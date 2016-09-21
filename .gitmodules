@@ -1,3 +1,6 @@
 [submodule "vendor/mathjax"]
 	path = vendor/mathjax
 	url = git@github.com:mathjax/MathJax.git
+[submodule "vendor/threejs"]
+	path = vendor/threejs
+	url = git@github.com:mrdoob/three.js.git
