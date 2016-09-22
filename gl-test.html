@@ -3,16 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>WebGL Test</title>
+    <link rel="stylesheet" type="text/css" href="vendor/normalizecss/normalize.css">
     <link rel="stylesheet" type="text/css" href="resources/css/color-main.css">
+
     <script type="text/javascript" async src="vendor/mathjax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script type="text/javascript" src="vendor/jquery/jquery-3.1.0.min.js"></script>
+    <script type="text/javascript" src="vendor/threejs/build/three.min.js"></script>
+
+    <script type="text/javascript" src="resources/js/visualizations-compiled.js"></script>
 </head>
 <body>
     <h1>WebGL Test</h1>
     <p>
+        <figref data-fig-id="fig-rgb-vis">The figure</figref> shows the RGB cube.
         Testing some maths like \(f(x)=2\cdot x + 3\).
         \[
             b := \frac{2}{3}
         \]
     </p>
+    <div class="figure" id="fig-rgb-vis">
+        <div class="rgb-cube visualization"></div>
+        <div class="figure-title">The RGB cube.</div>
+    </div>
 </body>
 </html>

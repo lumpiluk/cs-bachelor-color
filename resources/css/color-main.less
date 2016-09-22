@@ -1,10 +1,76 @@
 @background_color: rgb(255, 255, 255);
 @header_color: rgb(0, 50, 0);
 
-body {
+@wide_min_width: 50em;
+@max_body_width: 60em;
+
+@figref_color: rgb(50%, 50%, 50%);
+@figref_hover_color: rgb(20%, 20%, 20%);
+
+@figure_title_background: rgb(90%, 90%, 90%);
+
+@visualization_max_width: 40em;
+@visualization_height: 30em;
+
+html {
+  height: 100%;
   background-color: @background_color;
+}
+
+body {
+  padding: .5em;
+  border: 1px solid black;
 }
 
 h1 {
   color: @header_color;
+}
+
+.figure {
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid springgreen;
+}
+
+.figure {
+  max-width: @visualization_max_width;
+}
+
+.figure .figure-title {
+  padding: .45em .5em;
+  background: @figure_title_background;
+}
+
+.figure .visualization {
+  height: @visualization_height;
+}
+
+.figure .visualization canvas {
+  width: 100%;
+  height: 100%;
+}
+
+figref a:link,
+figref a:visited {
+  text-decoration: none;
+  color: @figref_color;
+}
+
+figref a:hover {
+  text-decoration: underline;
+  color: @figref_hover_color;
+}
+
+@media (min-width: @wide_min_width) {
+  html {
+    padding-left: .5em;
+    padding-right: .5em;
+  }
+
+  body {
+    max-width: @max_body_width;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1em;
+  }
 }
