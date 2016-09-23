@@ -1,0 +1,24 @@
+{
+  "name": "color",
+  "authors": [
+    "Lumpiluk <lumpiluk@gmail.com>"
+  ],
+  "description": "An exercise in color theory.",
+  "main": "index.html",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "normalize-css": "^4.2.0",
+    "MathJax": "^2.6.1",
+    "three.js": "threejs#*"
+  }
+}

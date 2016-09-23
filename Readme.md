@@ -2,7 +2,7 @@
 
 ## Installation
 
-Keep in mind that this git repository makes use of submodules!
+This project uses bower for managing dependencies, which are listed in bower.json. After cloning this project's repository, simply run "bower install".
 
 Additional requirements:
 - For WebStorm file watchers:
