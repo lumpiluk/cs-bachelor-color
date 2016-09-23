@@ -103,6 +103,11 @@ class Visualization {
             case 1: /* One finger -> rotate! */
                 event.preventDefault();
                 this.drag_start.set(event.touches[0].pageX, event.touches[0].pageY);
+                this.starting_rotation.copy(this.pivot.rotation);
+                this.rotating = true;
+                let that = this;
+                document.addEventListener("mousemove", this.mouse_move_handler, false);
+                document.addEventListener("mouseup", this.mouse_up_handler, false);
                 break;
             case 2: /* Two fingers -> zoom! */
 
@@ -111,13 +116,13 @@ class Visualization {
     }
 
     on_touch_move(event) {
-
+        this.on_mouse_move(event);
     }
 
     on_touch_cancel(event) {}
 
     on_touch_end(event) {
-
+        this.on_mouse_up(event);
     }
 }
 
