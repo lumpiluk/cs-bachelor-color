@@ -100,8 +100,8 @@ var Visualization = function () {
             }
             event.preventDefault();
             /* (y in delta_y is y-axis in 3D. Same for x in delta_x.) */
-            var delta_y = (event.pageX - this.drag_start.x) / $(window).width() * 2 * Math.PI;
-            var delta_x = (event.pageY - this.drag_start.y) / $(window).height() * 2 * Math.PI;
+            var delta_y = -(event.pageX - this.drag_start.x) / $(window).width() * 2 * Math.PI;
+            var delta_x = -(event.pageY - this.drag_start.y) / $(window).height() * 2 * Math.PI;
             this.current_rotation.y = (this.starting_rotation.y + delta_y) % (2 * Math.PI);
             this.current_rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, (this.starting_rotation.x + delta_x) % (2 * Math.PI)));
             this.pivot.rotation.copy(this.current_rotation);
