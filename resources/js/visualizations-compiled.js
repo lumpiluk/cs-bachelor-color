@@ -12,28 +12,132 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Created by lumpiluk on 9/21/16.
  */
 
-var RENDERER = new THREE.WebGLRenderer();
-
 var Visualization = function () {
     function Visualization($container) {
         _classCallCheck(this, Visualization);
 
         this.$container = $container;
         this.fov = 45;
-        this.aspect = $container.width / $container.height;
+        this.aspect = $container.width() / $container.height();
         this.near = 0.1;
         this.far = 10000;
-        this.camera = new THREE.PerspectiveCamera(this.fov, this.aspect, this.near, this.far);
+        this.renderer = new THREE.WebGLRenderer();
         this.scene = new THREE.Scene();
-        this.scene.add(this.camera);
-        this.$container.append(RENDERER.domElement);
+        this.pivot = new THREE.Object3D(); // Pivot for rotation of camera and lights.
+        this.camera = new THREE.PerspectiveCamera(this.fov, this.aspect, this.near, this.far);
+        this.camera.position.set(0, 0, 0, 1);
+        this.camera.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0, 3));
+        this.camera.lookAt(this.scene.position);
+        this.pivot.add(this.camera);
+        this.scene.add(this.pivot);
+        this.renderer.setClearColor(0x505050, 1);
+        this.renderer.setSize(this.$container.width(), this.$container.height());
+
+        this.$container.append(this.renderer.domElement);
+        var that = this;
+        $(window).resize(function () {
+            that.on_resize.call(that); // Wordy way of calling a function to preserve "this".
+        });
+
+        /* Initialize navigation controls. */
+        this.current_rotation = new THREE.Euler(0, 0, 0, "YXZ"); // YXZ for no "sideways" rotation.
+        this.starting_rotation = new THREE.Euler(0, 0, 0, "YXZ");
+        this.rotating = false;
+        this.drag_start = new THREE.Vector2(0, 0);
+        this.$container.mousedown(function (event) {
+            that.on_mouse_down.call(that, event);
+        });
+        this.mouse_move_handler = function (event) {
+            // Will be added to document on mouse down.
+            that.on_mouse_move.call(that, event);
+        };
+        this.mouse_up_handler = function (event) {
+            // Will be added to document on mouse down.
+            that.on_mouse_up.call(that, event);
+        };
+        this.$container.on("touchstart", function (event) {
+            that.on_touch_start.call(that, event);
+        });
+        this.$container.on("touchmove", function (event) {
+            that.on_touch_move.call(that, event);
+        });
+        this.$container.on("touchcancel", function (event) {
+            that.on_touch_cancel.call(that, event);
+        });
+        this.$container.on("touchend", function (event) {
+            that.on_touch_end.call(that, event);
+        });
     }
 
     _createClass(Visualization, [{
         key: "render",
         value: function render() {
-            RENDERER.setSize(this.$container.width, this.$container.height);
+            this.renderer.render(this.scene, this.camera);
         }
+    }, {
+        key: "on_resize",
+        value: function on_resize() {
+            this.renderer.setSize(this.$container.width(), this.$container.height());
+            this.camera.aspect = this.$container.width() / this.$container.height();
+            this.camera.updateProjectionMatrix();
+            this.render();
+        }
+    }, {
+        key: "on_mouse_down",
+        value: function on_mouse_down(event) {
+            this.drag_start.set(event.pageX, event.pageY);
+            this.starting_rotation.copy(this.pivot.rotation);
+            this.rotating = true;
+            var that = this;
+            document.addEventListener("mousemove", this.mouse_move_handler, false);
+            document.addEventListener("mouseup", this.mouse_up_handler, false);
+        }
+    }, {
+        key: "on_mouse_move",
+        value: function on_mouse_move(event) {
+            if (!this.rotating) {
+                return;
+            }
+            event.preventDefault();
+            /* (y in delta_y is y-axis in 3D. Same for x in delta_x.) */
+            var delta_y = (event.pageX - this.drag_start.x) / $(window).width() * 2 * Math.PI;
+            var delta_x = (event.pageY - this.drag_start.y) / $(window).height() * 2 * Math.PI;
+            this.current_rotation.y = (this.starting_rotation.y + delta_y) % (2 * Math.PI);
+            this.current_rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, (this.starting_rotation.x + delta_x) % (2 * Math.PI)));
+            this.pivot.rotation.copy(this.current_rotation);
+            this.render();
+        }
+    }, {
+        key: "on_mouse_up",
+        value: function on_mouse_up(event) {
+            this.rotating = false;
+            document.removeEventListener("mousemove", this.mouse_move_handler, false);
+            document.removeEventListener("mouseup", this.mouse_up_handler, false);
+        }
+    }, {
+        key: "on_touch_start",
+        value: function on_touch_start(event) {
+            switch (event.touches.length) {
+                case 1:
+                    /* One finger -> rotate! */
+                    event.preventDefault();
+                    this.drag_start.set(event.touches[0].pageX, event.touches[0].pageY);
+                    break;
+                case 2:
+                    /* Two fingers -> zoom! */
+
+                    break;
+            }
+        }
+    }, {
+        key: "on_touch_move",
+        value: function on_touch_move(event) {}
+    }, {
+        key: "on_touch_cancel",
+        value: function on_touch_cancel(event) {}
+    }, {
+        key: "on_touch_end",
+        value: function on_touch_end(event) {}
     }]);
 
     return Visualization;
@@ -45,7 +149,12 @@ var RGBCubeVisualization = function (_Visualization) {
     function RGBCubeVisualization($container) {
         _classCallCheck(this, RGBCubeVisualization);
 
-        return _possibleConstructorReturn(this, (RGBCubeVisualization.__proto__ || Object.getPrototypeOf(RGBCubeVisualization)).call(this, $container));
+        var _this = _possibleConstructorReturn(this, (RGBCubeVisualization.__proto__ || Object.getPrototypeOf(RGBCubeVisualization)).call(this, $container));
+
+        _this.wireframe_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
+        _this.wireframe_cube = new THREE.BoxHelper(new THREE.Mesh(_this.wireframe_cube_geometry), 0xffffff);
+        _this.scene.add(_this.wireframe_cube);
+        return _this;
     }
 
     return RGBCubeVisualization;
@@ -72,6 +181,7 @@ $(document).ready(function () {
     console.log("Initializing visualizations.");
     $(".visualization.rgb-cube").each(function () {
         var rgb_cube = new RGBCubeVisualization($(this));
+        rgb_cube.render();
         visualizations.push(rgb_cube);
     });
 
