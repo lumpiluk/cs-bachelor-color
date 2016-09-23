@@ -77,6 +77,14 @@ class Visualization {
         document.addEventListener("mouseup", this.mouse_up_handler, false);
     }
 
+    update_rotation(delta_x, delta_y) {
+        this.current_rotation.y = (this.starting_rotation.y + delta_y) % (2 * Math.PI);
+        this.current_rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2,
+            (this.starting_rotation.x + delta_x) % (2 * Math.PI)));
+        this.pivot.rotation.copy(this.current_rotation);
+        this.render();
+    }
+
     on_mouse_move(event) {
         if (!this.rotating) {
             return;
@@ -85,11 +93,7 @@ class Visualization {
         /* (y in delta_y is y-axis in 3D. Same for x in delta_x.) */
         let delta_y = -(event.pageX - this.drag_start.x) / $(window).width() * 2 * Math.PI;
         let delta_x = -(event.pageY - this.drag_start.y) / $(window).height() * 2 * Math.PI;
-        this.current_rotation.y = (this.starting_rotation.y + delta_y) % (2 * Math.PI);
-        this.current_rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2,
-            (this.starting_rotation.x + delta_x) % (2 * Math.PI)));
-        this.pivot.rotation.copy(this.current_rotation);
-        this.render();
+        this.update_rotation(delta_x, delta_y);
     }
 
     on_mouse_up(event) {
@@ -116,7 +120,14 @@ class Visualization {
     }
 
     on_touch_move(event) {
-        this.on_mouse_move(event);
+        if (!this.rotating) {
+            return;
+        }
+        event.preventDefault();
+        /* (y in delta_y is y-axis in 3D. Same for x in delta_x.) */
+        let delta_y = -(event.touches[0].pageX - this.drag_start.x) / $(window).width() * 2 * Math.PI;
+        let delta_x = -(event.touches[0].pageY - this.drag_start.y) / $(window).height() * 2 * Math.PI;
+        this.update_rotation(delta_x, delta_y);
     }
 
     on_touch_cancel(event) {}
