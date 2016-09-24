@@ -13,6 +13,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Created by lumpiluk on 9/21/16.
  */
 
+var DEFAULT_VERTEX_SHADER = require("../shaders/default-vertex.glsl");
+
 var Visualization = function () {
     function Visualization($container) {
         _classCallCheck(this, Visualization);
@@ -26,9 +28,9 @@ var Visualization = function () {
         this.aspect = $container.width() / $container.height();
         this.near = 0.1;
         this.far = 10000;
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.scene = new THREE.Scene();
-        // this.axis_helper = new THREE.AxisHelper(5);
+        this.axis_helper = new THREE.AxisHelper(5);
         this.pivot = new THREE.Object3D(); // Pivot for rotation of camera and lights.
         this.camera = new THREE.PerspectiveCamera(this.fov, this.aspect, this.near, this.far);
         this.camera.position.set(0, 0, 0, 1);
@@ -36,7 +38,7 @@ var Visualization = function () {
         this.camera.lookAt(this.scene.position);
         this.pivot.add(this.camera);
         this.scene.add(this.pivot);
-        // this.scene.add(this.axis_helper);
+        this.scene.add(this.axis_helper);
         this.renderer.setClearColor(0x505050, 1);
         this.renderer.setSize(this.$container.width(), this.$container.height());
 
@@ -235,14 +237,21 @@ var RGBCubeVisualization = function (_Visualization) {
         var _this = _possibleConstructorReturn(this, (RGBCubeVisualization.__proto__ || Object.getPrototypeOf(RGBCubeVisualization)).call(this, $container));
 
         _this.wireframe_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
-        _this.wireframe_cube = new THREE.BoxHelper(new THREE.Mesh(_this.wireframe_cube_geometry), 0xffffff);
+        _this.wireframe_cube = new THREE.BoxHelper(new THREE.Mesh(_this.wireframe_cube_geometry), 0x000000);
+        _this.wireframe_cube.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
         _this.scene.add(_this.wireframe_cube);
 
         _this.rgb_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
         _this.rgb_cube_shader = require("../shaders/rgb-fragment.glsl");
-        console.log(_this.rgb_cube_shader());
-        var a = "a";
-        //this.rgb_cube_mesh = new THREE.Mesh(this.rgb_cube_geometry, this.rgb_cube_mat);
+        _this.rgb_cube_mat = new THREE.ShaderMaterial({
+            vertexShader: DEFAULT_VERTEX_SHADER(),
+            fragmentShader: _this.rgb_cube_shader()
+        });
+        _this.rgb_cube_mesh = new THREE.Mesh(_this.rgb_cube_geometry, _this.rgb_cube_mat);
+        _this.rgb_cube_mesh.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
+        _this.scene.add(_this.rgb_cube_mesh);
+
+        _this.pivot.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
         return _this;
     }
 
@@ -287,9 +296,87 @@ $(document).ready(function () {
     });
 });
 
-},{"../shaders/rgb-fragment.glsl":2}],2:[function(require,module,exports){
+},{"../shaders/default-vertex.glsl":2,"../shaders/rgb-fragment.glsl":3}],2:[function(require,module,exports){
 module.exports = function parse(params){
-      var template = "testtest \n" +
+      var template = "/* \n" +
+" * Predefined built-in uniforms and attributes for vertex shader: \n" +
+" * http://threejs.org/docs/api/renderers/webgl/WebGLProgram.html \n" +
+" \n" +
+" * // = object.matrixWorld \n" +
+" * uniform mat4 modelMatrix; \n" +
+" \n" +
+" * // = camera.matrixWorldInverse * object.matrixWorld \n" +
+" * uniform mat4 modelViewMatrix; \n" +
+" \n" +
+" * // = camera.projectionMatrix \n" +
+" * uniform mat4 projectionMatrix; \n" +
+" \n" +
+" * // = camera.matrixWorldInverse \n" +
+" * uniform mat4 viewMatrix; \n" +
+" \n" +
+" * // = inverse transpose of modelViewMatrix \n" +
+" * uniform mat3 normalMatrix; \n" +
+" \n" +
+" * // = camera position in world space \n" +
+" * uniform vec3 cameraPosition; \n" +
+" * \n" +
+" * Additionally from GLSL: \n" +
+" * https://www.opengl.org/wiki/Built-in_Variable_(GLSL) \n" +
+" * gl_FragCoord \n" +
+" */ \n" +
+" \n" +
+"/* \n" +
+"  Fragment position in world space. \n" +
+"  Thanks to \n" +
+"  https://www.opengl.org/discussion_boards/showthread.php/163272-How-do-I-get-a-fragments-x-y-z-in-world-coordinates-in-the-fragment-shader \n" +
+"  and \n" +
+"  https://en.wikibooks.org/wiki/GLSL_Programming/Unity/Shading_in_World_Space \n" +
+"*/ \n" +
+"varying vec4 worldCoord; \n" +
+" \n" +
+"/** \n" +
+" * Multiply each vertex by the \n" +
+" * model-view matrix and the \n" +
+" * projection matrix (both provided \n" +
+" * by Three.js) to get a final \n" +
+" * vertex position. \n" +
+" * (Copied from https://aerotwist.com/tutorials/an-introduction-to-shaders-part-1/) \n" +
+" */ \n" +
+"void main() { \n" +
+"  worldCoord = modelMatrix * vec4(position,1.0); \n" +
+" \n" +
+"  gl_Position = projectionMatrix * \n" +
+"                modelViewMatrix * \n" +
+"                vec4(position,1.0); \n" +
+"} \n" 
+      params = params || {}
+      for(var key in params) {
+        var matcher = new RegExp("{{"+key+"}}","g")
+        template = template.replace(matcher, params[key])
+      }
+      return template
+    };
+
+},{}],3:[function(require,module,exports){
+module.exports = function parse(params){
+      var template = "varying vec4 worldCoord; \n" +
+" \n" +
+"void main() { \n" +
+"    /* worldPos = ModelView^(-1) * Projection^(-1) * p */ \n" +
+"    /*mat4 normalMatrix4 = mat4(varNormalMatrix); \n" +
+"    normalMatrix4[3][3] = 1.0; \n" +
+"    vec4 worldPositionTmp = normalMatrix4 * gl_FragCoord; \n" +
+"    vec4 worldPosition = vec4( \n" +
+"        worldPositionTmp.x, \n" +
+"        worldPositionTmp.y, \n" +
+"        worldPositionTmp.z, \n" +
+"        worldPositionTmp.z / gl_FragCoord.w // undo perspective projection matrix \n" +
+"    );*/ \n" +
+"    gl_FragColor = vec4(worldCoord.x, \n" +
+"                        worldCoord.y, \n" +
+"                        worldCoord.z, \n" +
+"                        1.0); \n" +
+"} \n" +
 " \n" 
       params = params || {}
       for(var key in params) {

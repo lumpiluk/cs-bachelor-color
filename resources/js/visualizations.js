@@ -2,7 +2,10 @@
  * Created by lumpiluk on 9/21/16.
  */
 
+let DEFAULT_VERTEX_SHADER = require("../shaders/default-vertex.glsl");
+
 class Visualization {
+
     constructor($container) {
         this.$container = $container;
         this.fov = 45;
@@ -13,9 +16,9 @@ class Visualization {
         this.aspect = $container.width() / $container.height();
         this.near = 0.1;
         this.far = 10000;
-        this.renderer = new THREE.WebGLRenderer();
+        this.renderer = new THREE.WebGLRenderer({antialias: true});
         this.scene = new THREE.Scene();
-        // this.axis_helper = new THREE.AxisHelper(5);
+       this.axis_helper = new THREE.AxisHelper(5);
         this.pivot = new THREE.Object3D(); // Pivot for rotation of camera and lights.
         this.camera = new THREE.PerspectiveCamera(
             this.fov, this.aspect, this.near, this.far
@@ -25,7 +28,7 @@ class Visualization {
         this.camera.lookAt(this.scene.position);
         this.pivot.add(this.camera);
         this.scene.add(this.pivot);
-        // this.scene.add(this.axis_helper);
+       this.scene.add(this.axis_helper);
         this.renderer.setClearColor(0x505050, 1);
         this.renderer.setSize(this.$container.width(), this.$container.height());
 
@@ -205,15 +208,22 @@ class RGBCubeVisualization extends Visualization {
         this.wireframe_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
         this.wireframe_cube = new THREE.BoxHelper(
             new THREE.Mesh(this.wireframe_cube_geometry),
-            0xffffff
+            0x000000
         );
+        this.wireframe_cube.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
         this.scene.add(this.wireframe_cube);
 
         this.rgb_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
         this.rgb_cube_shader = require("../shaders/rgb-fragment.glsl");
-        console.log(this.rgb_cube_shader());
-        let a = "a";
-        //this.rgb_cube_mesh = new THREE.Mesh(this.rgb_cube_geometry, this.rgb_cube_mat);
+        this.rgb_cube_mat = new THREE.ShaderMaterial({
+            vertexShader: DEFAULT_VERTEX_SHADER(),
+            fragmentShader: this.rgb_cube_shader()
+        });
+        this.rgb_cube_mesh = new THREE.Mesh(this.rgb_cube_geometry, this.rgb_cube_mat);
+        this.rgb_cube_mesh.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
+        this.scene.add(this.rgb_cube_mesh);
+
+        this.pivot.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
     }
 }
 
