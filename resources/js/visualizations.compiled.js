@@ -241,6 +241,7 @@ var RGBCubeVisualization = function (_Visualization) {
         _this.rgb_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
         _this.rgb_cube_shader = require("../shaders/rgb-fragment.glsl");
         console.log(_this.rgb_cube_shader());
+        var a = "a";
         //this.rgb_cube_mesh = new THREE.Mesh(this.rgb_cube_geometry, this.rgb_cube_mat);
         return _this;
     }

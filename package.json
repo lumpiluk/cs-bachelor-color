@@ -9,8 +9,7 @@
   "devDependencies": {
     "babel": "^6.5.2",
     "babel-preset-es2015": "^6.14.0",
-    "babelify": "^7.3.0",
-    "less": "^2.7.1"
+    "babelify": "^7.3.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

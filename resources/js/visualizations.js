@@ -212,6 +212,7 @@ class RGBCubeVisualization extends Visualization {
         this.rgb_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
         this.rgb_cube_shader = require("../shaders/rgb-fragment.glsl");
         console.log(this.rgb_cube_shader());
+        let a = "a";
         //this.rgb_cube_mesh = new THREE.Mesh(this.rgb_cube_geometry, this.rgb_cube_mat);
     }
 }
