@@ -7,7 +7,7 @@
       <option name="description" value="Compiles .less files into .css files" />
       <option name="exitCodeBehavior" value="ERROR" />
       <option name="fileExtension" value="less" />
-      <option name="immediateSync" value="true" />
+      <option name="immediateSync" value="false" />
       <option name="name" value="Less" />
       <option name="output" value="$FileNameWithoutExtension$.css" />
       <option name="outputFilters">
@@ -26,26 +26,26 @@
       <option name="workingDir" value="$FileDir$" />
       <envs />
     </TaskOptions>
-    <TaskOptions isEnabled="true">
-      <option name="arguments" value="--source-maps --out-file $FileNameWithoutExtension$-compiled.js --presets es2015 $FilePath$" />
+    <TaskOptions isEnabled="false">
+      <option name="arguments" value="--source-maps --out-file $FileNameWithoutExtension$.compiled.js --presets es2015 $FilePath$" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" value="Transpiles ECMAScript 6 code to ECMAScript 5" />
       <option name="exitCodeBehavior" value="ERROR" />
       <option name="fileExtension" value="js" />
-      <option name="immediateSync" value="true" />
+      <option name="immediateSync" value="false" />
       <option name="name" value="Babel" />
-      <option name="output" value="$FileNameWithoutExtension$-compiled.js:$FileNameWithoutExtension$-compiled.js.map" />
+      <option name="output" value="$FileNameWithoutExtension$.compiled.js:$FileNameWithoutExtension$.compiled.js.map" />
       <option name="outputFilters">
         <array />
       </option>
       <option name="outputFromStdout" value="false" />
       <option name="program" value="babel" />
-      <option name="scopeName" value="Unnamed" />
+      <option name="scopeName" value="Babel" />
       <option name="trackOnlyRoot" value="true" />
       <option name="workingDir" value="$FileDir$" />
       <envs />
     </TaskOptions>
-    <TaskOptions isEnabled="false">
+    <TaskOptions isEnabled="true">
       <option name="arguments" value="$FileName$ -o $FileNameWithoutExtension$.min.js" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" value="Compresses .js files" />
@@ -59,8 +59,27 @@
       </option>
       <option name="outputFromStdout" value="false" />
       <option name="program" value="yuicompressor" />
-      <option name="scopeName" value="Unnamed" />
+      <option name="scopeName" value="YUI" />
       <option name="trackOnlyRoot" value="true" />
+      <option name="workingDir" value="$FileDir$" />
+      <envs />
+    </TaskOptions>
+    <TaskOptions isEnabled="true">
+      <option name="arguments" value="-t [browserify-shader --parameterize=true] -t [babelify --presets es2015] $FileName$ -o $FileNameWithoutExtension$.compiled.js" />
+      <option name="checkSyntaxErrors" value="true" />
+      <option name="description" value="" />
+      <option name="exitCodeBehavior" value="ERROR" />
+      <option name="fileExtension" value="js" />
+      <option name="immediateSync" value="false" />
+      <option name="name" value="Browserify (+ Babelify, Browserify-Shader)" />
+      <option name="output" value="$FileNameWithoutExtension$.compiled.js" />
+      <option name="outputFilters">
+        <array />
+      </option>
+      <option name="outputFromStdout" value="false" />
+      <option name="program" value="browserify" />
+      <option name="scopeName" value="Browserify" />
+      <option name="trackOnlyRoot" value="false" />
       <option name="workingDir" value="$FileDir$" />
       <envs />
     </TaskOptions>
