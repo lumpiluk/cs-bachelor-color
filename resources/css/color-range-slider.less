@@ -1,20 +1,33 @@
-/* Aspect ratio 3:2 (like photos) */
-/* TODO: Adapt for multiple visualizations per figure! */
+@import "constants";
+
+@slider_width: 98%;
+@slider_track_height: .5em;
+@slider_padding: 0 0; // (top and bottom) (left and right)
+@slider_background: rgb(129, 129, 129);
+@slider_background_focused: @slider_background;
+@label_padding: 0 .5em 0 0; // top right bottom left
+@label_width: 2.5em;
+@number_margin: 0 0 0 .5em;
+
 /* Adapted from http://brennaobrien.com/blog/2014/05/style-input-type-range-in-every-browser.html */
+
 input[type=range] {
   /*removes default webkit styles*/
   -webkit-appearance: none;
+
   /*fix for FF unable to apply focus style bug */
   border: 1px solid white;
+
   /*required for proper track sizing in FF*/
-  width: 98%;
-  padding: 0 0;
+  width: @slider_width;
+
+  padding: @slider_padding;
   margin-right: 0;
 }
 input[type=range]::-webkit-slider-runnable-track {
-  width: 98%;
-  height: 0.5em;
-  background: #818181;
+  width: @slider_width;
+  height: @slider_track_height;
+  background: @slider_background;
   border: none;
   border-radius: 3px;
 }
@@ -31,12 +44,13 @@ input[type=range]:focus {
   outline: none;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #818181;
+  background: @slider_background_focused;
 }
+
 input[type=range]::-moz-range-track {
-  width: 98%;
-  height: 0.5em;
-  background: #818181;
+  width: @slider_width;
+  height: @slider_track_height;
+  background: @slider_background;
   border: none;
   border-radius: 3px;
 }
@@ -47,28 +61,33 @@ input[type=range]::-moz-range-thumb {
   border-radius: 50%;
   background: goldenrod;
 }
+
 /*hide the outline behind the border*/
-input[type=range]:-moz-focusring {
+input[type=range]:-moz-focusring{
   outline: 1px solid white;
   outline-offset: -1px;
 }
+
 input[type=range]::-ms-track {
-  width: 98%;
-  height: 0.5em;
+  width: @slider_width;
+  height: @slider_track_height;
+
   /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
   background: transparent;
+
   /*leave room for the larger thumb to overflow with a transparent border */
   border-color: transparent;
   border-width: 6px 0;
+
   /*remove default tick marks*/
   color: transparent;
 }
 input[type=range]::-ms-fill-lower {
-  background: #818181;
+  background: @slider_background;
   border-radius: 10px;
 }
 input[type=range]::-ms-fill-upper {
-  background: #818181;
+  background: @slider_background;
   border-radius: 10px;
 }
 input[type=range]::-ms-thumb {
@@ -79,83 +98,36 @@ input[type=range]::-ms-thumb {
   background: goldenrod;
 }
 input[type=range]:focus::-ms-fill-lower {
-  background: #818181;
+  background: @slider_background_focused;
 }
 input[type=range]:focus::-ms-fill-upper {
-  background: #818181;
+  background: @slider_background_focused;
 }
+
 /*
  * Slider and label arrangement.
  * With help from http://stackoverflow.com/questions/6713435/input-box-100-width-with-label-to-the-left
  */
-.visualization-control.slider label {
-  float: left;
-  text-align: left;
-  padding: 0 0.5em 0 0;
-  width: 2.5em;
-}
-.visualization-control.slider input[type=number] {
-  float: right;
-  width: 5em;
-  margin: 0 0 0 0.5em;
-}
-.visualization-control.slider .slider-container {
-  overflow: hidden;
-  display: block;
-}
-.figure {
-  margin-left: auto;
-  margin-right: auto;
-  box-shadow: 0.1em 0.1em 0.1em #999999;
-  max-width: 40em;
-}
-.figure .figure-title {
-  padding: 0.45em 0.5em 0.45em 0.5em;
-  background: #e6e6e6;
-}
-.figure .visualization {
-  height: 26.67em;
-}
-.figure .visualization canvas {
-  width: 100%;
-  height: 100%;
-}
-.figure .visualization-controls .visualization-control {
-  padding: 0.5em 0.5em 0.5em 0.5em;
-}
-figref a:link,
-figref a:visited {
-  text-decoration: none;
-  color: #808080;
-}
-figref a:hover {
-  text-decoration: underline;
-  color: #333333;
-}
-html {
-  height: 100%;
-  background-color: #ffffff;
-  /* On large screens. */
-}
-@media screen and (min-width: 50em) {
-  html {
-    padding-left: .5em;
-    padding-right: .5em;
+.visualization-control.slider {
+  label {
+    float: left;
+    text-align: left;
+    padding: @label_padding;
+    width: @label_width;
   }
-}
-body {
-  padding: .5em;
-  border: 1px solid black;
-  /* On large screens. */
-}
-@media screen and (min-width: 50em) {
-  body {
-    max-width: 60em;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1em;
+
+  input[type=number] {
+    float: right;
+    width: 5em;
+    margin: @number_margin;
   }
-}
-h1 {
-  color: #003200;
+
+  .slider-container {
+    overflow: hidden;
+    display: block;
+  }
+
+  input[type=range] {
+
+  }
 }

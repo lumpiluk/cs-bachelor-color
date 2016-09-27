@@ -1,11 +1,11 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -13,40 +13,262 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * Created by lumpiluk on 9/21/16.
  */
 
-var DEFAULT_VERTEX_SHADER = require("../shaders/default-vertex.glsl");
+var ColorSystemPropertyChangeEvent = function ColorSystemPropertyChangeEvent(property) {
+    _classCallCheck(this, ColorSystemPropertyChangeEvent);
 
-var Visualization = function () {
+    this.property = property;
+};
+
+var ColorSystemProperty = exports.ColorSystemProperty = function () {
+    /**
+     *
+     * @param initial_value An initial value.
+     * @param name Name of this property as it will appear on labels.
+     * @param short_name An name that can be used as part of an html id.
+     * @param min Minimum value.
+     * @param max Maximum value.
+     */
+    function ColorSystemProperty(initial_value, min, max, name, short_name) {
+        _classCallCheck(this, ColorSystemProperty);
+
+        this.value = initial_value;
+        this.name = name;
+        this.short_name = short_name;
+        this.min = min;
+        this.max = max;
+        this.change_listeners = [];
+    }
+
+    _createClass(ColorSystemProperty, [{
+        key: "add_listener",
+        value: function add_listener(callback) {
+            this.change_listeners.push(callback);
+        }
+    }, {
+        key: "set_value",
+        value: function set_value(value) {
+            this.value = value;
+            var event = new ColorSystemPropertyChangeEvent(this);
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this.change_listeners[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var callback = _step.value;
+
+                    callback(event);
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+        }
+    }]);
+
+    return ColorSystemProperty;
+}();
+
+},{}],2:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.RGBCubeVisualization = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _Visualization2 = require("./Visualization");
+
+var _ColorSystemProperty = require("./ColorSystemProperty");
+
+var _VisualizationControlSlider = require("./VisualizationControlSlider");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by lumpiluk on 9/25/16.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+//import "../../bower_components/rangetouch/dist/rangetouch";
+
+var RGBCubeVisualization = exports.RGBCubeVisualization = function (_Visualization) {
+    _inherits(RGBCubeVisualization, _Visualization);
+
+    function RGBCubeVisualization($container) {
+        _classCallCheck(this, RGBCubeVisualization);
+
+        var _this = _possibleConstructorReturn(this, (RGBCubeVisualization.__proto__ || Object.getPrototypeOf(RGBCubeVisualization)).call(this, $container));
+
+        _this.wireframe_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
+        _this.wireframe_cube = new THREE.BoxHelper(new THREE.Mesh(_this.wireframe_cube_geometry), 0x000000);
+        _this.wireframe_cube.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
+        _this.scene.add(_this.wireframe_cube);
+
+        _this.rgb_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
+        _this.rgb_cube_shader = require("../shaders/rgb-fragment.glsl");
+        _this.rgb_cube_mat = new THREE.ShaderMaterial({
+            vertexShader: (0, _Visualization2.DEFAULT_VERTEX_SHADER)(),
+            fragmentShader: _this.rgb_cube_shader()
+        });
+        _this.rgb_cube_mesh = new THREE.Mesh(_this.rgb_cube_geometry, _this.rgb_cube_mat);
+        _this.rgb_cube_mesh.matrixAutoUpdate = false; // Makes adjusting world transforms easier.
+        _this.rgb_cube_mesh.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
+        _this.scene.add(_this.rgb_cube_mesh);
+
+        _this.pivot.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
+
+        /* Color system. */
+        _this.red_property = new _ColorSystemProperty.ColorSystemProperty(1.0, 0.0, 1.0, "R", "r");
+        _this.green_property = new _ColorSystemProperty.ColorSystemProperty(1.0, 0.0, 1.0, "G", "g");
+        _this.blue_property = new _ColorSystemProperty.ColorSystemProperty(1.0, 0.0, 1.0, "B", "b");
+
+        /* Initialize color system controls. */
+        _this.red_control = null;
+        _this.green_control = null;
+        _this.blue_control = null;
+        if (_this.$figure != null) {
+            _this.init_controls();
+            _this.init_advanced_controls();
+        }
+
+        /* Attach event handlers. */
+        var that = _this;
+        _this.red_property.add_listener(function (event) {
+            return that.on_color_system_property_change.call(_this, event);
+        });
+        _this.blue_property.add_listener(function (event) {
+            return that.on_color_system_property_change.call(_this, event);
+        });
+        _this.green_property.add_listener(function (event) {
+            return that.on_color_system_property_change.call(_this, event);
+        });
+        return _this;
+    }
+
+    _createClass(RGBCubeVisualization, [{
+        key: "init_controls",
+        value: function init_controls() {
+            _get(RGBCubeVisualization.prototype.__proto__ || Object.getPrototypeOf(RGBCubeVisualization.prototype), "init_controls", this).call(this);
+            var $controls = this.$figure.find(".visualization-controls");
+            if ($controls.length == 0) {
+                return;
+            }
+            this.red_control = new _VisualizationControlSlider.VisualizationControlSlider(this.$figure.find(".visualization-controls"), this.red_property, 0.001);
+            this.green_control = new _VisualizationControlSlider.VisualizationControlSlider(this.$figure.find(".visualization-controls"), this.green_property, 0.001);
+            this.blue_control = new _VisualizationControlSlider.VisualizationControlSlider(this.$figure.find(".visualization-controls"), this.blue_property, 0.001);
+        }
+    }, {
+        key: "init_advanced_controls",
+        value: function init_advanced_controls() {
+            _get(RGBCubeVisualization.prototype.__proto__ || Object.getPrototypeOf(RGBCubeVisualization.prototype), "init_advanced_controls", this).call(this);
+            var $controls = this.$figure.find(".visualization-controls-advanced");
+            if ($controls.length == 0) {
+                return;
+            }
+        }
+    }, {
+        key: "on_color_system_property_change",
+        value: function on_color_system_property_change(event) {
+            switch (event.property) {
+                case this.red_property:
+                    this.rgb_cube_mesh.scale.x = this.red_property.value;
+                    break;
+                case this.green_property:
+                    this.rgb_cube_mesh.scale.y = this.green_property.value;
+                    break;
+                case this.blue_property:
+                    this.rgb_cube_mesh.scale.z = this.blue_property.value;
+                    break;
+            }
+            this.rgb_cube_mesh.matrix.identity();
+            this.rgb_cube_mesh.matrix.multiply(new THREE.Matrix4().makeTranslation(this.red_property.value / 2, this.green_property.value / 2, this.blue_property.value / 2));
+            this.rgb_cube_mesh.matrix.multiply(new THREE.Matrix4().makeScale(this.red_property.value, this.green_property.value, this.blue_property.value));
+            this.render();
+        }
+    }]);
+
+    return RGBCubeVisualization;
+}(_Visualization2.Visualization);
+
+},{"../shaders/rgb-fragment.glsl":7,"./ColorSystemProperty":1,"./Visualization":3,"./VisualizationControlSlider":4}],3:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Created by lumpiluk on 9/25/16.
+ */
+
+/* Load .glsl shader file via browserify plugin browserify-shader. */
+var DEFAULT_VERTEX_SHADER = exports.DEFAULT_VERTEX_SHADER = require("../shaders/default-vertex.glsl");
+
+var Visualization = exports.Visualization = function () {
     function Visualization($container) {
         _classCallCheck(this, Visualization);
 
+        var that = this; // for event listeners (which will typically not be called by this class)
+
+        /**
+         * If set to true, this.render() will keep updating until this.animating is false again.
+         * @type {boolean}
+         */
+        this.animating = false;
+
         this.$container = $container;
+        this.$figure = $container.parent().hasClass("figure") ? $container.parent() : null;
         this.fov = 45;
         this.min_focal_length = 10; // for zooming, assuming full frame (35mm) camera sensor
         this.max_focal_length = 400; // for zooming
         this.zoom_steps = 20; // (if available)
         this.zoom_sensitivity = 0.25; // For mouse wheels. Lower => more sensitive.
-        this.aspect = $container.width() / $container.height();
+        // this.aspect = $container.width() / $container.height(); // should be ~3/2
+        this.aspect = 3 / 2; // 3 / 2;
+        this.$container.height(this.$container.width() / this.aspect); // Apply aspect ratio (for camera and renderer).
         this.near = 0.1;
         this.far = 10000;
+
+        /* Initialize three.js. */
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.scene = new THREE.Scene();
-        this.axis_helper = new THREE.AxisHelper(5);
-        this.pivot = new THREE.Object3D(); // Pivot for rotation of camera and lights.
+        // this.axis_helper = new THREE.AxisHelper(5);
+        this.pivot = new THREE.Object3D(); // Pivot for rotation of camera and maybe lights.
         this.camera = new THREE.PerspectiveCamera(this.fov, this.aspect, this.near, this.far);
         this.camera.position.set(0, 0, 0, 1);
         this.camera.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0, 3));
         this.camera.lookAt(this.scene.position);
         this.pivot.add(this.camera);
         this.scene.add(this.pivot);
-        this.scene.add(this.axis_helper);
+        // this.scene.add(this.axis_helper);
         this.renderer.setClearColor(0x505050, 1);
         this.renderer.setSize(this.$container.width(), this.$container.height());
-
         this.$container.append(this.renderer.domElement);
-        var that = this;
+
         $(window).resize(function () {
-            that.on_resize.call(that); // Wordy way of calling a function to preserve "this".
+            return that.on_resize.call(that);
         });
+        // "that": Wordy way of calling a function to preserve "this". Necessary w/ arrow functions?
 
         /* Initialize navigation controls. */
         this.current_rotation = new THREE.Euler(0, 0, 0, "YXZ"); // YXZ for no "sideways" rotation.
@@ -56,38 +278,66 @@ var Visualization = function () {
         this.two_fingers_touching = false;
         this.drag_start = new THREE.Vector2(0, 0);
         this.scale_start_distance = 0;
-        this.$container.mousedown(function (event) {
-            that.on_mouse_down.call(that, event);
+        this.$container.on("mousedown", function (event) {
+            return that.on_mouse_down.call(that, event);
         });
         this.$container.on("wheel", function (event) {
-            that.on_wheel.call(that, event);
+            return that.on_wheel.call(that, event);
         });
         this.mouse_move_handler = function (event) {
-            // Will be added to document on mouse down.
-            that.on_mouse_move.call(that, event);
-        };
+            return that.on_mouse_move.call(that, event);
+        }; // added to document on mouse down.
         this.mouse_up_handler = function (event) {
-            // Will be added to document on mouse down.
-            that.on_mouse_up.call(that, event);
-        };
+            return that.on_mouse_up.call(that, event);
+        }; // added to document on mouse down.
         this.$container.on("touchstart", function (event) {
-            that.on_touch_start.call(that, event);
+            return that.on_touch_start.call(that, event);
         });
         this.$container.on("touchmove", function (event) {
-            that.on_touch_move.call(that, event);
+            return that.on_touch_move.call(that, event);
         });
         this.$container.on("touchcancel", function (event) {
-            that.on_touch_cancel.call(that, event);
+            return that.on_touch_cancel.call(that, event);
         });
         this.$container.on("touchend", function (event) {
-            that.on_touch_end.call(that, event);
+            return that.on_touch_end.call(that, event);
         });
     }
 
     _createClass(Visualization, [{
         key: "render",
         value: function render() {
+            if (this.animating) {
+                requestAnimationFrame(this.render.bind(this)); // bind(this) to preserve "this" context
+            }
             this.renderer.render(this.scene, this.camera);
+        }
+
+        /**
+         * Add controls to the figure for the current color system.
+         * This requires that the visualization is inside a .figure and that this .figure contains a
+         * .visualization-controls.
+         * Not called in default constructor!
+         */
+
+    }, {
+        key: "init_controls",
+        value: function init_controls() {}
+        /* To be implemented in subclasses. */
+
+
+        /**
+         * Add advanced controls to the figure for the current color system.
+         * This requires that the visualization is inside a .figure and that this .figure contains a
+         * .visualization-controls-advanced.
+         * Not called in default constructor!
+         */
+
+    }, {
+        key: "init_advanced_controls",
+        value: function init_advanced_controls() {
+            /* To be implemented in subclasses. */
+            // TODO: Setting to show only the color space w/o axes, wireframe etc.?
         }
     }, {
         key: "update_rotation",
@@ -104,6 +354,9 @@ var Visualization = function () {
     }, {
         key: "on_resize",
         value: function on_resize() {
+            /* Preserver aspect ratio. */
+            this.$container.height(this.$container.width() / this.aspect);
+
             this.renderer.setSize(this.$container.width(), this.$container.height());
             this.camera.aspect = this.$container.width() / this.$container.height();
             this.camera.updateProjectionMatrix();
@@ -118,6 +371,9 @@ var Visualization = function () {
             var that = this;
             document.addEventListener("mousemove", this.mouse_move_handler, false);
             document.addEventListener("mouseup", this.mouse_up_handler, false);
+
+            this.animating = true;
+            this.render();
         }
     }, {
         key: "on_mouse_move",
@@ -130,11 +386,11 @@ var Visualization = function () {
             var delta_y = -(event.pageX - this.drag_start.x) / $(window).width() * 2 * Math.PI;
             var delta_x = -(event.pageY - this.drag_start.y) / $(window).height() * 2 * Math.PI;
             this.update_rotation(delta_x, delta_y);
-            this.render();
         }
     }, {
         key: "on_mouse_up",
         value: function on_mouse_up(event) {
+            this.animating = false;
             this.dragging = false;
             document.removeEventListener("mousemove", this.mouse_move_handler, false);
             document.removeEventListener("mouseup", this.mouse_up_handler, false);
@@ -163,7 +419,15 @@ var Visualization = function () {
     }, {
         key: "on_touch_start",
         value: function on_touch_start(event) {
-            this.drag_start.set(event.touches[0].pageX, event.touches[0].pageY);
+            var pageX = event.touches[0].pageX;
+            var pageY = event.touches[0].pageY;
+            if (event.touches.length == 2) {
+                /* Use center point if two fingers are touching. */
+                pageX = (event.touches[0].pageX + event.touches[1].pageX) / 2;
+                pageY = (event.touches[0].pageY + event.touches[1].pageY) / 2;
+            }
+            this.drag_start.set(pageX, pageY);
+
             this.starting_rotation.copy(this.pivot.rotation);
             this.dragging = true;
             switch (event.touches.length) {
@@ -179,9 +443,9 @@ var Visualization = function () {
                     this.two_fingers_touching = true;
                     break;
             }
-            /* Temporarily add listeners to document so that dragging also works outside the canvas. */
-            document.addEventListener("mousemove", this.mouse_move_handler, false);
-            document.addEventListener("mouseup", this.mouse_up_handler, false);
+
+            this.animating = true;
+            this.render();
         }
     }, {
         key: "on_touch_move",
@@ -194,10 +458,17 @@ var Visualization = function () {
              * Rotation.
              * (y in delta_y is y-axis in 3D. Same for x in delta_x.)
              */
-            // TODO: use center point if two fingers are touching!
-            var delta_y = -(event.touches[0].pageX - this.drag_start.x) / $(window).width() * 2 * Math.PI;
-            var delta_x = -(event.touches[0].pageY - this.drag_start.y) / $(window).height() * 2 * Math.PI;
-            if (!this.two_fingers_touching) {
+            var pageX = event.touches[0].pageX;
+            var pageY = event.touches[0].pageY;
+            if (this.two_fingers_touching && event.touches.length == 2) {
+                /* Use center point if two fingers are touching. */
+                pageX = (event.touches[0].pageX + event.touches[1].pageX) / 2;
+                pageY = (event.touches[0].pageY + event.touches[1].pageY) / 2;
+            }
+            var delta_y = -(pageX - this.drag_start.x) / $(window).width() * 2 * Math.PI;
+            var delta_x = -(pageY - this.drag_start.y) / $(window).height() * 2 * Math.PI;
+            if (!this.two_fingers_touching || event.touches.length != 2) {
+                /* If swiping up or down with only one finger, don't rotate. */
                 delta_x = 0;
             }
             this.update_rotation(delta_x, delta_y);
@@ -205,18 +476,18 @@ var Visualization = function () {
             /*
              * Scale.
              */
-            if (this.two_fingers_touching) {
+            if (this.two_fingers_touching && event.touches.length == 2) {
                 event.preventDefault();
                 var distance = new THREE.Vector2(event.touches[0].pageX, event.touches[0].pageY).distanceTo(new THREE.Vector2(event.touches[1].pageX, event.touches[1].pageY));
                 var s_delta = (distance - this.scale_start_distance) / $(window).width() * (this.max_focal_length - this.min_focal_length);
                 this.update_scale(s_delta);
             }
-
-            this.render();
         }
     }, {
         key: "on_touch_cancel",
-        value: function on_touch_cancel(event) {}
+        value: function on_touch_cancel(event) {
+            this.on_touch_end(event);
+        }
     }, {
         key: "on_touch_end",
         value: function on_touch_end(event) {
@@ -228,75 +499,109 @@ var Visualization = function () {
     return Visualization;
 }();
 
-var RGBCubeVisualization = function (_Visualization) {
-    _inherits(RGBCubeVisualization, _Visualization);
+},{"../shaders/default-vertex.glsl":6}],4:[function(require,module,exports){
+"use strict";
 
-    function RGBCubeVisualization($container) {
-        _classCallCheck(this, RGBCubeVisualization);
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-        var _this = _possibleConstructorReturn(this, (RGBCubeVisualization.__proto__ || Object.getPrototypeOf(RGBCubeVisualization)).call(this, $container));
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-        _this.wireframe_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
-        _this.wireframe_cube = new THREE.BoxHelper(new THREE.Mesh(_this.wireframe_cube_geometry), 0x000000);
-        _this.wireframe_cube.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
-        _this.scene.add(_this.wireframe_cube);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-        _this.rgb_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
-        _this.rgb_cube_shader = require("../shaders/rgb-fragment.glsl");
-        _this.rgb_cube_mat = new THREE.ShaderMaterial({
-            vertexShader: DEFAULT_VERTEX_SHADER(),
-            fragmentShader: _this.rgb_cube_shader()
+/**
+ * Created by lumpiluk on 9/26/16.
+ */
+
+var VisualizationControlSlider = exports.VisualizationControlSlider = function () {
+    function VisualizationControlSlider($parent, color_system_property, step) {
+        _classCallCheck(this, VisualizationControlSlider);
+
+        this.$parent = parent;
+        this.color_system_property = color_system_property;
+        this.control_id = Math.floor(Math.random() * 1e+15).toString();
+        this.slider_id = "vis-ctrl-" + this.control_id + "-slider";
+        this.number_id = "vis-ctrl-" + this.control_id + "-number";
+
+        var ranges = 'min="' + this.color_system_property.min + '" ' + 'max="' + this.color_system_property.max + '" ' + 'step="' + step.toString() + '" ' + 'value="' + this.color_system_property.value.toString() + '"';
+
+        $parent.append('<div class="visualization-control slider">' + '<label for="' + this.slider_id + '">' + this.color_system_property.name + ':</label>' + '<input type="number" value="' + this.color_system_property.value.toString() + '" id="' + this.number_id + '" ' + ranges + ' />' + '<span class="slider-container">' + '<input type="range" name="' + this.slider_id + '" id="' + this.slider_id + '" ' + ranges + ' />' + '</span>' + '</div>');
+
+        /* Attach event handlers. */
+        var that = this;
+        $("#" + this.slider_id).on("input", function (event) {
+            return that.on_slider_change.call(that, event);
         });
-        _this.rgb_cube_mesh = new THREE.Mesh(_this.rgb_cube_geometry, _this.rgb_cube_mat);
-        _this.rgb_cube_mesh.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
-        _this.scene.add(_this.rgb_cube_mesh);
-
-        _this.pivot.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
-        return _this;
+        $("#" + this.number_id).on("change", function (event) {
+            return that.on_number_change.call(that, event);
+        });
     }
 
-    return RGBCubeVisualization;
-}(Visualization);
+    _createClass(VisualizationControlSlider, [{
+        key: "on_slider_change",
+        value: function on_slider_change(event) {
+            $("#" + this.number_id).val(event.target.value);
+            this.color_system_property.set_value(event.target.value);
+        }
+    }, {
+        key: "on_number_change",
+        value: function on_number_change(event) {
+            $("#" + this.slider_id).val(event.target.value);
+            this.color_system_property.set_value(event.target.value);
+        }
+    }]);
+
+    return VisualizationControlSlider;
+}();
+
+},{}],5:[function(require,module,exports){
+"use strict";
+
+var _RGBCubeVisualization = require("./RGBCubeVisualization");
 
 /**
  * List of visualizations in this document.
  * @type {Array}
  */
-
-
 var visualizations = [];
 
 /**
  * Matches each figure ID to the figure's visible number in the document.
  * @type {{}}
  */
+/**
+ * Created by lumpiluk on 9/21/16.
+ */
+
+// import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 var figures = {};
 
 $(document).ready(function () {
-    /*
-     * Find and initialize all visualizations as soon as the page is loaded.
-     */
-    console.log("Initializing visualizations.");
-    $(".visualization.rgb-cube").each(function () {
-        var rgb_cube = new RGBCubeVisualization($(this));
-        rgb_cube.render();
-        visualizations.push(rgb_cube);
-    });
+  /*
+   * Find and initialize all visualizations as soon as the page is loaded.
+   */
+  console.log("Initializing visualizations.");
+  $(".visualization.rgb-cube").each(function () {
+    var rgb_cube = new _RGBCubeVisualization.RGBCubeVisualization($(this));
+    rgb_cube.render();
+    visualizations.push(rgb_cube);
+  });
 
-    /* Enumerate figures. */
-    $(".figure-title").each(function (index) {
-        var fig_id = $(this).parent().attr("id");
-        figures[fig_id] = index + 1;
-        $(this).prepend('<b>Figure ' + (index + 1).toString() + ':</b> ');
-    });
-    /* Update references. */
-    $("figref").each(function () {
-        var fig_id = $(this).data("fig-id");
-        $(this).html('<a href="#' + fig_id + '">Figure ' + figures[fig_id] + '</a>');
-    });
+  /* Enumerate figures. */
+  $(".figure-title").each(function (index) {
+    var fig_id = $(this).parent().attr("id");
+    figures[fig_id] = index + 1;
+    $(this).prepend('<b>Figure ' + (index + 1).toString() + ':</b> ');
+  });
+  /* Update references. */
+  $("figref").each(function () {
+    var fig_id = $(this).data("fig-id");
+    $(this).html('<a href="#' + fig_id + '">Figure ' + figures[fig_id] + '</a>');
+  });
 });
 
-},{"../shaders/default-vertex.glsl":2,"../shaders/rgb-fragment.glsl":3}],2:[function(require,module,exports){
+},{"./RGBCubeVisualization":2}],6:[function(require,module,exports){
 module.exports = function parse(params){
       var template = "/* \n" +
 " * Predefined built-in uniforms and attributes for vertex shader: \n" +
@@ -357,7 +662,7 @@ module.exports = function parse(params){
       return template
     };
 
-},{}],3:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 module.exports = function parse(params){
       var template = "varying vec4 worldCoord; \n" +
 " \n" +
@@ -386,4 +691,4 @@ module.exports = function parse(params){
       return template
     };
 
-},{}]},{},[1]);
+},{}]},{},[5]);

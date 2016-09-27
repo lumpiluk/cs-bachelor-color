@@ -132,30 +132,3 @@ figref a:hover {
   text-decoration: underline;
   color: #333333;
 }
-html {
-  height: 100%;
-  background-color: #ffffff;
-  /* On large screens. */
-}
-@media screen and (min-width: 50em) {
-  html {
-    padding-left: .5em;
-    padding-right: .5em;
-  }
-}
-body {
-  padding: .5em;
-  border: 1px solid black;
-  /* On large screens. */
-}
-@media screen and (min-width: 50em) {
-  body {
-    max-width: 60em;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1em;
-  }
-}
-h1 {
-  color: #003200;
-}

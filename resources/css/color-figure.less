@@ -1,0 +1,44 @@
+@import "constants";
+@import "color-range-slider";
+
+.figure {
+  margin-left: auto;
+  margin-right: auto;
+  // border: 1px solid springgreen;
+  box-shadow: .1em .1em .1em rgb(60%, 60%, 60%);
+
+  max-width: @visualization_max_width;
+
+  .figure-title {
+    padding: @figure_title_padding;
+    background: @figure_title_background;
+  }
+
+  .visualization {
+    height: @visualization_height;
+
+    canvas {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .visualization-controls {
+    .visualization-control {
+      padding: .5em .5em .5em @figure_title_padding_left; // top right bottom left
+    }
+  }
+}
+
+figref {
+  a:link,
+  a:visited {
+    text-decoration: none;
+    color: @figref_color;
+  }
+
+  a:hover {
+    text-decoration: underline;
+    color: @figref_hover_color;
+  }
+}
