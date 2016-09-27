@@ -3,33 +3,88 @@
  */
 
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
+import {TextSprite} from "./TextSprite";
+import {CircleSprite} from "./CircleSprite";
 import {ColorSystemProperty} from "./ColorSystemProperty";
 import {VisualizationControlSlider} from "./VisualizationControlSlider";
 //import "../../bower_components/rangetouch/dist/rangetouch";
+
+const RGB_CUBE_SHADER = require("../shaders/rgb-fragment.glsl");
 
 export class RGBCubeVisualization extends Visualization {
     constructor($container) {
         super($container);
 
-        this.wireframe_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
-        this.wireframe_cube = new THREE.BoxHelper(
-            new THREE.Mesh(this.wireframe_cube_geometry),
-            0x000000
-        );
-        this.wireframe_cube.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
-        this.scene.add(this.wireframe_cube);
-
         this.rgb_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
-        this.rgb_cube_shader = require("../shaders/rgb-fragment.glsl");
         this.rgb_cube_mat = new THREE.ShaderMaterial({
             vertexShader: DEFAULT_VERTEX_SHADER(),
-            fragmentShader: this.rgb_cube_shader()
+            fragmentShader: RGB_CUBE_SHADER()
         });
         this.rgb_cube_mesh = new THREE.Mesh(this.rgb_cube_geometry, this.rgb_cube_mat);
         this.rgb_cube_mesh.matrixAutoUpdate = false; // Makes adjusting world transforms easier.
         this.rgb_cube_mesh.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
         this.scene.add(this.rgb_cube_mesh);
 
+        /* Coordinate system, arrows. */
+        /* Cube bounding box. */
+        this.wireframe_cube_geometry = new THREE.BoxGeometry(1, 1, 1);
+        this.wireframe_cube = new THREE.BoxHelper(
+            new THREE.Mesh(this.wireframe_cube_geometry),
+            0x000000
+        );
+        this.wireframe_cube.matrixAutoUpdate = false; // Object won't move dynamically anyway.
+        this.wireframe_cube.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
+        this.scene.add(this.wireframe_cube);
+        /*
+         * Arrows.
+         * Helpful example: view-source:https://stemkoski.github.io/Three.js/Helpers.html
+         */
+        let arrow_origin = new THREE.Vector3(-.01, -.01, -.01);
+        let arrow_length = 1.15;
+        let arrow_color_hex = 0xffffff;
+        let arrow_head_length = 0.1;
+        let arrow_head_width = 0.05;
+        this.arrow_red = new THREE.ArrowHelper(
+            new THREE.Vector3(1, 0, 0),
+            arrow_origin, arrow_length, arrow_color_hex, arrow_head_length, arrow_head_width
+        );
+        this.arrow_green = new THREE.ArrowHelper(
+            new THREE.Vector3(0, 1, 0),
+            arrow_origin, arrow_length, arrow_color_hex, arrow_head_length, arrow_head_width
+        );
+        this.arrow_blue = new THREE.ArrowHelper(
+            new THREE.Vector3(0, 0, 1),
+            arrow_origin, arrow_length, arrow_color_hex, arrow_head_length, arrow_head_width
+        );
+        this.scene.add(this.arrow_red);
+        this.scene.add(this.arrow_green);
+        this.scene.add(this.arrow_blue);
+        /* Labels */
+        this.label_red = new TextSprite("R", 0.15);
+        this.label_red.sprite.position.set(1.2, -.1, -.1);
+        this.scene.add(this.label_red.sprite);
+        this.label_green = new TextSprite("G", 0.15);
+        this.label_green.sprite.position.set(-.1, 1.2, -.1);
+        this.scene.add(this.label_green.sprite);
+        this.label_blue = new TextSprite("B", 0.15);
+        this.label_blue.sprite.position.set(-.1, -.1, 1.2);
+        this.scene.add(this.label_blue.sprite);
+        this.label_origin = new TextSprite("0", 0.15);
+        this.label_origin.sprite.position.set(-.1, -.1, -.1);
+        this.scene.add(this.label_origin.sprite);
+        /* Current color indicator. */
+        //this.current_color_sphere_geometry = new THREE.SphereGeometry(.05, 7, 7);
+        //this.current_color_material = new THREE.MeshBasicMaterial({color: 0xffffff});
+        //this.current_color_sphere_mesh = new THREE.Mesh(this.current_color_sphere_geometry,
+        //    this.current_color_material);
+        //this.current_color_sphere_mesh.position.set(1, 1, 1);
+        //this.scene.add(this.current_color_sphere_mesh);
+        this.current_color_sprite = new CircleSprite(.1, 256, 10);
+        this.current_color_sprite.sprite_material.color.setRGB(1, 1, 1);
+        this.current_color_sprite.sprite.position.set(1, 1, 1);
+        this.scene.add(this.current_color_sprite.sprite);
+
+        /* Rotate around center of the cube rather than the origin. */
         this.pivot.applyMatrix(new THREE.Matrix4().makeTranslation(0.5, 0.5, 0.5));
 
         /* Color system. */
@@ -82,21 +137,17 @@ export class RGBCubeVisualization extends Visualization {
         if ($controls.length == 0) {
             return;
         }
-
+        // TODO?
     }
 
     on_color_system_property_change(event) {
-        switch (event.property) {
-            case this.red_property:
-                this.rgb_cube_mesh.scale.x = this.red_property.value;
-                break;
-            case this.green_property:
-                this.rgb_cube_mesh.scale.y = this.green_property.value;
-                break;
-            case this.blue_property:
-                this.rgb_cube_mesh.scale.z = this.blue_property.value;
-                break;
-        }
+        this.set_selected_color(
+            "rgb(" +
+            (this.red_property.value * 100).toString() + "%, " +
+            (this.green_property.value * 100).toString() + "%, " +
+            (this.blue_property.value * 100).toString() + "%)"
+        );
+
         this.rgb_cube_mesh.matrix.identity();
         this.rgb_cube_mesh.matrix.multiply(new THREE.Matrix4().makeTranslation(
             this.red_property.value / 2,
@@ -108,6 +159,18 @@ export class RGBCubeVisualization extends Visualization {
             this.green_property.value,
             this.blue_property.value
         ));
+
+        this.current_color_sprite.sprite.position.set(
+            this.red_property.value,
+            this.green_property.value,
+            this.blue_property.value
+        );
+        this.current_color_sprite.sprite_material.color.setRGB(
+            this.red_property.value,
+            this.green_property.value,
+            this.blue_property.value
+        );
+
         this.render();
     }
 }

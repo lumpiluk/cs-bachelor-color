@@ -24,9 +24,19 @@
   }
 
   .visualization-controls {
+    padding: .3em @figure_title_padding_left;
+
     .visualization-control {
-      padding: .5em .5em .5em @figure_title_padding_left; // top right bottom left
+      padding: .5em 0 .5em 0; // top right bottom left
     }
+  }
+
+  .selected-color {
+    padding: .5em .5em .5em @figure_title_padding_left; // top right bottom left
+    color: black;
+    text-shadow: -.1em 0 0 white, 0 -.1em 0 white, .1em 0 0 white, 0 .1em 0 white;
+    background-color: white;
+    border: .1em solid black;
   }
 }
 

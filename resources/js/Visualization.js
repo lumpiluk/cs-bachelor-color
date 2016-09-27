@@ -240,4 +240,11 @@ export class Visualization {
         this.on_mouse_up(event);
         this.two_fingers_touching = false;
     }
+
+    set_selected_color(css_color) {
+        if (this.$figure == null) {
+            return;
+        }
+        this.$figure.find(".selected-color").css("background-color", css_color)
+    }
 }

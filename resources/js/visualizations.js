@@ -12,7 +12,7 @@ import {RGBCubeVisualization} from "./RGBCubeVisualization";
 let visualizations = [];
 
 /**
- * Matches each figure ID to the figure's visible number in the document.
+ * Matches each figure (HTML-)ID to the figure's visible number in the document.
  * @type {{}}
  */
 let figures = {};

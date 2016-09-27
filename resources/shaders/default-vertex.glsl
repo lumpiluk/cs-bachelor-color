@@ -43,9 +43,9 @@ varying vec4 worldCoord;
  * (Copied from https://aerotwist.com/tutorials/an-introduction-to-shaders-part-1/)
  */
 void main() {
-  worldCoord = modelMatrix * vec4(position,1.0);
+    worldCoord = modelMatrix * vec4(position,1.0);
 
-  gl_Position = projectionMatrix *
-                modelViewMatrix *
-                vec4(position,1.0);
+    gl_Position = projectionMatrix *
+                  modelViewMatrix *
+                  vec4(position,1.0);
 }
