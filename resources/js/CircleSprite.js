@@ -1,3 +1,4 @@
+import {Texture, SpriteMaterial, Sprite} from "../../bower_components/three.js/build/three";
 /**
  * Created by lumpiluk on 9/27/16.
  */
@@ -27,16 +28,16 @@ export class CircleSprite {
         context.stroke();
 
         // canvas contents will be used for a texture
-        this.texture = new THREE.Texture(canvas);
+        this.texture = new Texture(canvas);
         this.texture.needsUpdate = true;
 
-        this.sprite_material = new THREE.SpriteMaterial({
+        this.sprite_material = new SpriteMaterial({
             color: 0xffffff, // Texture is multiplied by this color.
             map: this.texture,
             rotation: 0,
             fog: false
         });
-        this.sprite = new THREE.Sprite(this.sprite_material);
+        this.sprite = new Sprite(this.sprite_material);
         this.sprite.scale.set(scale, scale, 1);
     }
 }

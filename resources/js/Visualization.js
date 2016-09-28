@@ -5,6 +5,9 @@
 /* Load .glsl shader file via browserify plugin browserify-shader. */
 export let DEFAULT_VERTEX_SHADER = require("../shaders/default-vertex.glsl");
 
+import {Vector2, Euler, Matrix4, PerspectiveCamera, Object3D, WebGLRenderer, Scene}
+    from "../../bower_components/three.js/build/three";
+
 export class Visualization {
 
     constructor($container) {
@@ -30,15 +33,15 @@ export class Visualization {
         this.far = 10000;
 
         /* Initialize three.js. */
-        this.renderer = new THREE.WebGLRenderer({antialias: true});
-        this.scene = new THREE.Scene();
+        this.renderer = new WebGLRenderer({antialias: true});
+        this.scene = new Scene();
         // this.axis_helper = new THREE.AxisHelper(5);
-        this.pivot = new THREE.Object3D(); // Pivot for rotation of camera and maybe lights.
-        this.camera = new THREE.PerspectiveCamera(
+        this.pivot = new Object3D(); // Pivot for rotation of camera and maybe lights.
+        this.camera = new PerspectiveCamera(
             this.fov, this.aspect, this.near, this.far
         );
         this.camera.position.set(0, 0, 0, 1);
-        this.camera.applyMatrix(new THREE.Matrix4().makeTranslation(0, 0, 3));
+        this.camera.applyMatrix(new Matrix4().makeTranslation(0, 0, 3));
         this.camera.lookAt(this.scene.position);
         this.pivot.add(this.camera);
         this.scene.add(this.pivot);
@@ -51,12 +54,12 @@ export class Visualization {
         // "that": Wordy way of calling a function to preserve "this". Necessary w/ arrow functions?
 
         /* Initialize navigation controls. */
-        this.current_rotation = new THREE.Euler(0, 0, 0, "YXZ"); // YXZ for no "sideways" rotation.
-        this.starting_rotation = new THREE.Euler(0, 0, 0, "YXZ");
+        this.current_rotation = new Euler(0, 0, 0, "YXZ"); // YXZ for no "sideways" rotation.
+        this.starting_rotation = new Euler(0, 0, 0, "YXZ");
         this.starting_focal_length = 0;
         this.dragging = false;
         this.two_fingers_touching = false;
-        this.drag_start = new THREE.Vector2(0, 0);
+        this.drag_start = new Vector2(0, 0);
         this.scale_start_distance = 0;
         this.$container.on("mousedown", (event) => that.on_mouse_down.call(that, event));
         this.$container.on("wheel", (event) => that.on_wheel.call(that, event));
@@ -184,8 +187,8 @@ export class Visualization {
                 break;
             case 2: /* Two fingers -> pinch to zoom, rotation around x! */
                 event.preventDefault();
-                this.scale_start_distance = new THREE.Vector2(event.touches[0].pageX, event.touches[0].pageY)
-                    .distanceTo(new THREE.Vector2(event.touches[1].pageX, event.touches[1].pageY));
+                this.scale_start_distance = new Vector2(event.touches[0].pageX, event.touches[0].pageY)
+                    .distanceTo(new Vector2(event.touches[1].pageX, event.touches[1].pageY));
                 this.starting_focal_length = this.camera.getFocalLength();
                 this.two_fingers_touching = true;
                 break;
@@ -224,8 +227,8 @@ export class Visualization {
          */
         if (this.two_fingers_touching && event.touches.length == 2) {
             event.preventDefault();
-            let distance = new THREE.Vector2(event.touches[0].pageX, event.touches[0].pageY)
-                .distanceTo(new THREE.Vector2(event.touches[1].pageX, event.touches[1].pageY));
+            let distance = new Vector2(event.touches[0].pageX, event.touches[0].pageY)
+                .distanceTo(new Vector2(event.touches[1].pageX, event.touches[1].pageY));
             let s_delta = (distance - this.scale_start_distance) / $(window).width()
                 * (this.max_focal_length - this.min_focal_length);
             this.update_scale(s_delta);

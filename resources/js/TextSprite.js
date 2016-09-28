@@ -1,6 +1,4 @@
-/**
- * Created by lumpiluk on 9/27/16.
- */
+import {Texture, SpriteMaterial, Sprite} from "../../bower_components/three.js/build/three";
 
 const TEXTURE_SIZE = 256;
 
@@ -11,7 +9,6 @@ export class TextSprite {
     constructor(text, scale) {
         let fontface = "sans-serif";
         let fontsize = 240;
-        let border_thickness = 4;
 
         let canvas = document.createElement('canvas');
         canvas.width = TEXTURE_SIZE;
@@ -34,16 +31,16 @@ export class TextSprite {
         context.fillText(text, 0, fontsize);
 
         // canvas contents will be used for a texture
-        this.texture = new THREE.Texture(canvas);
+        this.texture = new Texture(canvas);
         this.texture.needsUpdate = true;
 
-        this.sprite_material = new THREE.SpriteMaterial({
+        this.sprite_material = new SpriteMaterial({
             color: 0xffffff, // Texture is multiplied by this color.
             map: this.texture,
             rotation: 0,
             fog: false
         });
-        this.sprite = new THREE.Sprite(this.sprite_material);
+        this.sprite = new Sprite(this.sprite_material);
         this.sprite.scale.set(scale, scale, 1);
     }
 

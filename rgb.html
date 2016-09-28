@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>WebGL Test</title>
+    <title>RGB</title>
 
     <link rel="stylesheet" type="text/css" href="bower_components/normalize-css/normalize.css">
     <link rel="stylesheet" type="text/css" href="resources/css/color-main.css">
@@ -12,36 +12,22 @@
     <script async src="bower_components/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
 
+    <!-- TODO: .min.js -->
     <script src="resources/js/visualizations.compiled.js"></script>
-    <!--<script src="resources/js/visualizations.browserified.compiled.min.js"></script>-->
 </head>
 <body>
-    <h1>WebGL Test</h1>
-    <ul>
-        <li><a href="rgb.html">RGB</a></li>
-        <li><a href="hsl.html">HSL</a> (not implemented yet)</li>
-        <li><a href="hsv.html">HSV</a></li>
-    </ul>
+    <h1>RGB</h1>
     <p>
         <figref data-fig-id="fig-rgb-vis">The figure</figref> shows the RGB cube.
         Click and drag to rotate, scroll to zoom.
         On a touchscreen, drag to rotate around the y-axis and use two fingers to zoom or to rotate around the x-axis.
     </p>
-    <p>
-        \[
-            (r,g,b)_\text{RGB} := \begin{pmatrix}
-                r \\ g \\ b
-            \end{pmatrix}
-        \]
-    </p>
-    <p>
-        Testing some maths like \(f(x)=2\cdot x + 3\).
-        \[
-            b := \begin{cases}
-                \frac{2}{3} & \text{if } a \lt 3 \\
-                15^{a} & \text{else}
-            \end{cases}
-        \]
-    </p>
+    <div class="figure" id="fig-rgb-vis">
+        <div class="rgb-cube visualization"></div>
+        <div class="selected-color"></div>
+        <div class="figure-title">The RGB cube.</div>
+        <div class="visualization-controls"></div>
+        <div class="visualization-controls-advanced"></div>
+    </div>
 </body>
 </html>

@@ -3,7 +3,9 @@
  */
 
 // import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
-import {RGBCubeVisualization} from "./RGBCubeVisualization";
+import {attach_rgb_cube_visualizations} from "./RGBCubeVisualization";
+import {attach_hsv_visualizations} from "./HSVVisualization";
+
 
 /**
  * List of visualizations in this document.
@@ -23,11 +25,8 @@ $(document).ready(function() {
      * Find and initialize all visualizations as soon as the page is loaded.
      */
     console.log("Initializing visualizations.");
-    $(".visualization.rgb-cube").each(function() {
-        let rgb_cube = new RGBCubeVisualization($(this));
-        rgb_cube.render();
-        visualizations.push(rgb_cube);
-    });
+    visualizations.concat(attach_rgb_cube_visualizations());
+    visualizations.concat(attach_hsv_visualizations());
 
     /* Enumerate figures. */
     $(".figure-title").each(function(index) {
