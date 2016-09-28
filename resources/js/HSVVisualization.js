@@ -10,7 +10,7 @@ import {VisualizationControlSlider} from "./VisualizationControlSlider";
 import {DynamicCylinderBufferGeometry} from "./DynamicCylinderBufferGeometry";
 
 import {
-    MeshBasicMaterial,
+    ShaderMaterial,
     LineBasicMaterial,
     Vector3,
     ArrowHelper,
@@ -19,7 +19,9 @@ import {
     LineSegments,
     Mesh
 } from "../../bower_components/three.js/build/three";
-import {DoubleSide} from "../../bower_components/three.js/build/three";
+
+
+const HSV_CYLINDER_SHADER = require("../shaders/hsv-cylinder-fragment.glsl");
 
 export class HSVVisualization extends Visualization {
     constructor($container) {
@@ -32,8 +34,14 @@ export class HSVVisualization extends Visualization {
 
         /* Color solid. */
         this.hsv_cone_geom = new DynamicCylinderBufferGeometry(0.5, 0, 1, 30, 2 * Math.PI);
-        this.hsv_cone_mat = new MeshBasicMaterial({color: 0xff00ff, wireframe: false});
-        //this.hsv_cone_mat.side = DoubleSide;
+        this.hsv_cone_mat = this.rgb_cube_mat = new ShaderMaterial({
+            uniforms: {
+                radiusBottom: {type: "f", value: 0.0},
+                radiusTop: {type: "f", value: .5}
+            },
+            vertexShader: DEFAULT_VERTEX_SHADER(),
+            fragmentShader: HSV_CYLINDER_SHADER()
+        });
         this.hsv_cone_mesh = new Mesh(this.hsv_cone_geom, this.hsv_cone_mat);
         this.scene.add(this.hsv_cone_mesh);
 

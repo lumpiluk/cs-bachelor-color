@@ -3053,6 +3053,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * Created by lumpiluk on 9/28/16.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
+var HSV_CYLINDER_SHADER = require("../shaders/hsv-cylinder-fragment.glsl");
+
 var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
     _inherits(HSVVisualization, _Visualization);
 
@@ -3068,8 +3070,14 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
 
         /* Color solid. */
         _this.hsv_cone_geom = new _DynamicCylinderBufferGeometry.DynamicCylinderBufferGeometry(0.5, 0, 1, 30, 2 * Math.PI);
-        _this.hsv_cone_mat = new _three.MeshBasicMaterial({ color: 0xff00ff, wireframe: false });
-        //this.hsv_cone_mat.side = DoubleSide;
+        _this.hsv_cone_mat = _this.rgb_cube_mat = new _three.ShaderMaterial({
+            uniforms: {
+                radiusBottom: { type: "f", value: 0.0 },
+                radiusTop: { type: "f", value: .5 }
+            },
+            vertexShader: (0, _Visualization2.DEFAULT_VERTEX_SHADER)(),
+            fragmentShader: HSV_CYLINDER_SHADER()
+        });
         _this.hsv_cone_mesh = new _three.Mesh(_this.hsv_cone_geom, _this.hsv_cone_mat);
         _this.scene.add(_this.hsv_cone_mesh);
 
@@ -3159,7 +3167,7 @@ function attach_hsv_visualizations() {
     return visualizations;
 }
 
-},{"../../bower_components/three.js/build/three":1,"./CircleSprite":2,"./ColorSystemProperty":3,"./DynamicCylinderBufferGeometry":4,"./TextSprite":7,"./Visualization":8,"./VisualizationControlSlider":9}],6:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1,"../shaders/hsv-cylinder-fragment.glsl":12,"./CircleSprite":2,"./ColorSystemProperty":3,"./DynamicCylinderBufferGeometry":4,"./TextSprite":7,"./Visualization":8,"./VisualizationControlSlider":9}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3346,7 +3354,7 @@ function attach_rgb_cube_visualizations() {
     return visualizations;
 }
 
-},{"../../bower_components/three.js/build/three":1,"../shaders/rgb-fragment.glsl":12,"./CircleSprite":2,"./ColorSystemProperty":3,"./TextSprite":7,"./Visualization":8,"./VisualizationControlSlider":9}],7:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1,"../shaders/rgb-fragment.glsl":13,"./CircleSprite":2,"./ColorSystemProperty":3,"./TextSprite":7,"./Visualization":8,"./VisualizationControlSlider":9}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3885,6 +3893,78 @@ module.exports = function parse(params){
     };
 
 },{}],12:[function(require,module,exports){
+module.exports = function parse(params){
+      var template = "varying vec4 worldCoord; \n" +
+"uniform float radiusBottom; \n" +
+"uniform float radiusTop; \n" +
+" \n" +
+"const float PI = 3.1415926535897932384626433832795; \n" +
+"const float HALF_PI = 1.57079632679489661923; \n" +
+"const float TWO_PI = 6.283185307179586; \n" +
+" \n" +
+"const float Y_TRANSLATE = .5; \n" +
+" \n" +
+"vec3 get_hsv() { \n" +
+"    float distFromY = distance(vec2(worldCoord.x, worldCoord.z), vec2(0, 0)); \n" +
+" \n" +
+"    float h = (atan(worldCoord.z, -worldCoord.x) + PI) / TWO_PI; \n" +
+"    float v = worldCoord.y + Y_TRANSLATE; \n" +
+"    /* Adjust saturation for linear interpolation between radii. */ \n" +
+"    float s = distFromY / mix(radiusBottom, radiusTop, v); \n" +
+" \n" +
+"    return vec3(h, s, v); \n" +
+"} \n" +
+" \n" +
+"vec3 hsv_to_rgb(in vec3 hsv) { \n" +
+"    float h = hsv.x; \n" +
+"    float s = hsv.y; \n" +
+"    float v = hsv.z; \n" +
+" \n" +
+"    if (s <= 0.0) { \n" +
+"        return vec3(0, 0, 0); \n" +
+"    } \n" +
+" \n" +
+"    float hp = h * 6.0; \n" +
+"    float c1 = floor(hp); \n" +
+"    float c2 = hp - c1; \n" +
+" \n" +
+"    float w1 = (1.0 - s) * v; \n" +
+"    float w2 = (1.0 - s * c2) * v; \n" +
+"    float w3 = (1.0 - s * (1.0 - c2)) * v; \n" +
+" \n" +
+"    vec3 rgb; \n" +
+"    int ic1 = int(c1); \n" +
+"    if (ic1 == 0) { \n" +
+"        rgb = vec3(v, w3, w1); \n" +
+"    } else if (ic1 == 1) { \n" +
+"        rgb = vec3(w2, v, w1); \n" +
+"    } else if (ic1 == 2) { \n" +
+"        rgb = vec3(w1, v, w3); \n" +
+"    } else if (ic1 == 3) { \n" +
+"        rgb = vec3(w1, w2, v); \n" +
+"    } else if (ic1 == 4) { \n" +
+"        rgb = vec3(w3, w1, v); \n" +
+"    } else { \n" +
+"        rgb = vec3(v, w1, w2); \n" +
+"    } \n" +
+" \n" +
+"    return rgb; \n" +
+"} \n" +
+" \n" +
+"void main() { \n" +
+"    vec3 rgb = hsv_to_rgb(get_hsv()); \n" +
+"    gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, 1.0); \n" +
+"} \n" +
+" \n" 
+      params = params || {}
+      for(var key in params) {
+        var matcher = new RegExp("{{"+key+"}}","g")
+        template = template.replace(matcher, params[key])
+      }
+      return template
+    };
+
+},{}],13:[function(require,module,exports){
 module.exports = function parse(params){
       var template = "varying vec4 worldCoord; \n" +
 " \n" +
