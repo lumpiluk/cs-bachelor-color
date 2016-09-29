@@ -244,10 +244,14 @@ export class Visualization {
         this.two_fingers_touching = false;
     }
 
-    set_selected_color(css_color) {
+    set_selected_color(r, g, b) {
         if (this.$figure == null) {
             return;
         }
+        let css_color = "rgb(" +
+            (r * 100).toString() + "%, " +
+            (g * 100).toString() + "%, " +
+            (b * 100).toString() + "%)";
         this.$figure.find(".selected-color").css("background-color", css_color)
     }
 }

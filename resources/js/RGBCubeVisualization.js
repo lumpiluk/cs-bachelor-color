@@ -78,12 +78,6 @@ export class RGBCubeVisualization extends Visualization {
         this.label_origin.sprite.position.set(-.1, -.1, -.1);
         this.scene.add(this.label_origin.sprite);
         /* Current color indicator. */
-        //this.current_color_sphere_geometry = new SphereGeometry(.05, 7, 7);
-        //this.current_color_material = new MeshBasicMaterial({color: 0xffffff});
-        //this.current_color_sphere_mesh = new Mesh(this.current_color_sphere_geometry,
-        //    this.current_color_material);
-        //this.current_color_sphere_mesh.position.set(1, 1, 1);
-        //this.scene.add(this.current_color_sphere_mesh);
         this.current_color_sprite = new CircleSprite(.1, 256, 10);
         this.current_color_sprite.sprite_material.color.setRGB(1, 1, 1);
         this.current_color_sprite.sprite.position.set(1, 1, 1);
@@ -108,9 +102,9 @@ export class RGBCubeVisualization extends Visualization {
 
         /* Attach event handlers. */
         let that = this;
-        this.red_property.add_listener((event) => that.on_color_system_property_change.call(this, event));
-        this.blue_property.add_listener((event) => that.on_color_system_property_change.call(this, event));
-        this.green_property.add_listener((event) => that.on_color_system_property_change.call(this, event));
+        this.red_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
+        this.blue_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
+        this.green_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
     }
 
     init_controls() {
@@ -120,17 +114,17 @@ export class RGBCubeVisualization extends Visualization {
             return;
         }
         this.red_control = new VisualizationControlSlider(
-            this.$figure.find(".visualization-controls"),
+            $controls,
             this.red_property,
             0.001
         );
         this.green_control = new VisualizationControlSlider(
-            this.$figure.find(".visualization-controls"),
+            $controls,
             this.green_property,
             0.001
         );
         this.blue_control = new VisualizationControlSlider(
-            this.$figure.find(".visualization-controls"),
+            $controls,
             this.blue_property,
             0.001
         );
@@ -146,12 +140,7 @@ export class RGBCubeVisualization extends Visualization {
     }
 
     on_color_system_property_change(event) {
-        this.set_selected_color(
-            "rgb(" +
-            (this.red_property.value * 100).toString() + "%, " +
-            (this.green_property.value * 100).toString() + "%, " +
-            (this.blue_property.value * 100).toString() + "%)"
-        );
+        this.set_selected_color(this.red_property.value, this.green_property.value, this.blue_property.value);
 
         this.rgb_cube_mesh.matrix.identity();
         this.rgb_cube_mesh.matrix.multiply(new Matrix4().makeTranslation(

@@ -11,10 +11,10 @@ const float Y_TRANSLATE = .5;
 vec3 get_hsv() {
     float distFromY = distance(vec2(worldCoord.x, worldCoord.z), vec2(0, 0));
 
-    float h = (atan(worldCoord.z, -worldCoord.x) + PI) / TWO_PI;
     float v = worldCoord.y + Y_TRANSLATE;
     /* Adjust saturation for linear interpolation between radii. */
     float s = distFromY / mix(radiusBottom, radiusTop, v);
+    float h = (atan(worldCoord.z, -worldCoord.x) + PI) / TWO_PI;
 
     return vec3(h, s, v);
 }
@@ -25,10 +25,10 @@ vec3 hsv_to_rgb(in vec3 hsv) {
     float v = hsv.z;
 
     if (s <= 0.0) {
-        return vec3(0, 0, 0);
+        return vec3(v, v, v);
     }
 
-    float hp = h * 6.0;
+    float hp = mod(h * 6.0, 6.0);
     float c1 = floor(hp);
     float c2 = hp - c1;
 
@@ -36,23 +36,18 @@ vec3 hsv_to_rgb(in vec3 hsv) {
     float w2 = (1.0 - s * c2) * v;
     float w3 = (1.0 - s * (1.0 - c2)) * v;
 
-    vec3 rgb;
     int ic1 = int(c1);
-    if (ic1 == 0) {
-        rgb = vec3(v, w3, w1);
-    } else if (ic1 == 1) {
-        rgb = vec3(w2, v, w1);
-    } else if (ic1 == 2) {
-        rgb = vec3(w1, v, w3);
-    } else if (ic1 == 3) {
-        rgb = vec3(w1, w2, v);
-    } else if (ic1 == 4) {
-        rgb = vec3(w3, w1, v);
-    } else {
-        rgb = vec3(v, w1, w2);
-    }
-
-    return rgb;
+    if (ic1 == 0)
+        return vec3(v, w3, w1);
+    if (ic1 == 1)
+        return vec3(w2, v, w1);
+    if (ic1 == 2)
+        return vec3(w1, v, w3);
+    if (ic1 == 3)
+        return vec3(w1, w2, v);
+    if (ic1 == 4)
+        return vec3(w3, w1, v);
+    return vec3(v, w1, w2);
 }
 
 void main() {

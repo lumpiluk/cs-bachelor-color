@@ -12,7 +12,7 @@ Development dependencies (mostly run automatically in WebStorm's File Watchers):
 - *browserify* for a "require" that works in the browser. Otherwise, individual .js files would quickly become bloated. This needs to be installed globally via `sudo npm install -g browserify`.
 - *babelify*: A combination of babel and browserify.
 - *browserify-shader* plugin for browserify for including external shader text files in javascript.
-- yuicompressor for minifying Javascript. This needs to be installed globally via `sudo npm install -g yuicompressor`.
+- *uglify-js* for minifying Javascript. This needs to be installed globally via `sudo npm install -g uglify-js`.
 
 Command for browserify with babelify and browserify-shader as it is set in the corresponding File Watcher:
 `browserify -t [browserify-shader --parameterize=true] -t [babelify --presets es2015] $FileName$ -o $FileNameWithoutExtension$.compiled.js`
