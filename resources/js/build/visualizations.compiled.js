@@ -2847,6 +2847,114 @@ var CircleSprite = exports.CircleSprite = function CircleSprite(scale, texture_s
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.CircularArrow = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = require("../../bower_components/three.js/build/three");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function get_current_angle(i, num_segments, theta_length) {
+    return i * 2 * Math.PI / num_segments * theta_length / (2 * Math.PI);
+}
+
+var CircularArrow = exports.CircularArrow = function (_Object3D) {
+    _inherits(CircularArrow, _Object3D);
+
+    function CircularArrow(segments, radius, theta, arrow_head_length, arrow_head_width, color, arrow_color) {
+        _classCallCheck(this, CircularArrow);
+
+        var _this = _possibleConstructorReturn(this, (CircularArrow.__proto__ || Object.getPrototypeOf(CircularArrow)).call(this));
+
+        _this.segments = segments;
+        _this.radius = radius;
+        _this.theta = theta;
+        _this.arrow_head_length = arrow_head_length;
+        _this.arrow_head_width = arrow_head_width;
+
+        _this.circle_geometry = new _three.BufferGeometry();
+        _this.circle_material = new _three.LineBasicMaterial({ color: color });
+        _this.circle_vertices = [];
+        _this.circle_vertex_positions = new Float32Array((segments + 1) * 3);
+        _this.circle_indices = []; // Which vertex is connected to which.
+
+        /* Fill vertices array and set indices. Vertices be initialized in update_circle(). */
+        for (var i = 0; i < segments + 1; i++) {
+            _this.circle_vertices.push(new _three.Vector3(0, 0, 0));
+            if (i != segments) {
+                _this.circle_indices.push(i, i + 1);
+            }
+        }
+
+        _this.circle_geometry.setIndex(new _three.BufferAttribute(new Uint16Array(_this.circle_indices), 1));
+        _this.circle_geometry.addAttribute("position", new _three.BufferAttribute(_this.circle_vertex_positions, 3));
+        _this.circle_mesh = new _three.LineSegments(_this.circle_geometry, _this.circle_material);
+        _this.add(_this.circle_mesh);
+
+        _this.arrow = new _three.ArrowHelper(new _three.Vector3(0, 1, 0), // Initial direction, will be updated in update_circle().
+        new _three.Vector3(0, 0, 0), // Initial origin.
+        arrow_head_length + 0.001, // Arrow length.
+        arrow_color, arrow_head_length, arrow_head_width);
+        _this.add(_this.arrow);
+
+        _this.update_circle();
+        return _this;
+    }
+
+    /**
+     * Turn array of vertices into array of floats required for BufferGeometry.
+     */
+
+
+    _createClass(CircularArrow, [{
+        key: "update_positions",
+        value: function update_positions() {
+            var positions = this.circle_vertex_positions;
+            for (var i = 0; i < this.circle_vertices.length; i++) {
+                positions[i * 3] = this.circle_vertices[i].x;
+                positions[i * 3 + 1] = this.circle_vertices[i].y;
+                positions[i * 3 + 2] = this.circle_vertices[i].z;
+            }
+            this.circle_geometry.attributes.position.needsUpdate = true;
+        }
+    }, {
+        key: "update_circle",
+        value: function update_circle() {
+            /* Update vertices. */
+            for (var i = 0; i < this.segments + 1; i++) {
+                this.circle_vertices[i].x = Math.cos(get_current_angle(i, this.segments, this.theta)) * this.radius;
+                this.circle_vertices[i].z = -Math.sin(get_current_angle(i, this.segments, this.theta)) * this.radius;
+            }
+            this.update_positions();
+
+            /* Update arrow. */
+            this.arrow.position.set(Math.cos(get_current_angle(this.segments - 1, this.segments, this.theta)) * this.radius, 0, -Math.sin(get_current_angle(this.segments - 1, this.segments, this.theta)) * this.radius);
+            var dir = new _three.Vector3(Math.cos(this.theta) * this.radius, 0, -Math.sin(this.theta) * this.radius).sub(this.arrow.position);
+            if (dir.length() == 0) {
+                dir = new _three.Vector3(0, 0, -1);
+            } else {
+                dir.normalize();
+            }
+            this.arrow.rotation.set(0, 0, 0, "XYZ"); // because translateOnAxis is in object space...
+            this.arrow.translateOnAxis(dir, -(this.arrow_head_length + 0.001) + this.theta * this.radius / this.segments);
+            this.arrow.setDirection(dir);
+        }
+    }]);
+
+    return CircularArrow;
+}(_three.Object3D);
+
+},{"../../bower_components/three.js/build/three":1}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -2922,7 +3030,7 @@ var ColorSystemProperty = exports.ColorSystemProperty = function () {
     return ColorSystemProperty;
 }();
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3021,7 +3129,6 @@ var DynamicCylinderBufferGeometry = exports.DynamicCylinderBufferGeometry = func
 
     /**
      * Turn array of vertices into array of floats required for BufferGeometry.
-     * @returns {Float32Array}
      */
 
 
@@ -3066,7 +3173,7 @@ var DynamicCylinderBufferGeometry = exports.DynamicCylinderBufferGeometry = func
     return DynamicCylinderBufferGeometry;
 }(_three.BufferGeometry);
 
-},{"../../bower_components/three.js/build/three":1}],5:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3094,15 +3201,15 @@ var _VisualizationControlSlider = require("./VisualizationControlSlider");
 
 var _DynamicCylinderBufferGeometry = require("./DynamicCylinderBufferGeometry");
 
+var _CircularArrow = require("./CircularArrow");
+
 var _three = require("../../bower_components/three.js/build/three");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by lumpiluk on 9/28/16.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var HSV_CYLINDER_SHADER = require("../shaders/hsv-cylinder-fragment.glsl");
 
@@ -3139,7 +3246,6 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
         _this.bounding_cone = _this.make_bounding_cone(30, new _three.LineBasicMaterial({ color: 0x000000 }));
         _this.bounding_cone.matrixAutoUpdate = false;
         _this.scene.add(_this.bounding_cone);
-
         /* Arrows. */
         _this.arrow_length_padding = .15;
         var arrow_color_hex = 0xffffff;
@@ -3155,6 +3261,13 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
         _this.arrow_length_padding, // length
         arrow_color_hex, _this.arrow_head_length, _this.arrow_head_width);
         _this.scene.add(_this.arrow_saturation);
+        _this.circ_arrow_hue = new _CircularArrow.CircularArrow(30, // segments
+        _this.radius + .05, // radius
+        2 * Math.PI, // initial theta
+        _this.arrow_head_length, _this.arrow_head_width, arrow_color_hex, // circle color
+        arrow_color_hex);
+        _this.circ_arrow_hue.position.set(0, .5, 0);
+        _this.scene.add(_this.circ_arrow_hue);
         /* Labels. */
         _this.label_value = new _TextSprite.TextSprite("V", .15);
         _this.label_value.sprite.position.set(0, .6 + _this.arrow_length_padding, 0);
@@ -3162,6 +3275,9 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
         _this.label_saturation = new _TextSprite.TextSprite("S", .15);
         _this.label_saturation.sprite.position.set(_this.radius + _this.arrow_length_padding + .1, .5, 0);
         _this.scene.add(_this.label_saturation.sprite);
+        _this.label_hue = new _TextSprite.TextSprite("H", .15);
+        _this.set_hue_label_position(2 * Math.PI);
+        _this.scene.add(_this.label_hue.sprite);
         /* Current color indicator. */
         _this.current_color_sprite = new _CircleSprite.CircleSprite(.05, 256, 10);
         _this.current_color_sprite.sprite_material.color.setRGB(1, 1, 1);
@@ -3204,24 +3320,24 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
             var indices = []; // Which vertex is connected to which.
 
             /* Init circle vertices. */
-            for (var _i = 0; _i < num_circle_segments; _i++) {
-                vertices.push(new _three.Vector3(Math.cos(_i * 2 * Math.PI / num_circle_segments) * this.radius, 0.5, Math.sin(_i * 2 * Math.PI / num_circle_segments) * this.radius));
-                indices.push(_i + 1); // Offset of 1 to account for first vertex at cone tip.
-                indices.push(_i + 2);
+            for (var i = 0; i < num_circle_segments; i++) {
+                vertices.push(new _three.Vector3(Math.cos(i * 2 * Math.PI / num_circle_segments) * this.radius, 0.5, Math.sin(i * 2 * Math.PI / num_circle_segments) * this.radius));
+                indices.push(i + 1); // Offset of 1 to account for first vertex at cone tip.
+                indices.push(i + 2);
             }
             /* Init the six vertices for attaching the diagonal lines. */
-            for (var _i2 = 0; _i2 < 6; _i2++) {
-                vertices.push(new _three.Vector3(Math.cos(_i2 * 2 * Math.PI / 6) * this.radius, 0.5, Math.sin(_i2 * 2 * Math.PI / 6) * this.radius));
-                indices.push(_i2 + 1 + num_circle_segments);
+            for (var _i = 0; _i < 6; _i++) {
+                vertices.push(new _three.Vector3(Math.cos(_i * 2 * Math.PI / 6) * this.radius, 0.5, Math.sin(_i * 2 * Math.PI / 6) * this.radius));
+                indices.push(_i + 1 + num_circle_segments);
                 indices.push(0); // Connect to cone tip.
             }
 
             /* Turn array of vertices into array of floats required for BufferGeometry. */
             var positions = new Float32Array(vertices.length * 3);
-            for (var i = 0; i < vertices.length; i++) {
-                positions[i * 3] = vertices[i].x;
-                positions[i * 3 + 1] = vertices[i].y;
-                positions[i * 3 + 2] = vertices[i].z;
+            for (var _i2 = 0; _i2 < vertices.length; _i2++) {
+                positions[_i2 * 3] = vertices[_i2].x;
+                positions[_i2 * 3 + 1] = vertices[_i2].y;
+                positions[_i2 * 3 + 2] = vertices[_i2].z;
             }
 
             geometry.addAttribute('position', new _three.BufferAttribute(positions, 3));
@@ -3252,6 +3368,13 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
             // TODO: switch between cylinder, cone, and cube
         }
     }, {
+        key: "set_hue_label_position",
+        value: function set_hue_label_position(angle) {
+            var r = this.radius + .15;
+            var angle_p = angle * 2 / 3;
+            this.label_hue.sprite.position.set(Math.cos(angle_p) * r, .5, -Math.sin(angle_p) * r);
+        }
+    }, {
         key: "on_color_system_property_change",
         value: function on_color_system_property_change(event) {
             var selected_rgb = (0, _color_conversion.hsv_to_rgb)(this.hue_property.value, this.saturation_property.value, this.value_property.value);
@@ -3278,6 +3401,10 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
             this.arrow_saturation.setDirection(new _three.Vector3(Math.cos(this.hsv_cone_geom.theta_length), 0, -Math.sin(this.hsv_cone_geom.theta_length)));
             r += this.arrow_length_padding + .1;
             this.label_saturation.sprite.position.set(Math.cos(this.hsv_cone_geom.theta_length) * r, this.value_property.value - .5, -Math.sin(this.hsv_cone_geom.theta_length) * r);
+            /* Update hue arrow and label. */
+            this.circ_arrow_hue.theta = this.hue_property.value * 2 * Math.PI;
+            this.circ_arrow_hue.update_circle();
+            this.set_hue_label_position(this.hue_property.value * 2 * Math.PI);
 
             this.render();
         }
@@ -3302,7 +3429,7 @@ function attach_hsv_visualizations() {
     return visualizations;
 }
 
-},{"../../bower_components/three.js/build/three":1,"../shaders/hsv-cylinder-fragment.glsl":13,"./CircleSprite":2,"./ColorSystemProperty":3,"./DynamicCylinderBufferGeometry":4,"./TextSprite":7,"./Visualization":8,"./VisualizationControlSlider":9,"./color_conversion":10}],6:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1,"../shaders/hsv-cylinder-fragment.glsl":14,"./CircleSprite":2,"./CircularArrow":3,"./ColorSystemProperty":4,"./DynamicCylinderBufferGeometry":5,"./TextSprite":8,"./Visualization":9,"./VisualizationControlSlider":10,"./color_conversion":11}],7:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3483,7 +3610,7 @@ function attach_rgb_cube_visualizations() {
     return visualizations;
 }
 
-},{"../../bower_components/three.js/build/three":1,"../shaders/rgb-fragment.glsl":14,"./CircleSprite":2,"./ColorSystemProperty":3,"./TextSprite":7,"./Visualization":8,"./VisualizationControlSlider":9}],7:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1,"../shaders/rgb-fragment.glsl":15,"./CircleSprite":2,"./ColorSystemProperty":4,"./TextSprite":8,"./Visualization":9,"./VisualizationControlSlider":10}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3554,7 +3681,7 @@ var TextSprite = exports.TextSprite = function () {
     return TextSprite;
 }();
 
-},{"../../bower_components/three.js/build/three":1}],8:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3859,7 +3986,7 @@ var Visualization = exports.Visualization = function () {
     return Visualization;
 }();
 
-},{"../../bower_components/three.js/build/three":1,"../shaders/default-vertex.glsl":12}],9:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1,"../shaders/default-vertex.glsl":13}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3915,7 +4042,7 @@ var VisualizationControlSlider = exports.VisualizationControlSlider = function (
     return VisualizationControlSlider;
 }();
 
-},{}],10:[function(require,module,exports){
+},{}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3964,7 +4091,7 @@ function hsv_to_rgb(h, s, v) {
     }
 }
 
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 "use strict";
 
 var _RGBCubeVisualization = require("./RGBCubeVisualization");
@@ -4009,7 +4136,7 @@ $(document).ready(function () {
   });
 });
 
-},{"./HSVVisualization":5,"./RGBCubeVisualization":6}],12:[function(require,module,exports){
+},{"./HSVVisualization":6,"./RGBCubeVisualization":7}],13:[function(require,module,exports){
 module.exports = function parse(params){
       var template = "/* \n" +
 " * Predefined built-in uniforms and attributes for vertex shader: \n" +
@@ -4071,7 +4198,7 @@ module.exports = function parse(params){
       return template
     };
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 module.exports = function parse(params){
       var template = "varying vec4 worldCoord; \n" +
 "uniform float radiusBottom; \n" +
@@ -4138,7 +4265,7 @@ module.exports = function parse(params){
       return template
     };
 
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 module.exports = function parse(params){
       var template = "varying vec4 worldCoord; \n" +
 " \n" +
@@ -4157,4 +4284,4 @@ module.exports = function parse(params){
       return template
     };
 
-},{}]},{},[11]);
+},{}]},{},[12]);

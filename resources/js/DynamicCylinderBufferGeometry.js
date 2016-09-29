@@ -100,7 +100,6 @@ export class DynamicCylinderBufferGeometry extends BufferGeometry {
 
     /**
      * Turn array of vertices into array of floats required for BufferGeometry.
-     * @returns {Float32Array}
      */
     update_positions() {
         let positions = this.vertex_positions;

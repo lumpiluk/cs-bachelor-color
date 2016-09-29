@@ -1,7 +1,3 @@
-/**
- * Created by lumpiluk on 9/28/16.
- */
-
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {TextSprite} from "./TextSprite";
 import {CircleSprite} from "./CircleSprite";
@@ -9,6 +5,7 @@ import {ColorSystemProperty} from "./ColorSystemProperty";
 import {hsv_to_rgb} from "./color_conversion";
 import {VisualizationControlSlider} from "./VisualizationControlSlider";
 import {DynamicCylinderBufferGeometry} from "./DynamicCylinderBufferGeometry";
+import {CircularArrow} from "./CircularArrow";
 
 import {
     ShaderMaterial,
@@ -53,7 +50,6 @@ export class HSVVisualization extends Visualization {
         this.bounding_cone = this.make_bounding_cone(30, new LineBasicMaterial({color: 0x000000}));
         this.bounding_cone.matrixAutoUpdate = false;
         this.scene.add(this.bounding_cone);
-
         /* Arrows. */
         this.arrow_length_padding = .15;
         let arrow_color_hex = 0xffffff;
@@ -77,6 +73,17 @@ export class HSVVisualization extends Visualization {
             this.arrow_head_width
         );
         this.scene.add(this.arrow_saturation);
+        this.circ_arrow_hue = new CircularArrow(
+            30, // segments
+            this.radius + .05, // radius
+            2 * Math.PI, // initial theta
+            this.arrow_head_length,
+            this.arrow_head_width,
+            arrow_color_hex, // circle color
+            arrow_color_hex
+        );
+        this.circ_arrow_hue.position.set(0, .5, 0);
+        this.scene.add(this.circ_arrow_hue);
         /* Labels. */
         this.label_value = new TextSprite("V", .15);
         this.label_value.sprite.position.set(0, .6 + this.arrow_length_padding, 0);
@@ -84,6 +91,9 @@ export class HSVVisualization extends Visualization {
         this.label_saturation = new TextSprite("S", .15);
         this.label_saturation.sprite.position.set(this.radius + this.arrow_length_padding + .1, .5, 0);
         this.scene.add(this.label_saturation.sprite);
+        this.label_hue = new TextSprite("H", .15);
+        this.set_hue_label_position(2 * Math.PI);
+        this.scene.add(this.label_hue.sprite);
         /* Current color indicator. */
         this.current_color_sprite = new CircleSprite(.05, 256, 10);
         this.current_color_sprite.sprite_material.color.setRGB(1, 1, 1);
@@ -141,7 +151,7 @@ export class HSVVisualization extends Visualization {
 
         /* Turn array of vertices into array of floats required for BufferGeometry. */
         let positions = new Float32Array(vertices.length * 3);
-        for (var i = 0; i < vertices.length; i++) {
+        for (let i = 0; i < vertices.length; i++) {
             positions[i * 3] = vertices[i].x;
             positions[i * 3 + 1] = vertices[i].y;
             positions[i * 3 + 2] = vertices[i].z;
@@ -183,6 +193,16 @@ export class HSVVisualization extends Visualization {
             return;
         }
         // TODO: switch between cylinder, cone, and cube
+    }
+
+    set_hue_label_position(angle) {
+        let r = this.radius + .15;
+        let angle_p = angle * 2 / 3;
+        this.label_hue.sprite.position.set(
+            Math.cos(angle_p) * r,
+            .5,
+            -Math.sin(angle_p) * r
+        );
     }
 
     on_color_system_property_change(event) {
@@ -231,6 +251,10 @@ export class HSVVisualization extends Visualization {
             this.value_property.value - .5,
             -Math.sin(this.hsv_cone_geom.theta_length) * r
         );
+        /* Update hue arrow and label. */
+        this.circ_arrow_hue.theta = this.hue_property.value * 2 * Math.PI;
+        this.circ_arrow_hue.update_circle();
+        this.set_hue_label_position(this.hue_property.value * 2 * Math.PI);
 
         this.render();
     }
