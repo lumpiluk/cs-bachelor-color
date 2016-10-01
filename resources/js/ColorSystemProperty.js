@@ -31,7 +31,7 @@ export class ColorSystemProperty {
     }
 
     set_value(value) {
-        this.value = value;
+        this.value = parseFloat(value);
         let event = new ColorSystemPropertyChangeEvent(this);
         for (let callback of this.change_listeners) {
             callback(event);

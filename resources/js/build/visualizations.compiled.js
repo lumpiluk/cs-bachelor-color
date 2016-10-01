@@ -2998,7 +2998,7 @@ var ColorSystemProperty = exports.ColorSystemProperty = function () {
     }, {
         key: "set_value",
         value: function set_value(value) {
-            this.value = value;
+            this.value = parseFloat(value);
             var event = new ColorSystemPropertyChangeEvent(this);
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
@@ -3031,6 +3031,138 @@ var ColorSystemProperty = exports.ColorSystemProperty = function () {
 }();
 
 },{}],5:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.DynamicBoundingCylinder = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _three = require("../../bower_components/three.js/build/three");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DynamicBoundingCylinder = exports.DynamicBoundingCylinder = function (_Object3D) {
+    _inherits(DynamicBoundingCylinder, _Object3D);
+
+    /**
+     * Creates a cylinder of height one centered around the origin.
+     * @param num_circle_segments
+     * @param num_vertical_lines
+     * @param color
+     * @param radius_top
+     * @param radius_bottom
+     * @param include_top_circle If true, draws a circle at the top. Set to false if another bounding cylinder is to be
+     * attached.
+     * @param include_bottom_circle If true, draws a circle at the bottom.
+     */
+    function DynamicBoundingCylinder(num_circle_segments, num_vertical_lines, color, radius_top, radius_bottom, include_top_circle, include_bottom_circle) {
+        _classCallCheck(this, DynamicBoundingCylinder);
+
+        var _this = _possibleConstructorReturn(this, (DynamicBoundingCylinder.__proto__ || Object.getPrototypeOf(DynamicBoundingCylinder)).call(this));
+
+        _this.num_circle_segments = num_circle_segments;
+        _this.num_vertical_lines = num_vertical_lines;
+        _this.radius_top = radius_top;
+        _this.radius_bottom = radius_bottom;
+        _this.include_top_circle = include_top_circle;
+        _this.include_bottom_circle = include_bottom_circle;
+        _this.geometry = new _three.BufferGeometry();
+        _this.material = new _three.LineBasicMaterial({ color: color });
+        _this.vertices = [new _three.Vector3(0, .5, 0), new _three.Vector3(0, -.5, 0)];
+        _this.indices = []; // Which vertex is connected to which.
+
+        /* Init circle indices, fill vertices array. */
+        if (_this.include_top_circle) {
+            for (var i = 0; i < num_circle_segments; i++) {
+                _this.vertices.push(new _three.Vector3(0, 0, 0));
+                // Offset of two for top and bottom center vectors.
+                _this.indices.push(i + 2, (i + 1) % num_circle_segments + 2);
+            }
+        }
+        if (_this.include_bottom_circle) {
+            for (var _i = 0; _i < num_circle_segments; _i++) {
+                _this.vertices.push(new _three.Vector3(0, 0, 0));
+                var offset = _this.include_top_circle ? num_circle_segments + 2 : 2;
+                _this.indices.push(_i + offset, (_i + 1) % num_circle_segments + offset);
+            }
+        }
+
+        /* Init lines connecting the two (potential) circles. */
+        var index_offset = 2;
+        index_offset += _this.include_top_circle ? _this.num_circle_segments : 0;
+        index_offset += _this.include_bottom_circle ? _this.num_circle_segments : 0;
+        for (var _i2 = 0; _i2 < _this.num_vertical_lines; _i2++) {
+            _this.vertices.push(new _three.Vector3(0, 0, 0));
+            _this.vertices.push(new _three.Vector3(0, 0, 0));
+            _this.indices.push(2 * _i2 + index_offset, 2 * _i2 + index_offset + 1);
+        }
+
+        _this.vertex_positions = new Float32Array(_this.vertices.length * 3);
+        _this.geometry.setIndex(new _three.BufferAttribute(new Uint16Array(_this.indices), 1));
+        _this.geometry.addAttribute("position", new _three.BufferAttribute(_this.vertex_positions, 3));
+        _this.mesh = new _three.LineSegments(_this.geometry, _this.material);
+        _this.add(_this.mesh);
+
+        _this.update_cylinder();
+        return _this;
+    }
+
+    /**
+     * Turn array of vertices into array of floats required for BufferGeometry.
+     */
+
+
+    _createClass(DynamicBoundingCylinder, [{
+        key: "update_positions",
+        value: function update_positions() {
+            var positions = this.vertex_positions;
+            for (var i = 0; i < this.vertices.length; i++) {
+                positions[i * 3] = this.vertices[i].x;
+                positions[i * 3 + 1] = this.vertices[i].y;
+                positions[i * 3 + 2] = this.vertices[i].z;
+            }
+            this.geometry.attributes.position.needsUpdate = true;
+        }
+    }, {
+        key: "update_cylinder",
+        value: function update_cylinder() {
+            /* Circles. */
+            if (this.include_top_circle) {
+                var offset = 2;
+                for (var i = 0; i < this.num_circle_segments; i++) {
+                    this.vertices[i + offset].set(Math.cos(i * 2 * Math.PI / this.num_circle_segments) * this.radius_top, 0.5, Math.sin(i * 2 * Math.PI / this.num_circle_segments) * this.radius_top);
+                }
+            }
+            if (this.include_bottom_circle) {
+                var _offset = this.include_top_circle ? this.num_circle_segments + 2 : 2;
+                for (var _i3 = 0; _i3 < this.num_circle_segments; _i3++) {
+                    this.vertices[_i3 + _offset].set(Math.cos(_i3 * 2 * Math.PI / this.num_circle_segments) * this.radius_bottom, -0.5, Math.sin(_i3 * 2 * Math.PI / this.num_circle_segments) * this.radius_bottom);
+                }
+            }
+
+            /* Vertical lines. */
+            var index_offset = 2;
+            index_offset += this.include_top_circle ? this.num_circle_segments : 0;
+            index_offset += this.include_bottom_circle ? this.num_circle_segments : 0;
+            for (var _i4 = 0; _i4 < this.num_vertical_lines; _i4++) {
+                this.vertices[_i4 * 2 + index_offset].set(Math.cos(_i4 * 2 * Math.PI / this.num_vertical_lines) * this.radius_top, 0.5, Math.sin(_i4 * 2 * Math.PI / this.num_vertical_lines) * this.radius_top);
+                this.vertices[_i4 * 2 + index_offset + 1].set(Math.cos(_i4 * 2 * Math.PI / this.num_vertical_lines) * this.radius_bottom, -0.5, Math.sin(_i4 * 2 * Math.PI / this.num_vertical_lines) * this.radius_bottom);
+            }
+            this.update_positions();
+        }
+    }]);
+
+    return DynamicBoundingCylinder;
+}(_three.Object3D);
+
+},{"../../bower_components/three.js/build/three":1}],6:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3173,7 +3305,266 @@ var DynamicCylinderBufferGeometry = exports.DynamicCylinderBufferGeometry = func
     return DynamicCylinderBufferGeometry;
 }(_three.BufferGeometry);
 
-},{"../../bower_components/three.js/build/three":1}],6:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1}],7:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.HSLVisualization = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+exports.attach_hsl_visualizations = attach_hsl_visualizations;
+
+var _Visualization2 = require("./Visualization");
+
+var _TextSprite = require("./TextSprite");
+
+var _CircleSprite = require("./CircleSprite");
+
+var _ColorSystemProperty = require("./ColorSystemProperty");
+
+var _color_conversion = require("./color_conversion");
+
+var _VisualizationControlSlider = require("./VisualizationControlSlider");
+
+var _DynamicCylinderBufferGeometry = require("./DynamicCylinderBufferGeometry");
+
+var _CircularArrow = require("./CircularArrow");
+
+var _DynamicBoundingCylinder = require("./DynamicBoundingCylinder");
+
+var _three = require("../../bower_components/three.js/build/three");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var HSL_CYLINDER_SHADER = require("../shaders/hsl-cylinders-fragment.glsl");
+
+var HSLVisualization = exports.HSLVisualization = function (_Visualization) {
+    _inherits(HSLVisualization, _Visualization);
+
+    function HSLVisualization($container) {
+        _classCallCheck(this, HSLVisualization);
+
+        var _this = _possibleConstructorReturn(this, (HSLVisualization.__proto__ || Object.getPrototypeOf(HSLVisualization)).call(this, $container));
+
+        _this.radius = .5;
+        _this.height = 1;
+        _this.circle_segments = 30;
+
+        /* Small pivot offset to keep lightness label in frame. */
+        _this.pivot.position.set(0, .15, 0);
+        /* Adjust zoom. */
+        _this.update_scale(50);
+
+        /* Color solid: Cones. */
+        _this.hsl_cylinder_top_geom = new _DynamicCylinderBufferGeometry.DynamicCylinderBufferGeometry(0, _this.radius, _this.height / 2, _this.circle_segments, 2 * Math.PI);
+        _this.hsl_cylinder_bottom_geom = new _DynamicCylinderBufferGeometry.DynamicCylinderBufferGeometry(_this.radius, 0, _this.height / 2, _this.circle_segments, 2 * Math.PI);
+        _this.hsl_cylinder_mat = new _three.ShaderMaterial({
+            uniforms: {
+                radiusBottom: { type: "f", value: 0.0 },
+                radiusTop: { type: "f", value: 0.0 },
+                radius: { type: "f", value: _this.radius },
+                height: { type: "f", value: _this.height }
+            },
+            vertexShader: (0, _Visualization2.DEFAULT_VERTEX_SHADER)(),
+            fragmentShader: HSL_CYLINDER_SHADER()
+        });
+        _this.hsl_cylinder_top = new _three.Mesh(_this.hsl_cylinder_top_geom, _this.hsl_cylinder_mat);
+        _this.hsl_cylinder_bottom = new _three.Mesh(_this.hsl_cylinder_bottom_geom, _this.hsl_cylinder_mat);
+        _this.hsl_cylinder_top.position.set(0, _this.height / 4, 0);
+        _this.hsl_cylinder_bottom.position.set(0, -_this.height / 4, 0);
+        _this.scene.add(_this.hsl_cylinder_top);
+        _this.scene.add(_this.hsl_cylinder_bottom);
+
+        /* Coordinate system. */
+        /* HSL bounding wireframe. */
+        _this.bounding_cylinder_top = new _DynamicBoundingCylinder.DynamicBoundingCylinder(_this.circle_segments, 6, // num_vertical_lines
+        0x000000, 0, // radius_top
+        _this.radius, // radius_bottom
+        true, // include_top_circle
+        true // include_bottom_circle
+        );
+        _this.bounding_cylinder_top.scale.set(1, _this.height / 2, 1);
+        _this.bounding_cylinder_top.position.set(0, _this.height / 4, 0);
+        _this.scene.add(_this.bounding_cylinder_top);
+        _this.bounding_cylinder_bottom = new _DynamicBoundingCylinder.DynamicBoundingCylinder(_this.circle_segments, 6, // num_vertical_lines
+        0x000000, _this.radius, // radius_top
+        0, // radius_bottom
+        false, // include_top_circle // TODO: fix error when this is set to false
+        true // include_bottom_circle
+        );
+        _this.bounding_cylinder_bottom.scale.set(1, _this.height / 2, 1);
+        _this.bounding_cylinder_bottom.position.set(0, -_this.height / 4, 0);
+        _this.scene.add(_this.bounding_cylinder_bottom);
+        /* Arrows. */
+        _this.arrow_length_padding = .15;
+        var arrow_color_hex = 0xffffff;
+        _this.arrow_head_length = .1;
+        _this.arrow_head_width = .05;
+        _this.arrow_lightness = new _three.ArrowHelper(new _three.Vector3(0, 1, 0), // direction
+        new _three.Vector3(0, -_this.height / 2, 0), // origin
+        _this.height + _this.arrow_length_padding, // length
+        arrow_color_hex, _this.arrow_head_length, _this.arrow_head_width);
+        _this.scene.add(_this.arrow_lightness);
+        _this.arrow_saturation = new _three.ArrowHelper(new _three.Vector3(1, 0, 0), // direction
+        new _three.Vector3(0, _this.height / 2, 0), // origin
+        _this.arrow_length_padding, // length
+        arrow_color_hex, _this.arrow_head_length, _this.arrow_head_width);
+        _this.scene.add(_this.arrow_saturation);
+        _this.circ_arrow_hue = new _CircularArrow.CircularArrow(30, // segments
+        _this.radius + .05, // radius
+        2 * Math.PI, // initial theta
+        _this.arrow_head_length, _this.arrow_head_width, arrow_color_hex, // circle color
+        arrow_color_hex);
+        _this.circ_arrow_hue.position.set(0, 0, 0);
+        _this.scene.add(_this.circ_arrow_hue);
+        /* Labels. */
+        _this.label_lightness = new _TextSprite.TextSprite("L", .15);
+        _this.label_lightness.sprite.position.set(0, _this.height / 2 + .1 + _this.arrow_length_padding, 0);
+        _this.scene.add(_this.label_lightness.sprite);
+        _this.label_saturation = new _TextSprite.TextSprite("S", .15);
+        _this.label_saturation.sprite.position.set(_this.arrow_length_padding + .1, _this.height / 2, 0);
+        _this.scene.add(_this.label_saturation.sprite);
+        _this.label_hue = new _TextSprite.TextSprite("H", .15);
+        _this.set_hue_label_position(2 * Math.PI);
+        _this.scene.add(_this.label_hue.sprite);
+        /* Current color indicator. */
+        _this.current_color_sprite = new _CircleSprite.CircleSprite(.05, 256, 10);
+        _this.current_color_sprite.sprite_material.color.setRGB(1, 1, 1);
+        _this.current_color_sprite.sprite.position.set(0, _this.height / 2, 0);
+        _this.scene.add(_this.current_color_sprite.sprite);
+
+        /* Color system. */
+        _this.hue_property = new _ColorSystemProperty.ColorSystemProperty(1.0, 0.0, 1.0, "H", "h");
+        _this.saturation_property = new _ColorSystemProperty.ColorSystemProperty(0.0, 0.0, 1.0, "S", "s");
+        _this.lightness_property = new _ColorSystemProperty.ColorSystemProperty(1.0, 0.0, 1.0, "L", "l");
+
+        /* Initialize color system controls. */
+        _this.hue_control = null;
+        _this.saturation_control = null;
+        _this.lightness_control = null;
+        if (_this.$figure != null) {
+            _this.init_controls();
+            _this.init_advanced_controls();
+        }
+
+        /* Attach event handlers. */
+        var that = _this;
+        _this.hue_property.add_listener(function (event) {
+            return that.on_color_system_property_change.call(that, event);
+        });
+        _this.saturation_property.add_listener(function (event) {
+            return that.on_color_system_property_change.call(that, event);
+        });
+        _this.lightness_property.add_listener(function (event) {
+            return that.on_color_system_property_change.call(that, event);
+        });
+        return _this;
+    }
+
+    _createClass(HSLVisualization, [{
+        key: "init_controls",
+        value: function init_controls() {
+            _get(HSLVisualization.prototype.__proto__ || Object.getPrototypeOf(HSLVisualization.prototype), "init_controls", this).call(this);
+            var $controls = this.$figure.find(".visualization-controls");
+            if ($controls.length == 0) {
+                return;
+            }
+            this.hue_control = new _VisualizationControlSlider.VisualizationControlSlider($controls, this.hue_property, 0.001);
+            this.saturation_control = new _VisualizationControlSlider.VisualizationControlSlider($controls, this.saturation_property, 0.001);
+            this.lightness_control = new _VisualizationControlSlider.VisualizationControlSlider($controls, this.lightness_property, 0.001);
+        }
+    }, {
+        key: "init_advanced_controls",
+        value: function init_advanced_controls() {
+            _get(HSLVisualization.prototype.__proto__ || Object.getPrototypeOf(HSLVisualization.prototype), "init_advanced_controls", this).call(this);
+            var $controls = this.$figure.find(".visualization-controls-advanced");
+            if ($controls.length == 0) {
+                return;
+            }
+            // TODO: switch between cylinder, cone, and cube
+        }
+    }, {
+        key: "set_hue_label_position",
+        value: function set_hue_label_position(angle) {
+            var r = this.radius + .15;
+            var angle_p = angle * 2 / 3;
+            this.label_hue.sprite.position.set(Math.cos(angle_p) * r, 0, -Math.sin(angle_p) * r);
+        }
+    }, {
+        key: "on_color_system_property_change",
+        value: function on_color_system_property_change(event) {
+            var selected_rgb = (0, _color_conversion.hsl_to_rgb)(this.hue_property.value, this.saturation_property.value, this.lightness_property.value);
+            this.set_selected_color(selected_rgb.r, selected_rgb.g, selected_rgb.b);
+
+            var lightness_top = Math.max(0, (this.lightness_property.value - .5) * 2);
+            var lightness_bottom = Math.min(1, this.lightness_property.value * 2);
+            var theta = this.hue_property.value * 2 * Math.PI;
+            var current_y = this.lightness_property.value * this.height - this.height / 2;
+
+            this.hsl_cylinder_top_geom.height = lightness_top * this.height / 2;
+            this.hsl_cylinder_bottom_geom.height = lightness_bottom * this.height / 2;
+            this.hsl_cylinder_top_geom.radius_top = this.radius - lightness_top * this.radius;
+            this.hsl_cylinder_bottom_geom.radius_top = lightness_bottom * this.radius;
+            this.hsl_cylinder_top_geom.theta_length = this.hue_property.value * 2 * Math.PI;
+            this.hsl_cylinder_bottom_geom.theta_length = this.hue_property.value * 2 * Math.PI;
+            this.hsl_cylinder_top_geom.update_cylinder();
+            this.hsl_cylinder_bottom_geom.update_cylinder();
+
+            this.hsl_cylinder_top.position.set(0, this.hsl_cylinder_top_geom.height / 2, 0);
+            this.hsl_cylinder_bottom.position.set(0, (this.lightness_property.value <= .5 ? current_y : 0) - this.hsl_cylinder_bottom_geom.height / 2, 0);
+            this.hsl_cylinder_top.visible = this.lightness_property.value >= .5;
+
+            /* Update current color indicator. */
+            var r = this.lightness_property.value <= .5 ? lightness_bottom * this.radius : (1 - lightness_top) * this.radius;
+            this.current_color_sprite.sprite.position.set(Math.cos(theta) * r * this.saturation_property.value, current_y, -Math.sin(theta) * r * this.saturation_property.value);
+            this.current_color_sprite.sprite_material.color.setRGB(selected_rgb.r, selected_rgb.g, selected_rgb.b);
+
+            /* Update length of lightness arrow. */
+            this.arrow_lightness.position.set(0, current_y, 0);
+            this.arrow_lightness.setLength(this.height / 2 - current_y + this.arrow_length_padding, this.arrow_head_length, this.arrow_head_width);
+            /* Update saturation arrow and label. */
+            this.arrow_saturation.position.set(Math.cos(theta) * r, current_y, -Math.sin(theta) * r);
+            this.arrow_saturation.setDirection(new _three.Vector3(Math.cos(theta), 0, -Math.sin(theta)));
+            r += this.arrow_length_padding + .1;
+            this.label_saturation.sprite.position.set(Math.cos(theta) * r, current_y, -Math.sin(theta) * r);
+            /* Update hue arrow and label. */
+            this.circ_arrow_hue.theta = theta;
+            this.circ_arrow_hue.update_circle();
+            this.set_hue_label_position(theta);
+
+            this.render();
+        }
+    }]);
+
+    return HSLVisualization;
+}(_Visualization2.Visualization);
+
+/**
+ * Finds all HSL visualizations in the document and initializes them.
+ * @returns {Array} An array containing all newly added visualizations.
+ */
+
+
+function attach_hsl_visualizations() {
+    var visualizations = [];
+    $(".visualization.hsl").each(function () {
+        var visualization = new HSLVisualization($(this));
+        visualization.render();
+        visualizations.push(visualization);
+    });
+    return visualizations;
+}
+
+},{"../../bower_components/three.js/build/three":1,"../shaders/hsl-cylinders-fragment.glsl":16,"./CircleSprite":2,"./CircularArrow":3,"./ColorSystemProperty":4,"./DynamicBoundingCylinder":5,"./DynamicCylinderBufferGeometry":6,"./TextSprite":10,"./Visualization":11,"./VisualizationControlSlider":12,"./color_conversion":13}],8:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3201,6 +3592,8 @@ var _VisualizationControlSlider = require("./VisualizationControlSlider");
 
 var _DynamicCylinderBufferGeometry = require("./DynamicCylinderBufferGeometry");
 
+var _DynamicBoundingCylinder = require("./DynamicBoundingCylinder");
+
 var _CircularArrow = require("./CircularArrow");
 
 var _three = require("../../bower_components/three.js/build/three");
@@ -3222,18 +3615,19 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
         var _this = _possibleConstructorReturn(this, (HSVVisualization.__proto__ || Object.getPrototypeOf(HSVVisualization)).call(this, $container));
 
         _this.radius = .5;
+        _this.circle_segments = 30;
 
-        /* Small pivot offset to keep hue label in frame. */
+        /* Small pivot offset to keep value label in frame. */
         _this.pivot.position.set(0, .15, 0);
         /* Adjust zoom. */
         _this.update_scale(50);
 
         /* Color solid. */
-        _this.hsv_cone_geom = new _DynamicCylinderBufferGeometry.DynamicCylinderBufferGeometry(0.5, 0, 1, 30, 2 * Math.PI);
-        _this.hsv_cone_mat = _this.rgb_cube_mat = new _three.ShaderMaterial({
+        _this.hsv_cone_geom = new _DynamicCylinderBufferGeometry.DynamicCylinderBufferGeometry(_this.radius, 0, 1, 30, 2 * Math.PI);
+        _this.hsv_cone_mat = new _three.ShaderMaterial({
             uniforms: {
                 radiusBottom: { type: "f", value: 0.0 },
-                radiusTop: { type: "f", value: .5 }
+                radiusTop: { type: "f", value: _this.radius }
             },
             vertexShader: (0, _Visualization2.DEFAULT_VERTEX_SHADER)(),
             fragmentShader: HSV_CYLINDER_SHADER()
@@ -3243,8 +3637,11 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
 
         /* Coordinate system. */
         /* HSV cone bounding box. */
-        _this.bounding_cone = _this.make_bounding_cone(30, new _three.LineBasicMaterial({ color: 0x000000 }));
-        _this.bounding_cone.matrixAutoUpdate = false;
+        _this.bounding_cone = new _DynamicBoundingCylinder.DynamicBoundingCylinder(_this.circle_segments, 6, // num_vertical_lines
+        0x000000, _this.radius, 0, // radius_bottom
+        true, // include_top_circle
+        true // include_bottom_circle
+        );
         _this.scene.add(_this.bounding_cone);
         /* Arrows. */
         _this.arrow_length_padding = .15;
@@ -3269,13 +3666,13 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
         _this.circ_arrow_hue.position.set(0, .5, 0);
         _this.scene.add(_this.circ_arrow_hue);
         /* Labels. */
-        _this.label_value = new _TextSprite.TextSprite("V", .15);
+        _this.label_value = new _TextSprite.TextSprite("V", .075);
         _this.label_value.sprite.position.set(0, .6 + _this.arrow_length_padding, 0);
         _this.scene.add(_this.label_value.sprite);
-        _this.label_saturation = new _TextSprite.TextSprite("S", .15);
+        _this.label_saturation = new _TextSprite.TextSprite("S", .075);
         _this.label_saturation.sprite.position.set(_this.radius + _this.arrow_length_padding + .1, .5, 0);
         _this.scene.add(_this.label_saturation.sprite);
-        _this.label_hue = new _TextSprite.TextSprite("H", .15);
+        _this.label_hue = new _TextSprite.TextSprite("H", .075);
         _this.set_hue_label_position(2 * Math.PI);
         _this.scene.add(_this.label_hue.sprite);
         /* Current color indicator. */
@@ -3313,39 +3710,6 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
     }
 
     _createClass(HSVVisualization, [{
-        key: "make_bounding_cone",
-        value: function make_bounding_cone(num_circle_segments, material) {
-            var geometry = new _three.BufferGeometry();
-            var vertices = [new _three.Vector3(0, -.5, 0)];
-            var indices = []; // Which vertex is connected to which.
-
-            /* Init circle vertices. */
-            for (var i = 0; i < num_circle_segments; i++) {
-                vertices.push(new _three.Vector3(Math.cos(i * 2 * Math.PI / num_circle_segments) * this.radius, 0.5, Math.sin(i * 2 * Math.PI / num_circle_segments) * this.radius));
-                indices.push(i + 1); // Offset of 1 to account for first vertex at cone tip.
-                indices.push(i + 2);
-            }
-            /* Init the six vertices for attaching the diagonal lines. */
-            for (var _i = 0; _i < 6; _i++) {
-                vertices.push(new _three.Vector3(Math.cos(_i * 2 * Math.PI / 6) * this.radius, 0.5, Math.sin(_i * 2 * Math.PI / 6) * this.radius));
-                indices.push(_i + 1 + num_circle_segments);
-                indices.push(0); // Connect to cone tip.
-            }
-
-            /* Turn array of vertices into array of floats required for BufferGeometry. */
-            var positions = new Float32Array(vertices.length * 3);
-            for (var _i2 = 0; _i2 < vertices.length; _i2++) {
-                positions[_i2 * 3] = vertices[_i2].x;
-                positions[_i2 * 3 + 1] = vertices[_i2].y;
-                positions[_i2 * 3 + 2] = vertices[_i2].z;
-            }
-
-            geometry.addAttribute('position', new _three.BufferAttribute(positions, 3));
-            geometry.setIndex(new _three.BufferAttribute(new Uint16Array(indices), 1));
-
-            return new _three.LineSegments(geometry, material);
-        }
-    }, {
         key: "init_controls",
         value: function init_controls() {
             _get(HSVVisualization.prototype.__proto__ || Object.getPrototypeOf(HSVVisualization.prototype), "init_controls", this).call(this);
@@ -3422,14 +3786,14 @@ var HSVVisualization = exports.HSVVisualization = function (_Visualization) {
 function attach_hsv_visualizations() {
     var visualizations = [];
     $(".visualization.hsv").each(function () {
-        var rgb_cube = new HSVVisualization($(this));
-        rgb_cube.render();
-        visualizations.push(rgb_cube);
+        var visualization = new HSVVisualization($(this));
+        visualization.render();
+        visualizations.push(visualization);
     });
     return visualizations;
 }
 
-},{"../../bower_components/three.js/build/three":1,"../shaders/hsv-cylinder-fragment.glsl":14,"./CircleSprite":2,"./CircularArrow":3,"./ColorSystemProperty":4,"./DynamicCylinderBufferGeometry":5,"./TextSprite":8,"./Visualization":9,"./VisualizationControlSlider":10,"./color_conversion":11}],7:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1,"../shaders/hsv-cylinder-fragment.glsl":17,"./CircleSprite":2,"./CircularArrow":3,"./ColorSystemProperty":4,"./DynamicBoundingCylinder":5,"./DynamicCylinderBufferGeometry":6,"./TextSprite":10,"./Visualization":11,"./VisualizationControlSlider":12,"./color_conversion":13}],9:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3610,7 +3974,7 @@ function attach_rgb_cube_visualizations() {
     return visualizations;
 }
 
-},{"../../bower_components/three.js/build/three":1,"../shaders/rgb-fragment.glsl":15,"./CircleSprite":2,"./ColorSystemProperty":4,"./TextSprite":8,"./Visualization":9,"./VisualizationControlSlider":10}],8:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1,"../shaders/rgb-fragment.glsl":18,"./CircleSprite":2,"./ColorSystemProperty":4,"./TextSprite":10,"./Visualization":11,"./VisualizationControlSlider":12}],10:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3681,7 +4045,7 @@ var TextSprite = exports.TextSprite = function () {
     return TextSprite;
 }();
 
-},{"../../bower_components/three.js/build/three":1}],9:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1}],11:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3986,7 +4350,7 @@ var Visualization = exports.Visualization = function () {
     return Visualization;
 }();
 
-},{"../../bower_components/three.js/build/three":1,"../shaders/default-vertex.glsl":13}],10:[function(require,module,exports){
+},{"../../bower_components/three.js/build/three":1,"../shaders/default-vertex.glsl":15}],12:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4042,27 +4406,15 @@ var VisualizationControlSlider = exports.VisualizationControlSlider = function (
     return VisualizationControlSlider;
 }();
 
-},{}],11:[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.hsv_to_rgb = hsv_to_rgb;
-/**
- * Created by lumpiluk on 9/27/16.
- */
-
-/* function rgb_component_to_hex(c) {
-    let c_bytes = Math.floor(c * 255);
-    let c_hex = c_bytes.toString(16);
-    return c_hex.length < 2 ? "0" + c_hex : c_hex;
-} */
-
+exports.hsl_to_rgb = hsl_to_rgb;
 function hsv_to_rgb(h, s, v) {
-    /*
-    TODO: fix conversions for (1, 1, 1) (purple instead of red), (0.999, 0, 1) (black instead of white)
-     */
     if (s <= 0) {
         return { r: v, g: v, b: v };
     }
@@ -4091,28 +4443,62 @@ function hsv_to_rgb(h, s, v) {
     }
 }
 
-},{}],12:[function(require,module,exports){
+function hsl_to_rgb(h, s, l) {
+    if (l <= 0) {
+        return { r: 0, g: 0, b: 0 };
+    } else if (l >= 1) {
+        return { r: 1, g: 1, b: 1 };
+    }
+
+    var hp = h * 6 % 6;
+    var c1 = Math.floor(hp);
+    var c2 = hp - c1;
+    var d = l <= .5 ? s * l : s * (1 - l);
+
+    var u1 = l + d;
+    var u2 = l - d;
+    var u3 = u1 - (u1 - u2) * c2;
+    var u4 = u2 + (u1 - u2) * c2;
+
+    switch (c1) {
+        case 0:
+            return { r: u1, g: u4, b: u2 };
+        case 1:
+            return { r: u3, g: u1, b: u2 };
+        case 2:
+            return { r: u2, g: u1, b: u4 };
+        case 3:
+            return { r: u2, g: u3, b: u1 };
+        case 4:
+            return { r: u4, g: u2, b: u1 };
+        default:
+            return { r: u1, g: u2, b: u3 };
+    }
+}
+
+},{}],14:[function(require,module,exports){
 "use strict";
 
 var _RGBCubeVisualization = require("./RGBCubeVisualization");
 
 var _HSVVisualization = require("./HSVVisualization");
 
+var _HSLVisualization = require("./HSLVisualization");
+
 /**
  * List of visualizations in this document.
  * @type {Array}
  */
-/**
- * Created by lumpiluk on 9/21/16.
- */
-
-// import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 var visualizations = [];
 
 /**
  * Matches each figure (HTML-)ID to the figure's visible number in the document.
  * @type {{}}
  */
+/**
+ * Created by lumpiluk on 9/21/16.
+ */
+
 var figures = {};
 
 $(document).ready(function () {
@@ -4122,6 +4508,7 @@ $(document).ready(function () {
   console.log("Initializing visualizations.");
   visualizations.concat((0, _RGBCubeVisualization.attach_rgb_cube_visualizations)());
   visualizations.concat((0, _HSVVisualization.attach_hsv_visualizations)());
+  visualizations.concat((0, _HSLVisualization.attach_hsl_visualizations)());
 
   /* Enumerate figures. */
   $(".figure-title").each(function (index) {
@@ -4136,7 +4523,7 @@ $(document).ready(function () {
   });
 });
 
-},{"./HSVVisualization":6,"./RGBCubeVisualization":7}],13:[function(require,module,exports){
+},{"./HSLVisualization":7,"./HSVVisualization":8,"./RGBCubeVisualization":9}],15:[function(require,module,exports){
 module.exports = function parse(params){
       var template = "/* \n" +
 " * Predefined built-in uniforms and attributes for vertex shader: \n" +
@@ -4198,7 +4585,83 @@ module.exports = function parse(params){
       return template
     };
 
-},{}],14:[function(require,module,exports){
+},{}],16:[function(require,module,exports){
+module.exports = function parse(params){
+      var template = "varying vec4 worldCoord; \n" +
+"uniform float radiusBottom; \n" +
+"uniform float radiusTop; \n" +
+"uniform float radius; \n" +
+"uniform float height; \n" +
+" \n" +
+"const float PI = 3.1415926535897932384626433832795; \n" +
+"const float HALF_PI = 1.57079632679489661923; \n" +
+"const float TWO_PI = 6.283185307179586; \n" +
+" \n" +
+"vec3 get_hsl() { \n" +
+"    float distFromY = distance(vec2(worldCoord.x, worldCoord.z), vec2(0, 0)); \n" +
+" \n" +
+"    float l = (worldCoord.y + height / 2.0) / height; \n" +
+"    /* Adjust saturation for linear interpolation between radii. */ \n" +
+"    float s = 0.0; \n" +
+"    if (l > .5) { \n" +
+"        s = distFromY / mix(radius, radiusTop, worldCoord.y / (height / 2.0)); \n" +
+"    } else { \n" +
+"        s = distFromY / mix(radiusBottom, radius, (worldCoord.y + height / 2.0) / (height / 2.0)); \n" +
+"    } \n" +
+"    float h = (atan(worldCoord.z, -worldCoord.x) + PI) / TWO_PI; \n" +
+" \n" +
+"    return vec3(h, s, l); \n" +
+"} \n" +
+" \n" +
+"vec3 hsl_to_rgb(in vec3 hsl) { \n" +
+"    float h = hsl.x; \n" +
+"    float s = hsl.y; \n" +
+"    float l = hsl.z; \n" +
+" \n" +
+"    if (l <= 0.0) { \n" +
+"        return vec3(0.0, 0.0, 0.0); \n" +
+"    } else if (l >= 1.0) { \n" +
+"        return vec3(1.0, 1.0, 1.0); \n" +
+"    } \n" +
+" \n" +
+"    float hp = mod(h * 6.0, 6.0); \n" +
+"    float c1 = floor(hp); \n" +
+"    float c2 = hp - c1; \n" +
+"    float d = l <= .5 ? s * l : s * (1.0 - l); \n" +
+" \n" +
+"    float u1 = l + d; \n" +
+"    float u2 = l - d; \n" +
+"    float u3 = u1 - (u1 - u2) * c2; \n" +
+"    float u4 = u2 + (u1 - u2) * c2; \n" +
+" \n" +
+"    int ic1 = int(c1); \n" +
+"    if (ic1 == 0) \n" +
+"        return vec3(u1, u4, u2); \n" +
+"    if (ic1 == 1) \n" +
+"        return vec3(u3, u1, u2); \n" +
+"    if (ic1 == 2) \n" +
+"        return vec3(u2, u1, u4); \n" +
+"    if (ic1 == 3) \n" +
+"        return vec3(u2, u3, u1); \n" +
+"    if (ic1 == 4) \n" +
+"        return vec3(u4, u2, u1); \n" +
+"    return vec3(u1, u2, u3); \n" +
+"} \n" +
+" \n" +
+"void main() { \n" +
+"    vec3 rgb = hsl_to_rgb(get_hsl()); \n" +
+"    gl_FragColor = vec4(rgb.x, rgb.y, rgb.z, 1.0); \n" +
+"} \n" +
+" \n" 
+      params = params || {}
+      for(var key in params) {
+        var matcher = new RegExp("{{"+key+"}}","g")
+        template = template.replace(matcher, params[key])
+      }
+      return template
+    };
+
+},{}],17:[function(require,module,exports){
 module.exports = function parse(params){
       var template = "varying vec4 worldCoord; \n" +
 "uniform float radiusBottom; \n" +
@@ -4265,7 +4728,7 @@ module.exports = function parse(params){
       return template
     };
 
-},{}],15:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = function parse(params){
       var template = "varying vec4 worldCoord; \n" +
 " \n" +
@@ -4284,4 +4747,4 @@ module.exports = function parse(params){
       return template
     };
 
-},{}]},{},[12]);
+},{}]},{},[14]);

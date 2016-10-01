@@ -2,9 +2,9 @@
  * Created by lumpiluk on 9/21/16.
  */
 
-// import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {attach_rgb_cube_visualizations} from "./RGBCubeVisualization";
 import {attach_hsv_visualizations} from "./HSVVisualization";
+import {attach_hsl_visualizations} from "./HSLVisualization";
 
 
 /**
@@ -26,6 +26,7 @@ $(document).ready(function() {
     console.log("Initializing visualizations.");
     visualizations.concat(attach_rgb_cube_visualizations());
     visualizations.concat(attach_hsv_visualizations());
+    visualizations.concat(attach_hsl_visualizations());
 
     /* Enumerate figures. */
     $(".figure-title").each(function(index) {
