@@ -65,7 +65,7 @@
       <envs />
     </TaskOptions>
     <TaskOptions isEnabled="true">
-      <option name="arguments" value="-t [browserify-shader --parameterize=true] -t [babelify --presets es2015] $FileName$ -o $ProjectFileDir$/resources/js/build/$FileNameWithoutExtension$.compiled.js" />
+      <option name="arguments" value="--debug -t [browserify-shader --parameterize=true] -t [babelify --presets es2015] $FileName$ -o $ProjectFileDir$/resources/js/build/$FileNameWithoutExtension$.compiled.js" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" value="" />
       <option name="exitCodeBehavior" value="ERROR" />

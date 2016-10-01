@@ -1,4 +1,4 @@
-import {Texture, SpriteMaterial, Sprite} from "../../bower_components/three.js/build/three";
+import {Texture, SpriteMaterial, Sprite} from "../../../bower_components/three.js/build/three";
 
 const TEXTURE_SIZE = 256;
 

@@ -3,10 +3,10 @@
  */
 
 /* Load .glsl shader file via browserify plugin browserify-shader. */
-export let DEFAULT_VERTEX_SHADER = require("../shaders/default-vertex.glsl");
+export let DEFAULT_VERTEX_SHADER = require("../../shaders/default-vertex.glsl");
 
 import {Vector2, Euler, Matrix4, PerspectiveCamera, Object3D, WebGLRenderer, Scene}
-    from "../../bower_components/three.js/build/three";
+    from "../../../bower_components/three.js/build/three";
 
 export class Visualization {
 

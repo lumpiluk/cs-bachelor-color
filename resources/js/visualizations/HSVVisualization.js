@@ -1,22 +1,22 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
-import {TextSprite} from "./TextSprite";
-import {CircleSprite} from "./CircleSprite";
-import {ColorSystemProperty} from "./ColorSystemProperty";
-import {hsv_to_rgb} from "./color_conversion";
-import {VisualizationControlSlider} from "./VisualizationControlSlider";
-import {DynamicCylinderBufferGeometry} from "./DynamicCylinderBufferGeometry";
-import {DynamicBoundingCylinder} from "./DynamicBoundingCylinder";
-import {CircularArrow} from "./CircularArrow";
+import {TextSprite} from "../objects/TextSprite";
+import {CircleSprite} from "../objects/CircleSprite";
+import {ColorSystemProperty} from "../ColorSystemProperty";
+import {hsv_to_rgb} from "../color_conversion";
+import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
+import {DynamicCylinderBufferGeometry} from "../objects/DynamicCylinderBufferGeometry";
+import {DynamicBoundingCylinder} from "../objects/DynamicBoundingCylinder";
+import {CircularArrow} from "../objects/CircularArrow";
 
 import {
     ShaderMaterial,
     Vector3,
     ArrowHelper,
     Mesh
-} from "../../bower_components/three.js/build/three";
+} from "../../../bower_components/three.js/build/three";
 
 
-const HSV_CYLINDER_SHADER = require("../shaders/hsv-cylinder-fragment.glsl");
+const HSV_CYLINDER_SHADER = require("../../shaders/hsv-cylinder-fragment.glsl");
 
 export class HSVVisualization extends Visualization {
     constructor($container) {

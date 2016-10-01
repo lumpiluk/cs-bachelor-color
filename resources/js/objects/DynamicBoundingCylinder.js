@@ -5,7 +5,7 @@ import {
     BufferAttribute,
     LineBasicMaterial,
     LineSegments
-} from "../../bower_components/three.js/build/three";
+} from "../../../bower_components/three.js/build/three";
 
 
 export class DynamicBoundingCylinder extends Object3D {

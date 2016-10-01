@@ -1,8 +1,8 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
-import {TextSprite} from "./TextSprite";
-import {CircleSprite} from "./CircleSprite";
-import {ColorSystemProperty} from "./ColorSystemProperty";
-import {VisualizationControlSlider} from "./VisualizationControlSlider";
+import {TextSprite} from "../objects/TextSprite";
+import {CircleSprite} from "../objects/CircleSprite";
+import {ColorSystemProperty} from "../ColorSystemProperty";
+import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {
     BoxGeometry,
     ShaderMaterial,
@@ -11,10 +11,10 @@ import {
     BoxHelper,
     Vector3,
     ArrowHelper
-} from "../../bower_components/three.js/build/three";
+} from "../../../bower_components/three.js/build/three";
 
 
-const RGB_CUBE_SHADER = require("../shaders/rgb-fragment.glsl");
+const RGB_CUBE_SHADER = require("../../shaders/rgb-fragment.glsl");
 
 export class RGBCubeVisualization extends Visualization {
     constructor($container) {

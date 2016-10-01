@@ -1,12 +1,12 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
-import {TextSprite} from "./TextSprite";
-import {CircleSprite} from "./CircleSprite";
-import {ColorSystemProperty} from "./ColorSystemProperty";
-import {hsl_to_rgb} from "./color_conversion";
-import {VisualizationControlSlider} from "./VisualizationControlSlider";
-import {DynamicCylinderBufferGeometry} from "./DynamicCylinderBufferGeometry";
-import {CircularArrow} from "./CircularArrow";
-import {DynamicBoundingCylinder} from "./DynamicBoundingCylinder"
+import {TextSprite} from "../objects/TextSprite";
+import {CircleSprite} from "../objects/CircleSprite";
+import {ColorSystemProperty} from "../ColorSystemProperty";
+import {hsl_to_rgb} from "../color_conversion";
+import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
+import {DynamicCylinderBufferGeometry} from "../objects/DynamicCylinderBufferGeometry";
+import {CircularArrow} from "../objects/CircularArrow";
+import {DynamicBoundingCylinder} from "../objects/DynamicBoundingCylinder"
 
 import {
     ShaderMaterial,
@@ -14,10 +14,10 @@ import {
     ArrowHelper,
     Mesh,
     MeshBasicMaterial
-} from "../../bower_components/three.js/build/three";
+} from "../../../bower_components/three.js/build/three";
 
 
-const HSL_CYLINDER_SHADER = require("../shaders/hsl-cylinders-fragment.glsl");
+const HSL_CYLINDER_SHADER = require("../../shaders/hsl-cylinders-fragment.glsl");
 
 export class HSLVisualization extends Visualization {
     constructor($container) {

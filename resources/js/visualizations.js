@@ -2,9 +2,9 @@
  * Created by lumpiluk on 9/21/16.
  */
 
-import {attach_rgb_cube_visualizations} from "./RGBCubeVisualization";
-import {attach_hsv_visualizations} from "./HSVVisualization";
-import {attach_hsl_visualizations} from "./HSLVisualization";
+import {attach_rgb_cube_visualizations} from "./visualizations/RGBCubeVisualization";
+import {attach_hsv_visualizations} from "./visualizations/HSVVisualization";
+import {attach_hsl_visualizations} from "./visualizations/HSLVisualization";
 
 
 /**
