@@ -104,7 +104,7 @@ export class HSLVisualization extends Visualization {
         );
         this.scene.add(this.arrow_saturation);
         this.circ_arrow_hue = new CircularArrow(
-            30, // segments
+            this.circle_segments, // segments
             this.radius + .05, // radius
             2 * Math.PI, // initial theta
             this.arrow_head_length,

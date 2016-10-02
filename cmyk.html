@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CMY(K)</title>
+
+    <link rel="stylesheet" type="text/css" href="bower_components/normalize-css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="resources/css/color-main.css">
+
+    <script async src="bower_components/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- TODO: .min.js -->
+    <script src="resources/js/build/visualizations.compiled.js"></script>
+</head>
+<body>
+    <h1>CMY(K)</h1>
+    <p>
+        <figref data-fig-id="fig-cmy-vis">The figure</figref> shows the CMY cube.
+        Click and drag to rotate, scroll to zoom.
+        On a touchscreen, drag to rotate around the y-axis and use two fingers to zoom or to rotate around the x-axis.
+    </p>
+    <div class="figure" id="fig-cmy-vis">
+        <div class="cmy-cube visualization"></div>
+        <div class="selected-color"></div>
+        <div class="figure-title">The RGB cube.</div>
+        <div class="visualization-controls"></div>
+        <div class="visualization-controls-advanced"></div>
+    </div>
+</body>
+</html>

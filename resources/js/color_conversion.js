@@ -48,3 +48,7 @@ export function hsl_to_rgb(h, s, l) {
         default: return {r: u1, g: u2, b: u3};
     }
 }
+
+export function cmy_to_rgb(c, m, y) {
+    return {r: 1 - c, g: 1 - m, b: 1 - y};
+}

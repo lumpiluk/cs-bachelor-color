@@ -5,6 +5,7 @@
 import {attach_rgb_cube_visualizations} from "./visualizations/RGBCubeVisualization";
 import {attach_hsv_visualizations} from "./visualizations/HSVVisualization";
 import {attach_hsl_visualizations} from "./visualizations/HSLVisualization";
+import {attach_cmy_cube_visualizations} from "./visualizations/CMYCubeVisualization";
 
 
 /**
@@ -27,6 +28,7 @@ $(document).ready(function() {
     visualizations.concat(attach_rgb_cube_visualizations());
     visualizations.concat(attach_hsv_visualizations());
     visualizations.concat(attach_hsl_visualizations());
+    visualizations.concat(attach_cmy_cube_visualizations());
 
     /* Enumerate figures. */
     $(".figure-title").each(function(index) {

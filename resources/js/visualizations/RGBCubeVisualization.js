@@ -1,16 +1,10 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
-import {TextSprite} from "../objects/TextSprite";
-import {CircleSprite} from "../objects/CircleSprite";
+import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
 import {ColorSystemProperty} from "../ColorSystemProperty";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {
-    BoxGeometry,
     ShaderMaterial,
-    Mesh,
-    Matrix4,
-    BoxHelper,
-    Vector3,
-    ArrowHelper
+    Vector3
 } from "../../../bower_components/three.js/build/three";
 
 
@@ -20,71 +14,15 @@ export class RGBCubeVisualization extends Visualization {
     constructor($container) {
         super($container);
 
-        this.rgb_cube_geometry = new BoxGeometry(1, 1, 1);
         this.rgb_cube_mat = new ShaderMaterial({
             vertexShader: DEFAULT_VERTEX_SHADER(),
             fragmentShader: RGB_CUBE_SHADER()
         });
-        this.rgb_cube_mesh = new Mesh(this.rgb_cube_geometry, this.rgb_cube_mat);
-        this.rgb_cube_mesh.matrixAutoUpdate = false; // Makes adjusting world transforms easier.
-        this.rgb_cube_mesh.applyMatrix(new Matrix4().makeTranslation(0.5, 0.5, 0.5));
-        this.scene.add(this.rgb_cube_mesh);
-
-        /* Coordinate system, arrows. */
-        /* Cube bounding box. */
-        this.wireframe_cube_geometry = new BoxGeometry(1, 1, 1);
-        this.wireframe_cube = new BoxHelper(
-            new Mesh(this.wireframe_cube_geometry),
-            0x000000
-        );
-        this.wireframe_cube.matrixAutoUpdate = false; // Object won't move dynamically anyway.
-        this.wireframe_cube.applyMatrix(new Matrix4().makeTranslation(0.5, 0.5, 0.5));
-        this.scene.add(this.wireframe_cube);
-        /*
-         * Arrows.
-         * Helpful example: view-source:https://stemkoski.github.io/Three.js/Helpers.html
-         */
-        let arrow_origin = new Vector3(-.01, -.01, -.01);
-        let arrow_length = 1.15;
-        let arrow_color_hex = 0xffffff;
-        let arrow_head_length = 0.1;
-        let arrow_head_width = 0.05;
-        this.arrow_red = new ArrowHelper(
-            new Vector3(1, 0, 0),
-            arrow_origin, arrow_length, arrow_color_hex, arrow_head_length, arrow_head_width
-        );
-        this.arrow_green = new ArrowHelper(
-            new Vector3(0, 1, 0),
-            arrow_origin, arrow_length, arrow_color_hex, arrow_head_length, arrow_head_width
-        );
-        this.arrow_blue = new ArrowHelper(
-            new Vector3(0, 0, 1),
-            arrow_origin, arrow_length, arrow_color_hex, arrow_head_length, arrow_head_width
-        );
-        this.scene.add(this.arrow_red);
-        this.scene.add(this.arrow_green);
-        this.scene.add(this.arrow_blue);
-        /* Labels */
-        this.label_value = new TextSprite("R", 0.15);
-        this.label_value.sprite.position.set(1.2, -.1, -.1);
-        this.scene.add(this.label_value.sprite);
-        this.label_green = new TextSprite("G", 0.15);
-        this.label_green.sprite.position.set(-.1, 1.2, -.1);
-        this.scene.add(this.label_green.sprite);
-        this.label_blue = new TextSprite("B", 0.15);
-        this.label_blue.sprite.position.set(-.1, -.1, 1.2);
-        this.scene.add(this.label_blue.sprite);
-        this.label_origin = new TextSprite("0", 0.15);
-        this.label_origin.sprite.position.set(-.1, -.1, -.1);
-        this.scene.add(this.label_origin.sprite);
-        /* Current color indicator. */
-        this.current_color_sprite = new CircleSprite(.1, 256, 10);
-        this.current_color_sprite.sprite_material.color.setRGB(1, 1, 1);
-        this.current_color_sprite.sprite.position.set(1, 1, 1);
-        this.scene.add(this.current_color_sprite.sprite);
+        this.rgb_cube = new DynamicAnnotatedCube(this.rgb_cube_mat, "R", "G", "B", new Vector3(1, 1, 1));
+        this.scene.add(this.rgb_cube);
 
         /* Rotate around center of the cube rather than the origin. */
-        this.pivot.applyMatrix(new Matrix4().makeTranslation(0.5, 0.5, 0.5));
+        this.pivot.position.set(.5, .5, .5);
 
         /* Color system. */
         this.red_property = new ColorSystemProperty(1.0, 0.0, 1.0, "R", "r");
@@ -142,24 +80,14 @@ export class RGBCubeVisualization extends Visualization {
     on_color_system_property_change(event) {
         this.set_selected_color(this.red_property.value, this.green_property.value, this.blue_property.value);
 
-        this.rgb_cube_mesh.matrix.identity();
-        this.rgb_cube_mesh.matrix.multiply(new Matrix4().makeTranslation(
-            this.red_property.value / 2,
-            this.green_property.value / 2,
-            this.blue_property.value / 2
-        ));
-        this.rgb_cube_mesh.matrix.multiply(new Matrix4().makeScale(
-            this.red_property.value,
-            this.green_property.value,
-            this.blue_property.value
-        ));
-
-        this.current_color_sprite.sprite.position.set(
+        this.rgb_cube.value.set(
             this.red_property.value,
             this.green_property.value,
             this.blue_property.value
         );
-        this.current_color_sprite.sprite_material.color.setRGB(
+        this.rgb_cube.update_cube();
+
+        this.rgb_cube.current_color_sprite.sprite_material.color.setRGB(
             this.red_property.value,
             this.green_property.value,
             this.blue_property.value
