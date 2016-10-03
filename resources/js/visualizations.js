@@ -20,6 +20,7 @@ let visualizations = [];
  */
 let figures = {};
 
+
 $(document).ready(function() {
     /*
      * Find and initialize all visualizations as soon as the page is loaded.

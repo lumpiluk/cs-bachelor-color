@@ -6,18 +6,23 @@ import {hsl_to_rgb} from "../color_conversion";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {DynamicCylinderBufferGeometry} from "../objects/DynamicCylinderBufferGeometry";
 import {CircularArrow} from "../objects/CircularArrow";
-import {DynamicBoundingCylinder} from "../objects/DynamicBoundingCylinder"
+import {DynamicBoundingCylinder} from "../objects/DynamicBoundingCylinder";
+import {VisualizationControlSelect} from "../controls/VisualizationControlSelect";
+import {lerp} from "../util";
+import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
 
 import {
     ShaderMaterial,
     Vector3,
     ArrowHelper,
     Mesh,
-    MeshBasicMaterial
+    Object3D
 } from "../../../bower_components/three.js/build/three";
 
 
 const HSL_CYLINDER_SHADER = require("../../shaders/hsl-cylinders-fragment.glsl");
+const HSL_CUBE_SHADER = require("../../shaders/hsl-cube-fragment.glsl");
+
 
 export class HSLVisualization extends Visualization {
     constructor($container) {
@@ -26,13 +31,16 @@ export class HSLVisualization extends Visualization {
         this.radius = .5;
         this.height = 1;
         this.circle_segments = 30;
+        this.pivot_position_cylinders = new Vector3(0, .1, 0);
+        this.pivot_position_cube = new Vector3(.5, .5, .5);
 
         /* Small pivot offset to keep lightness label in frame. */
-        this.pivot.position.set(0, .15, 0);
+        this.pivot.position.copy(this.pivot_position_cylinders);
         /* Adjust zoom. */
         this.update_scale(50);
 
         /* Color solid: Cones. */
+        this.hsl_cones = new Object3D();
         this.hsl_cylinder_top_geom = new DynamicCylinderBufferGeometry(
             0, this.radius, this.height / 2, this.circle_segments, 2 * Math.PI);
         this.hsl_cylinder_bottom_geom = new DynamicCylinderBufferGeometry(
@@ -51,8 +59,18 @@ export class HSLVisualization extends Visualization {
         this.hsl_cylinder_bottom = new Mesh(this.hsl_cylinder_bottom_geom, this.hsl_cylinder_mat);
         this.hsl_cylinder_top.position.set(0, this.height / 4, 0);
         this.hsl_cylinder_bottom.position.set(0, -this.height / 4, 0);
-        this.scene.add(this.hsl_cylinder_top);
-        this.scene.add(this.hsl_cylinder_bottom);
+        this.hsl_cones.add(this.hsl_cylinder_top);
+        this.hsl_cones.add(this.hsl_cylinder_bottom);
+        this.scene.add(this.hsl_cones);
+
+        /* Cube (not visible by default). */
+        this.hsl_cube_mat = new ShaderMaterial({
+            vertexShader: DEFAULT_VERTEX_SHADER(),
+            fragmentShader: HSL_CUBE_SHADER()
+        });
+        this.hsl_cube = new DynamicAnnotatedCube(this.hsl_cube_mat, "H", "S", "L", new Vector3(1, 1, 1));
+        this.hsl_cube.visible = false;
+        this.scene.add(this.hsl_cube);
 
         /* Coordinate system. */
         /* HSL bounding wireframe. */
@@ -67,7 +85,7 @@ export class HSLVisualization extends Visualization {
         );
         this.bounding_cylinder_top.scale.set(1, this.height / 2, 1);
         this.bounding_cylinder_top.position.set(0, this.height / 4, 0);
-        this.scene.add(this.bounding_cylinder_top);
+        this.hsl_cones.add(this.bounding_cylinder_top);
         this.bounding_cylinder_bottom = new DynamicBoundingCylinder(
             this.circle_segments,
             6, // num_vertical_lines
@@ -79,7 +97,7 @@ export class HSLVisualization extends Visualization {
         );
         this.bounding_cylinder_bottom.scale.set(1, this.height / 2, 1);
         this.bounding_cylinder_bottom.position.set(0, -this.height / 4, 0);
-        this.scene.add(this.bounding_cylinder_bottom);
+        this.hsl_cones.add(this.bounding_cylinder_bottom);
         /* Arrows. */
         this.arrow_length_padding = .15;
         let arrow_color_hex = 0xffffff;
@@ -93,7 +111,7 @@ export class HSLVisualization extends Visualization {
             this.arrow_head_length,
             this.arrow_head_width
         );
-        this.scene.add(this.arrow_lightness);
+        this.hsl_cones.add(this.arrow_lightness);
         this.arrow_saturation = new ArrowHelper(
             new Vector3(1, 0, 0), // direction
             new Vector3(0, this.height / 2, 0), // origin
@@ -102,7 +120,7 @@ export class HSLVisualization extends Visualization {
             this.arrow_head_length,
             this.arrow_head_width
         );
-        this.scene.add(this.arrow_saturation);
+        this.hsl_cones.add(this.arrow_saturation);
         this.circ_arrow_hue = new CircularArrow(
             this.circle_segments, // segments
             this.radius + .05, // radius
@@ -113,22 +131,22 @@ export class HSLVisualization extends Visualization {
             arrow_color_hex
         );
         this.circ_arrow_hue.position.set(0, 0, 0);
-        this.scene.add(this.circ_arrow_hue);
+        this.hsl_cones.add(this.circ_arrow_hue);
         /* Labels. */
         this.label_lightness = new TextSprite("L", .15);
         this.label_lightness.sprite.position.set(0, this.height / 2 + .1 + this.arrow_length_padding, 0);
-        this.scene.add(this.label_lightness.sprite);
+        this.hsl_cones.add(this.label_lightness.sprite);
         this.label_saturation = new TextSprite("S", .15);
         this.label_saturation.sprite.position.set(this.arrow_length_padding + .1, this.height / 2, 0);
-        this.scene.add(this.label_saturation.sprite);
+        this.hsl_cones.add(this.label_saturation.sprite);
         this.label_hue = new TextSprite("H", .15);
         this.set_hue_label_position(2 * Math.PI);
-        this.scene.add(this.label_hue.sprite);
+        this.hsl_cones.add(this.label_hue.sprite);
         /* Current color indicator. */
         this.current_color_sprite = new CircleSprite(.05, 256, 10);
         this.current_color_sprite.sprite_material.color.setRGB(1, 1, 1);
         this.current_color_sprite.sprite.position.set(0, this.height / 2, 0);
-        this.scene.add(this.current_color_sprite.sprite);
+        this.hsl_cones.add(this.current_color_sprite.sprite);
 
         /* Color system. */
         this.hue_property = new ColorSystemProperty(1.0, 0.0, 1.0, "H", "h");
@@ -139,6 +157,7 @@ export class HSLVisualization extends Visualization {
         this.hue_control = null;
         this.saturation_control = null;
         this.lightness_control = null;
+        this.representation_select_control = null;
         if (this.$figure != null) {
             this.init_controls();
             this.init_advanced_controls();
@@ -176,11 +195,15 @@ export class HSLVisualization extends Visualization {
 
     init_advanced_controls() {
         super.init_advanced_controls();
+        let that = this;
         let $controls = this.$figure.find(".visualization-controls-advanced");
         if ($controls.length == 0) {
             return;
         }
-        // TODO: switch between cylinder, cone, and cube
+        this.representation_select_control = new VisualizationControlSelect(
+            $controls, ["Cones", "Cylinder", "Cube"], "Representation");
+        this.representation_select_control.add_listener((event) =>
+            that.on_representation_type_changed.call(that, event.option));
     }
 
     set_hue_label_position(angle) {
@@ -205,8 +228,9 @@ export class HSLVisualization extends Visualization {
 
         this.hsl_cylinder_top_geom.height = lightness_top * this.height / 2;
         this.hsl_cylinder_bottom_geom.height = lightness_bottom * this.height / 2;
-        this.hsl_cylinder_top_geom.radius_top = this.radius - lightness_top * this.radius;
-        this.hsl_cylinder_bottom_geom.radius_top = lightness_bottom * this.radius;
+        this.hsl_cylinder_top_geom.radius_top = lerp(this.radius, this.bounding_cylinder_top.radius_top, lightness_top);
+        this.hsl_cylinder_bottom_geom.radius_top =
+            lerp(this.bounding_cylinder_bottom.radius_bottom, this.radius, lightness_bottom);
         this.hsl_cylinder_top_geom.theta_length = this.hue_property.value * 2 * Math.PI;
         this.hsl_cylinder_bottom_geom.theta_length = this.hue_property.value * 2 * Math.PI;
         this.hsl_cylinder_top_geom.update_cylinder();
@@ -222,7 +246,8 @@ export class HSLVisualization extends Visualization {
 
         /* Update current color indicator. */
         let r = this.lightness_property.value <= .5 ?
-            lightness_bottom * this.radius : (1 - lightness_top) * this.radius;
+            lerp(this.bounding_cylinder_bottom.radius_bottom, this.radius, lightness_bottom) :
+            lerp(this.radius, this.bounding_cylinder_top.radius_top, lightness_top);
         this.current_color_sprite.sprite.position.set(
             Math.cos(theta) * r * this.saturation_property.value,
             current_y,
@@ -259,7 +284,41 @@ export class HSLVisualization extends Visualization {
         this.circ_arrow_hue.update_circle();
         this.set_hue_label_position(theta);
 
+        /* Update HSL cube (which is not visible by default). */
+        this.hsl_cube.value.set(
+            this.hue_property.value,
+            this.saturation_property.value,
+            this.lightness_property.value
+        );
+        this.hsl_cube.update_cube();
+        this.hsl_cube.current_color_sprite.sprite_material.color.setRGB(
+            selected_rgb.r, selected_rgb.g, selected_rgb.b);
+
         this.render();
+    }
+
+    on_representation_type_changed(type) {
+        if (type == "Cones" || type == "Cylinder") {
+            let r = type == "Cones" ? 0 : this.radius;
+            this.hsl_cones.visible = true;
+            this.hsl_cube.visible = false;
+            this.hsl_cylinder_top_geom.radius_top = r;
+            this.hsl_cylinder_bottom_geom.radius_bottom = r;
+            this.hsl_cylinder_top_geom.update_cylinder();
+            this.hsl_cylinder_bottom_geom.update_cylinder();
+            this.bounding_cylinder_top.radius_top = r;
+            this.bounding_cylinder_bottom.radius_bottom = r;
+            this.bounding_cylinder_top.update_cylinder();
+            this.bounding_cylinder_bottom.update_cylinder();
+            this.hsl_cylinder_mat.uniforms.radiusTop.value = r;
+            this.hsl_cylinder_mat.uniforms.radiusBottom.value = r;
+            this.pivot.position.copy(this.pivot_position_cylinders);
+        } else if (type == "Cube") {
+            this.hsl_cones.visible = false;
+            this.hsl_cube.visible = true;
+            this.pivot.position.copy(this.pivot_position_cube);
+        }
+        this.on_color_system_property_change(null);
     }
 }
 
