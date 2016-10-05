@@ -1,0 +1,17 @@
+/* Aspect ratio 3:2 (like photos) */
+/* TODO: Adapt for multiple visualizations per figure! */
+.visualization-control.select {
+  width: 100%;
+}
+.visualization-control.select label {
+  float: left;
+  text-align: left;
+  padding: 0 0.5em 0 0;
+}
+.visualization-control.select .select-container {
+  overflow: hidden;
+  display: block;
+}
+.visualization-control.select .select-container select {
+  width: 100%;
+}

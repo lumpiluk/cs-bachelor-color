@@ -1,7 +1,7 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {TextSprite} from "../objects/TextSprite";
 import {CircleSprite} from "../objects/CircleSprite";
-import {ColorSystemProperty} from "../ColorSystemProperty";
+import {ColorSystemProperty} from "../color-systems/ColorSystemProperty";
 import {hsl_to_rgb} from "../color_conversion";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {DynamicCylinderBufferGeometry} from "../objects/DynamicCylinderBufferGeometry";
@@ -172,7 +172,7 @@ export class HSLVisualization extends Visualization {
 
     init_controls() {
         super.init_controls();
-        let $controls = this.$figure.find(".visualization-controls");
+        let $controls = this.$controls;
         if ($controls.length == 0) {
             return;
         }
@@ -196,7 +196,7 @@ export class HSLVisualization extends Visualization {
     init_advanced_controls() {
         super.init_advanced_controls();
         let that = this;
-        let $controls = this.$figure.find(".visualization-controls-advanced");
+        let $controls = this.$controls_advanced;
         if ($controls.length == 0) {
             return;
         }

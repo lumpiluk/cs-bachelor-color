@@ -3,6 +3,9 @@
 @slider_width: 98%;
 @slider_track_height: .5em;
 @slider_padding: 0 0; // (top and bottom) (left and right)
+@slider_thumb_background: rgb(230, 230, 230);
+@slider_thumb_border: .1em solid black;
+@slider_thumb_size: 2 * @slider_track_height;
 @slider_background: rgb(129, 129, 129);
 @slider_background_focused: @slider_background;
 @label_padding: 0 .5em 0 0; // top right bottom left
@@ -33,12 +36,12 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  border: none;
-  height: 16px;
-  width: 16px;
+  border: @slider_thumb_border;
+  height: @slider_thumb_size;
+  width: @slider_thumb_size;
   border-radius: 50%;
-  background: goldenrod;
-  margin-top: -4px;
+  background: @slider_thumb_background;
+  margin-top: -@slider_thumb_size / 4;
 }
 input[type=range]:focus {
   outline: none;
@@ -55,11 +58,11 @@ input[type=range]::-moz-range-track {
   border-radius: 3px;
 }
 input[type=range]::-moz-range-thumb {
-  border: none;
-  height: 16px;
-  width: 16px;
+  border: @slider_thumb_border;
+  height: @slider_thumb_size;
+  width: @slider_thumb_size;
   border-radius: 50%;
-  background: goldenrod;
+  background: @slider_thumb_background;
 }
 
 /*hide the outline behind the border*/
@@ -91,11 +94,11 @@ input[type=range]::-ms-fill-upper {
   border-radius: 10px;
 }
 input[type=range]::-ms-thumb {
-  border: none;
-  height: 16px;
-  width: 16px;
+  border: @slider_thumb_border;
+  height: @slider_thumb_size;
+  width: @slider_thumb_size;
   border-radius: 50%;
-  background: goldenrod;
+  background: @slider_thumb_background;
 }
 input[type=range]:focus::-ms-fill-lower {
   background: @slider_background_focused;

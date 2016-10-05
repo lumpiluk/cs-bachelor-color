@@ -1,6 +1,6 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
-import {ColorSystemProperty} from "../ColorSystemProperty";
+import {ColorSystemProperty} from "../color-systems/ColorSystemProperty";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {
     ShaderMaterial,

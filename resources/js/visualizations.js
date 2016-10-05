@@ -9,29 +9,22 @@ import {attach_cmy_cube_visualizations} from "./visualizations/CMYCubeVisualizat
 
 
 /**
- * List of visualizations in this document.
- * @type {Array}
+ * Find and initialize all visualizations.
  */
-let visualizations = [];
+export function initialize_visualizations() {
+    let visualizations = [];
 
-/**
- * Matches each figure (HTML-)ID to the figure's visible number in the document.
- * @type {{}}
- */
-let figures = {};
+    /* Assigns each figure (HTML-)ID its visible index. */
+    let figures = {};
 
 
-$(document).ready(function() {
-    /*
-     * Find and initialize all visualizations as soon as the page is loaded.
-     */
     console.log("Initializing visualizations.");
     visualizations.concat(attach_rgb_cube_visualizations());
     visualizations.concat(attach_hsv_visualizations());
     visualizations.concat(attach_hsl_visualizations());
     visualizations.concat(attach_cmy_cube_visualizations());
 
-    /* Enumerate figures. */
+    /* Enumerate figures. */ // TODO: do in other function!
     $(".figure-title").each(function(index) {
         let fig_id = $(this).parent().attr("id");
         figures[fig_id] = index + 1;
@@ -42,4 +35,6 @@ $(document).ready(function() {
         let fig_id = $(this).data("fig-id");
         $(this).html('<a href="#' + fig_id + '">Figure ' + figures[fig_id] + '</a>');
     });
-});
+
+    return {visualizations: visualizations, figures: figures};
+}

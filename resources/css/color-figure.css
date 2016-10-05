@@ -20,12 +20,12 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
-  border: none;
-  height: 16px;
-  width: 16px;
+  border: 0.1em solid black;
+  height: 1em;
+  width: 1em;
   border-radius: 50%;
-  background: goldenrod;
-  margin-top: -4px;
+  background: #e6e6e6;
+  margin-top: -0.25em;
 }
 input[type=range]:focus {
   outline: none;
@@ -41,11 +41,11 @@ input[type=range]::-moz-range-track {
   border-radius: 3px;
 }
 input[type=range]::-moz-range-thumb {
-  border: none;
-  height: 16px;
-  width: 16px;
+  border: 0.1em solid black;
+  height: 1em;
+  width: 1em;
   border-radius: 50%;
-  background: goldenrod;
+  background: #e6e6e6;
 }
 /*hide the outline behind the border*/
 input[type=range]:-moz-focusring {
@@ -72,11 +72,11 @@ input[type=range]::-ms-fill-upper {
   border-radius: 10px;
 }
 input[type=range]::-ms-thumb {
-  border: none;
-  height: 16px;
-  width: 16px;
+  border: 0.1em solid black;
+  height: 1em;
+  width: 1em;
   border-radius: 50%;
-  background: goldenrod;
+  background: #e6e6e6;
 }
 input[type=range]:focus::-ms-fill-lower {
   background: #818181;
@@ -103,6 +103,21 @@ input[type=range]:focus::-ms-fill-upper {
   overflow: hidden;
   display: block;
 }
+.visualization-control.select {
+  width: 100%;
+}
+.visualization-control.select label {
+  float: left;
+  text-align: left;
+  padding: 0 0.5em 0 0;
+}
+.visualization-control.select .select-container {
+  overflow: hidden;
+  display: block;
+}
+.visualization-control.select .select-container select {
+  width: 100%;
+}
 .figure {
   margin-left: auto;
   margin-right: auto;
@@ -120,11 +135,42 @@ input[type=range]:focus::-ms-fill-upper {
   width: 100%;
   height: 100%;
 }
-.figure .visualization-controls {
+.figure .visualization-controls,
+.figure .visualization-controls-advanced {
   padding: 0.3em 0.5em;
 }
-.figure .visualization-controls .visualization-control {
+.figure .visualization-controls .visualization-control,
+.figure .visualization-controls-advanced .visualization-control {
   padding: .5em 0 .5em 0;
+}
+.figure .visualization-controls-advanced-toggle {
+  margin: 0;
+  padding: 0.45em 0.5em 0.45em 0.5em;
+  background: #ebebeb;
+  cursor: pointer;
+  cursor: hand;
+  font-size: 1em;
+}
+.figure .visualization-controls-advanced-toggle .text {
+  font-weight: normal;
+  text-decoration: underline;
+}
+.figure .visualization-controls-advanced-toggle .arrow {
+  display: inline-block;
+  -webkit-transform-origin: 33% 50%;
+  -moz-transform-origin: 33% 50%;
+  -o-transform-origin: 33% 50%;
+  transform-origin: 33% 50%;
+  text-decoration: none;
+  -webkit-transition: all .3s;
+  transition: all .3s;
+}
+.figure .visualization-controls-advanced-toggle .arrow-rotated {
+  -ms-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+  -webkit-transition: all .3s;
+  transition: all .3s;
 }
 .figure .selected-color {
   padding: 0.5em 0.5em 0.5em 0.5em;

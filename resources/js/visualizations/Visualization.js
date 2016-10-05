@@ -21,6 +21,9 @@ export class Visualization {
 
         this.$container = $container;
         this.$figure = $container.parent().hasClass("figure") ? $container.parent() : null;
+        this.$controls = this.$figure != null ? this.$figure.find(".visualization-controls") : null;
+        this.$controls_advanced = this.$figure != null ?
+            this.$figure.find(".visualization-controls-advanced") : null;
         this.fov = 45;
         this.min_focal_length = 10; // for zooming, assuming full frame (35mm) camera sensor
         this.max_focal_length = 400; // for zooming
@@ -95,8 +98,22 @@ export class Visualization {
      * Not called in default constructor!
      */
     init_advanced_controls() {
-        /* To be implemented in subclasses. */
-        // TODO: Setting to show only the color space w/o axes, wireframe etc.?
+        /* Add toggle for showing/hiding controls. */
+        this.$controls_advanced.before(
+            '<h3 class="visualization-controls-advanced-toggle">' +
+            '<span class="arrow">&#x25B6;&nbsp;</span><span class="text">Advanced controls</span></h3>'
+        );
+        this.$controls_advanced.hide();
+        let $toggle = this.$figure.find(".visualization-controls-advanced-toggle");
+        let that = this;
+        $toggle.click(function () {
+            if (that.$controls_advanced.is(":visible")) {
+                $toggle.find(".arrow").removeClass("arrow-rotated");
+            } else {
+                $toggle.find(".arrow").addClass("arrow-rotated");
+            }
+            that.$controls_advanced.toggle(300);
+        });
     }
 
     update_rotation(delta_x, delta_y) {

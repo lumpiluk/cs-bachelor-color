@@ -21,9 +21,11 @@ export class VisualizationControlSelect {
         this.$parent.append(
             '<div class="visualization-control select">' +
                 '<label for="' + this.select_id + '">' + this.label + ':</label>' +
-                '<select name="' + this.select_id + '" id="' + this.select_id + '">' +
-                    options_html +
-                '</select>' +
+                '<span class="select-container">' +
+                    '<select name="' + this.select_id + '" id="' + this.select_id + '">' +
+                        options_html +
+                    '</select>' +
+                '</span>' +
             '</div>'
         );
 
