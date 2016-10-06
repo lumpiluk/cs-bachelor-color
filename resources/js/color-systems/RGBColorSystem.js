@@ -1,15 +1,22 @@
 import {AbstractColorSystem} from "./AbstractColorSystem";
-import {RGBCubeVisualization} from "../visualizations/RGBCubeVisualization";
 import {ColorSystemProperty} from "./ColorSystemProperty";
+import {RGBCubeVisualization} from "../visualizations/RGBCubeVisualization";
 
-class RGBColorSystem extends AbstractColorSystem {
+export class RGBColorSystem extends AbstractColorSystem {
     constructor() {
         super();
         // nothing to do
     }
 
+    get_name() {
+        return "RGB";
+    }
+
+    get_visualization_class_name() {
+        return "RGBCubeVisualization";
+    }
+
     create_associated_visualization($container, options) {
-        super.create_associated_visualization();
         return new RGBCubeVisualization($container, options);
     }
 
@@ -21,6 +28,12 @@ class RGBColorSystem extends AbstractColorSystem {
         properties.push(new ColorSystemProperty(1, 0, 1, "B", "b"));
         return properties;
     }
-}
 
-export const RGB_COLOR_SYSTEM = new RGBColorSystem();
+    get_rgb() {
+        return {
+            r: this.properties[0].value,
+            g: this.properties[1].value,
+            b: this.properties[2].value
+        }
+    }
+}

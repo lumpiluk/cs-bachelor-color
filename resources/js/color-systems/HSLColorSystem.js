@@ -1,15 +1,23 @@
 import {AbstractColorSystem} from "./AbstractColorSystem";
 import {ColorSystemProperty} from "./ColorSystemProperty";
+import {hsl_to_rgb} from "../color_conversion";
 import {HSLVisualization} from "../visualizations/HSLVisualization";
 
-class HSLColorSystem extends AbstractColorSystem {
+export class HSLColorSystem extends AbstractColorSystem {
     constructor() {
         super();
         // nothing to do
     }
 
+    get_name() {
+        return "HSL";
+    }
+
+    get_visualization_class_name() {
+        return "HSLVisualization";
+    }
+
     create_associated_visualization($container, options) {
-        super.create_associated_visualization();
         return new HSLVisualization($container, options);
     }
 
@@ -21,6 +29,12 @@ class HSLColorSystem extends AbstractColorSystem {
         properties.push(new ColorSystemProperty(1, 0, 1, "L", "l"));
         return properties;
     }
-}
 
-export const HSL_COLOR_SYSTEM = new HSLColorSystem();
+    get_rgb() {
+        return hsl_to_rgb(
+            this.properties[0].value,
+            this.properties[1].value,
+            this.properties[2].value
+        );
+    }
+}

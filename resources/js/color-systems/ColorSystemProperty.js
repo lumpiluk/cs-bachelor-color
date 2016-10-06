@@ -37,4 +37,8 @@ export class ColorSystemProperty {
             callback(event);
         }
     }
+
+    set_to_random() {
+        this.value = Math.random() * Math.abs(this.max - this.min) + this.min;
+    }
 }

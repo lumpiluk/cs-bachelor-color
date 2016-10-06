@@ -1,14 +1,22 @@
 import {AbstractColorSystem} from "./AbstractColorSystem";
 import {ColorSystemProperty} from "./ColorSystemProperty";
+import {cmyk_to_rgb} from "../color_conversion";
 
-class CMYKColorSystem extends AbstractColorSystem {
+export class CMYKColorSystem extends AbstractColorSystem {
     constructor() {
         super();
         // nothing to do
     }
 
+    get_name() {
+        return "CMYK";
+    }
+
+    get_visualization_class_name() {
+        return null;
+    }
+
     create_associated_visualization($container, options) {
-        super.create_associated_visualization();
         return null;
     }
 
@@ -21,6 +29,13 @@ class CMYKColorSystem extends AbstractColorSystem {
         properties.push(new ColorSystemProperty(1, 0, 1, "K", "k"));
         return properties;
     }
-}
 
-export const CMYK_COLOR_SYSTEM = new CMYKColorSystem();
+    get_rgb() {
+        cmyk_to_rgb(
+            this.properties[0].value,
+            this.properties[1].value,
+            this.properties[2].value,
+            this.properties[3].value
+        );
+    }
+}

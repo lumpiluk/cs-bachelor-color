@@ -1,3 +1,4 @@
+import {cmy_to_rgb} from "../color_conversion";
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
 import {ColorSystemProperty} from "../color-systems/ColorSystemProperty";
@@ -6,7 +7,6 @@ import {
     ShaderMaterial,
     Vector3
 } from "../../../bower_components/three.js/build/three";
-import {cmy_to_rgb} from "../color_conversion";
 
 
 const CMY_CUBE_SHADER = require("../../shaders/cmy-fragment.glsl");

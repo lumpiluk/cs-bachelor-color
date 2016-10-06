@@ -1,0 +1,40 @@
+@button_highlight: #f8f8f8;
+@button_bg_color: #e8e8e8;
+@button_disabled_bg_color: #cdcdcd;
+@button_disabled_font_color: #5a5a5a;
+@button_shade: #cbcbcb;
+@button_text_color: black;
+@button_shadow_color: rgb(70%, 70%, 70%);
+@button_padding: .3em .7em .3em .7em; // top right bottom left
+
+button {
+  background: @button_bg_color;
+  border: none;
+  color: @button_text_color;
+  padding: @button_padding;
+  box-shadow: .1em .1em .1em @button_shadow_color;
+  cursor: pointer;
+  cursor: hand;
+  border-left: .1em solid @button_highlight;
+  border-top: .1em solid @button_highlight;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+button:hover {
+  background: linear-gradient(to bottom,
+    @button_bg_color 0%,
+    @button_shade 100%);
+  //@button_bg_color 85%,
+  //@button_shade 100%);
+}
+
+button:disabled,
+button:disabled:hover {
+  color: @button_disabled_font_color;
+  background: @button_disabled_bg_color;
+  cursor: default;
+  border-left: .1em solid @button_bg_color;
+  border-top: .1em solid @button_bg_color;
+}

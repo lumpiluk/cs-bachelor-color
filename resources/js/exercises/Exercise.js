@@ -41,6 +41,11 @@ export class Exercise {
         }
         this.task_weights_sum = this.task_weights.reduce((pv, cv) => pv+cv, 0);
 
+        /* Stats. */
+        this.num_correct_answers = 0;
+        this.num_skipped = 0;
+        this.num_attempts = 0;
+
         this._remaining_tasks = []; // (Underscore to prevent WebStorm warning about "not exported" element.)
         this.current_task = null;
         this.initialize_tasks();
@@ -80,7 +85,7 @@ export class Exercise {
             let new_task_type = this.get_random_task_type();
             switch(new_task_type.name) {
                 case "ColorMatching":
-                    new_task = new ColorMatchingTask(this, new_task_type.options);
+                    new_task = new ColorMatchingTask(this, this.num_rounds - i, new_task_type.options);
                     break;
                 case "ColorSelection":
 
@@ -115,10 +120,31 @@ export class Exercise {
     }
 
     on_task_finished(task) {
+        this.num_correct_answers += task.stats.correct ? 1 : 0;
+        this.num_attempts += task.stats.attempts;
+        this.num_skipped += task.stats.skipped ? 1 : 0;
         this.next_task();
     }
 
     show_results() {
-        // TODO
+        let avg_attempts = this.num_attempts / this.num_correct_answers;
+        this.$container.empty();
+        this.$container.append(
+            '<h3>Exercise complete!</h3>' +
+            '<table>' +
+                '<tr>' +
+                    '<td>Correct answers:</td>' +
+                    '<td>' + this.num_correct_answers + '/' + this.num_rounds + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td>Skipped tasks:</td>' +
+                    '<td>' + this.num_skipped + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td>Average attempts:</td>' +
+                    '<td>' + avg_attempts.toFixed(3) + '</td>' +
+                '</tr>' +
+            '</table>'
+        );
     }
 }

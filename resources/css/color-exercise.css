@@ -1,108 +1,5 @@
 /* Aspect ratio 3:2 (like photos) */
 /* TODO: Adapt for multiple visualizations per figure! */
-/* Adapted from http://brennaobrien.com/blog/2014/05/style-input-type-range-in-every-browser.html */
-input[type=range] {
-  /*removes default webkit styles*/
-  -webkit-appearance: none;
-  /*fix for FF unable to apply focus style bug */
-  border: 1px solid white;
-  /*required for proper track sizing in FF*/
-  width: 98%;
-  padding: 0 0;
-  margin-right: 0;
-}
-input[type=range]::-webkit-slider-runnable-track {
-  width: 98%;
-  height: 0.5em;
-  background: #818181;
-  border: none;
-  border-radius: 3px;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  border: 0.1em solid black;
-  height: 1em;
-  width: 1em;
-  border-radius: 50%;
-  background: #e6e6e6;
-  margin-top: -0.25em;
-}
-input[type=range]:focus {
-  outline: none;
-}
-input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #818181;
-}
-input[type=range]::-moz-range-track {
-  width: 98%;
-  height: 0.5em;
-  background: #818181;
-  border: none;
-  border-radius: 3px;
-}
-input[type=range]::-moz-range-thumb {
-  border: 0.1em solid black;
-  height: 1em;
-  width: 1em;
-  border-radius: 50%;
-  background: #e6e6e6;
-}
-/*hide the outline behind the border*/
-input[type=range]:-moz-focusring {
-  outline: 1px solid white;
-  outline-offset: -1px;
-}
-input[type=range]::-ms-track {
-  width: 98%;
-  height: 0.5em;
-  /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
-  background: transparent;
-  /*leave room for the larger thumb to overflow with a transparent border */
-  border-color: transparent;
-  border-width: 6px 0;
-  /*remove default tick marks*/
-  color: transparent;
-}
-input[type=range]::-ms-fill-lower {
-  background: #818181;
-  border-radius: 10px;
-}
-input[type=range]::-ms-fill-upper {
-  background: #818181;
-  border-radius: 10px;
-}
-input[type=range]::-ms-thumb {
-  border: 0.1em solid black;
-  height: 1em;
-  width: 1em;
-  border-radius: 50%;
-  background: #e6e6e6;
-}
-input[type=range]:focus::-ms-fill-lower {
-  background: #818181;
-}
-input[type=range]:focus::-ms-fill-upper {
-  background: #818181;
-}
-/*
- * Slider and label arrangement.
- * With help from http://stackoverflow.com/questions/6713435/input-box-100-width-with-label-to-the-left
- */
-.visualization-control.slider label {
-  float: left;
-  text-align: left;
-  padding: 0 0.5em 0 0;
-  width: 2.5em;
-}
-.visualization-control.slider input[type=number] {
-  float: right;
-  width: 5em;
-  margin: 0 0 0 0.5em;
-}
-.visualization-control.slider .slider-container {
-  overflow: hidden;
-  display: block;
-}
 .visualization-control.select {
   width: 100%;
 }
@@ -212,6 +109,109 @@ figref a:hover {
   text-decoration: underline;
   color: #333333;
 }
+/* Adapted from http://brennaobrien.com/blog/2014/05/style-input-type-range-in-every-browser.html */
+input[type=range] {
+  /*removes default webkit styles*/
+  -webkit-appearance: none;
+  /*fix for FF unable to apply focus style bug */
+  border: 1px solid white;
+  /*required for proper track sizing in FF*/
+  width: 98%;
+  padding: 0 0;
+  margin-right: 0;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  width: 98%;
+  height: 0.5em;
+  background: #818181;
+  border: none;
+  border-radius: 3px;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  border: 0.1em solid black;
+  height: 1em;
+  width: 1em;
+  border-radius: 50%;
+  background: #e6e6e6;
+  margin-top: -0.25em;
+}
+input[type=range]:focus {
+  outline: none;
+}
+input[type=range]:focus::-webkit-slider-runnable-track {
+  background: #818181;
+}
+input[type=range]::-moz-range-track {
+  width: 98%;
+  height: 0.5em;
+  background: #818181;
+  border: none;
+  border-radius: 3px;
+}
+input[type=range]::-moz-range-thumb {
+  border: 0.1em solid black;
+  height: 1em;
+  width: 1em;
+  border-radius: 50%;
+  background: #e6e6e6;
+}
+/*hide the outline behind the border*/
+input[type=range]:-moz-focusring {
+  outline: 1px solid white;
+  outline-offset: -1px;
+}
+input[type=range]::-ms-track {
+  width: 98%;
+  height: 0.5em;
+  /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+  background: transparent;
+  /*leave room for the larger thumb to overflow with a transparent border */
+  border-color: transparent;
+  border-width: 6px 0;
+  /*remove default tick marks*/
+  color: transparent;
+}
+input[type=range]::-ms-fill-lower {
+  background: #818181;
+  border-radius: 10px;
+}
+input[type=range]::-ms-fill-upper {
+  background: #818181;
+  border-radius: 10px;
+}
+input[type=range]::-ms-thumb {
+  border: 0.1em solid black;
+  height: 1em;
+  width: 1em;
+  border-radius: 50%;
+  background: #e6e6e6;
+}
+input[type=range]:focus::-ms-fill-lower {
+  background: #818181;
+}
+input[type=range]:focus::-ms-fill-upper {
+  background: #818181;
+}
+/*
+ * Slider and label arrangement.
+ * With help from http://stackoverflow.com/questions/6713435/input-box-100-width-with-label-to-the-left
+ */
+.visualization-control.slider label {
+  float: left;
+  text-align: left;
+  padding: 0 0.5em 0 0;
+  width: 2.5em;
+}
+.visualization-control.slider input[type=number] {
+  float: right;
+  width: 5em;
+  margin: 0 0 0 0.5em;
+}
+.visualization-control.slider .slider-container {
+  overflow: hidden;
+  display: block;
+}
 .exercise {
   margin-left: auto;
   margin-right: auto;
@@ -265,31 +265,4 @@ figref a:hover {
   box-sizing: border-box;
   display: inline-block;
   border: .1em solid black;
-}
-html {
-  height: 100%;
-  background-color: #ffffff;
-  /* On large screens. */
-}
-@media screen and (min-width: 50em) {
-  html {
-    padding-left: .5em;
-    padding-right: .5em;
-  }
-}
-body {
-  padding: .5em;
-  border: 1px solid black;
-  /* On large screens. */
-}
-@media screen and (min-width: 50em) {
-  body {
-    max-width: 60em;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 1em;
-  }
-}
-h1 {
-  color: #003200;
 }

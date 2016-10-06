@@ -1,12 +1,11 @@
-/**
- * Created by lumpiluk on 9/25/16.
- */
+import {Vector2, Euler, Matrix4, PerspectiveCamera, Object3D, WebGLRenderer, Scene}
+    from "../../../bower_components/three.js/build/three";
+import {rgb_to_css} from "../util";
+
 
 /* Load .glsl shader file via browserify plugin browserify-shader. */
 export let DEFAULT_VERTEX_SHADER = require("../../shaders/default-vertex.glsl");
 
-import {Vector2, Euler, Matrix4, PerspectiveCamera, Object3D, WebGLRenderer, Scene}
-    from "../../../bower_components/three.js/build/three";
 
 export class Visualization {
 
@@ -265,10 +264,7 @@ export class Visualization {
         if (this.$figure == null) {
             return;
         }
-        let css_color = "rgb(" +
-            (r * 100).toString() + "%, " +
-            (g * 100).toString() + "%, " +
-            (b * 100).toString() + "%)";
+        let css_color = rgb_to_css(r, g, b);
         this.$figure.find(".selected-color").css("background-color", css_color)
     }
 }

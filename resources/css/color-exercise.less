@@ -1,0 +1,45 @@
+@import "constants";
+@import "color-figure";
+@import "color-range-slider";
+
+@color_matching_patches_height: 5em;
+@color_matching_patches_border_width: .1em;
+
+.exercise {
+  .figure;
+
+  .exercise-button-bar {
+    padding: @figure_title_padding;
+    background: @figure_title_background;
+    overflow: hidden;
+
+    button {
+      float: right;
+      margin-left: .5em;
+    }
+  }
+
+  .exercise-feedback {
+    padding: @figure_title_padding;
+
+    em {
+      font-weight: bold;
+    }
+  }
+  .exercise-feedback.wrong {
+    color: red;
+  }
+  .exercise-feedback.correct {
+    color: green;
+  }
+
+  /* ColorMatchingTask. */
+  .color-matching-target,
+  .color-matching-current {
+    height: @color_matching_patches_height;
+    width: 50%;
+    box-sizing: border-box;
+    display: inline-block;
+    border: .1em solid black;
+  }
+}

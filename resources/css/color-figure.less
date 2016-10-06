@@ -1,6 +1,7 @@
 @import "constants";
 @import "color-range-slider";
 @import "color-options-select";
+@import "color-button";
 
 .figure {
   margin-left: auto;
@@ -24,54 +25,53 @@
     }
   }
 
-  .visualization-controls,
-  .visualization-controls-advanced {
-    padding: .3em @figure_title_padding_left;
-
-    .visualization-control {
-      padding: .5em 0 .5em 0; // top right bottom left
-    }
-  }
-
-  .visualization-controls-advanced-toggle {
-    margin: 0;
-    padding: @figure_title_padding;
-    background: @visualization_controls_advanced_toggle_background;
-    cursor: pointer;
-    cursor: hand;
-    font-size: 1em;
-
-    .text {
-      font-weight: normal;
-      text-decoration: underline;
-    }
-
-    .arrow {
-      display: inline-block;
-      -webkit-transform-origin: 33% 50%;
-      -moz-transform-origin: 33% 50%;
-      -o-transform-origin: 33% 50%;
-      transform-origin: 33% 50%;
-      text-decoration: none;
-      -webkit-transition: all .3s;
-      transition: all .3s;
-    }
-
-    .arrow-rotated {
-      -ms-transform: rotate(90deg);
-      -webkit-transform: rotate(90deg);
-      transform: rotate(90deg);
-      -webkit-transition: all .3s;
-      transition: all .3s;
-    }
-  }
-
   .selected-color {
     padding: .5em .5em .5em @figure_title_padding_left; // top right bottom left
     color: black;
     text-shadow: -.1em 0 0 white, 0 -.1em 0 white, .1em 0 0 white, 0 .1em 0 white;
     background-color: white;
     border: .1em solid black;
+  }
+}
+
+.visualization-controls,
+.visualization-controls-advanced {
+  padding: .3em @figure_title_padding_left;
+
+  .visualization-control {
+    padding: .5em 0 .5em 0; // top right bottom left
+  }
+}
+
+.visualization-controls-advanced-toggle {
+  margin: 0;
+  padding: @figure_title_padding;
+  background: @visualization_controls_advanced_toggle_background;
+  cursor: hand;
+  font-size: 1em;
+
+  .text {
+    font-weight: normal;
+    text-decoration: underline;
+  }
+
+  .arrow {
+    display: inline-block;
+    -webkit-transform-origin: 33% 50%;
+    -moz-transform-origin: 33% 50%;
+    -o-transform-origin: 33% 50%;
+    transform-origin: 33% 50%;
+    text-decoration: none;
+    -webkit-transition: all .3s;
+    transition: all .3s;
+  }
+
+  .arrow-rotated {
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+    -webkit-transition: all .3s;
+    transition: all .3s;
   }
 }
 

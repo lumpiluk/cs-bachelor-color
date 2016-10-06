@@ -49,6 +49,10 @@ export function hsl_to_rgb(h, s, l) {
     }
 }
 
+export function cmyk_to_rgb(c, m, y, k) {
+    return cmy_to_rgb(c + k, m + k, y + k);
+}
+
 export function cmy_to_rgb(c, m, y) {
     return {r: 1 - c, g: 1 - m, b: 1 - y};
 }

@@ -1,0 +1,25 @@
+button {
+  background: #e8e8e8;
+  border: none;
+  color: black;
+  padding: 0.3em 0.7em 0.3em 0.7em;
+  box-shadow: 0.1em 0.1em 0.1em #b3b3b3;
+  cursor: pointer;
+  cursor: hand;
+  border-left: 0.1em solid #f8f8f8;
+  border-top: 0.1em solid #f8f8f8;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+button:hover {
+  background: linear-gradient(to bottom, #e8e8e8 0%, #cbcbcb 100%);
+}
+button:disabled,
+button:disabled:hover {
+  color: #5a5a5a;
+  background: #cdcdcd;
+  cursor: default;
+  border-left: 0.1em solid #e8e8e8;
+  border-top: 0.1em solid #e8e8e8;
+}

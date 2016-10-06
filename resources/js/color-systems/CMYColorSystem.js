@@ -1,15 +1,23 @@
 import {AbstractColorSystem} from "./AbstractColorSystem";
 import {ColorSystemProperty} from "./ColorSystemProperty";
+import {cmy_to_rgb} from "../color_conversion";
 import {CMYCubeVisualization} from "../visualizations/CMYCubeVisualization";
 
-class CMYColorSystem extends AbstractColorSystem {
+
+export class CMYColorSystem extends AbstractColorSystem {
     constructor() {
         super();
-        // nothing to do
+    }
+
+    get_name() {
+        return "CMY";
+    }
+
+    get_visualization_class_name() {
+        return "CMYCubeVisualization";
     }
 
     create_associated_visualization($container, options) {
-        super.create_associated_visualization();
         return new CMYCubeVisualization($container, options);
     }
 
@@ -21,6 +29,12 @@ class CMYColorSystem extends AbstractColorSystem {
         properties.push(new ColorSystemProperty(1, 0, 1, "Y", "y"));
         return properties;
     }
-}
 
-export const CMY_COLOR_SYSTEM = new CMYColorSystem();
+    get_rgb() {
+        return cmy_to_rgb(
+            this.properties[0].value,
+            this.properties[1].value,
+            this.properties[2].value
+        );
+    }
+}
