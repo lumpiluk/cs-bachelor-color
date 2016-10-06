@@ -23,6 +23,18 @@ export class AbstractColorSystem {
 
     }
 
+    get_tex() {
+        let s = "(";
+        for (let i = 0; i < this.properties.length; i++) {
+            s += this.properties[i].value.toFixed(3);
+            if (i != this.properties.length - 1) {
+                s += ",";
+            }
+        }
+        s += ")_\\text{" + this.get_name() + "}";
+        return s;
+    }
+
     get_euclidean_distance_rgb(other_color_system) {
         let other_rgb = other_color_system.get_rgb();
         let this_rgb = this.get_rgb();

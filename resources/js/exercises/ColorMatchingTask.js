@@ -3,6 +3,7 @@ import {
     random_sample,
     rgb_to_css,
     get_euclidean_distance_for_error,
+    update_mathjax
 } from "../util";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {get_color_system_by_name} from "../color-systems/color-systems";
@@ -140,7 +141,7 @@ export class ColorMatchingTask extends AbstractTask {
 
         /* Give feedback. */
         if (this.$feedback == null) {
-            this.$container.append('<div class="exercise-feedback"></div>');
+            this.$container.find(".exercise-button-bar").before('<div class="exercise-feedback"></div>');
             this.$feedback = this.$container.find(".exercise-feedback");
         }
         if (this.stats.correct) {
@@ -151,6 +152,7 @@ export class ColorMatchingTask extends AbstractTask {
             this.$feedback.removeClass("wrong");
             this.$feedback.addClass("correct");
             feedback_str += "<em>Correct!</em> ";
+            feedback_str += "The exact result is \\(" + this.target_color.get_tex() + "\\).<br/>";
         } else {
             if (this.allow_skip_after_first_attempt || this.current_attempt == this.max_attempts) {
                 /* (Because this.current_attempt starts at 0, max_attempts=0 means infinite attempts.) */
@@ -172,6 +174,7 @@ export class ColorMatchingTask extends AbstractTask {
         feedback_str += "Maximum difference in RGB: " + this.max_euclidean_distance.toFixed(3) +
                 ".<br/>Current difference in RGB: " + euclidean_distance_rgb.toFixed(3);
         this.$feedback.html(feedback_str);
+        update_mathjax(this.$feedback);
     }
 
     on_next_click() {

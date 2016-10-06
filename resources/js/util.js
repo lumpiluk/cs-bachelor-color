@@ -17,3 +17,7 @@ export function rgb_to_css(r, g, b) {
 export function get_euclidean_distance_for_error(error, num_dimensions) {
     return Math.sqrt(Math.pow(error, 2) * num_dimensions);
 }
+
+export function update_mathjax($container) {
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, $container[0]]);
+}

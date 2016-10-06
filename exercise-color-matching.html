@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Exercises</title>
+    <title>Color Matching Exercise</title>
 
     <link rel="stylesheet" type="text/css" href="bower_components/normalize-css/normalize.css">
     <link rel="stylesheet" type="text/css" href="resources/css/color-main.css">
@@ -16,10 +16,22 @@
     <script src="resources/js/build/color.compiled.min.js"></script>
 </head>
 <body>
-    <h1>Exercises</h1>
+    <h1>Color Matching Exercise</h1>
     <div class="exercise"
          data-num-rounds="10"
-         data-task-types='[{"name":"ColorMatching","options":{},"weight":1}]'
+         data-task-types='[
+            {
+                "name": "ColorMatching",
+                "options": {
+                    "color_systems": ["rgb", "hsl", "hsv", "cmy"],
+                    "show_visualization": true,
+                    "visualization_options": {},
+                    "max_attempts": 3,
+                    "allow_skip_after_first_attempt": true
+                },
+                "weight": 1
+            }
+         ]'
     >
     </div>
 </body>

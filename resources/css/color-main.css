@@ -147,6 +147,7 @@ button:disabled:hover {
   margin-left: auto;
   margin-right: auto;
   box-shadow: 0.1em 0.1em 0.1em #999999;
+  background: #fafafa;
   max-width: 40em;
 }
 .figure .figure-title {
@@ -216,6 +217,7 @@ figref a:hover {
   margin-left: auto;
   margin-right: auto;
   box-shadow: 0.1em 0.1em 0.1em #999999;
+  background: #fafafa;
   max-width: 40em;
   /* ColorMatchingTask. */
 }
