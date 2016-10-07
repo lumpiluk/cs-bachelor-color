@@ -23,6 +23,12 @@ export class AbstractColorSystem {
 
     }
 
+    randomize() {
+        for (let property of this.properties) {
+            property.set_to_random();
+        }
+    }
+
     get_tex() {
         let s = "(";
         for (let i = 0; i < this.properties.length; i++) {

@@ -5,6 +5,9 @@
 @color_matching_patches_height: 5em;
 @color_matching_patches_border_width: .1em;
 
+@color_selection_patch_width: 5em;
+@color_selection_patch_height: 5em;
+
 .exercise {
   .figure;
 
@@ -41,5 +44,30 @@
     box-sizing: border-box;
     display: inline-block;
     border: .1em solid black;
+  }
+  .color-matching-current {
+    border-left-width: 0;
+  }
+
+  /* ColorSelectionTask. */
+  .color-selection-patches {
+    display: -webkit-flex;
+    -webkit-flex-flow: row wrap;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: center;
+
+    .color-selection-patch {
+      cursor: hand;
+      cursor: pointer;
+    }
+  }
+  .color-selection-patch {
+    width: @color_selection_patch_width;
+    height: @color_selection_patch_height;
+    border: .1em solid black;
+    margin: .3em;
+    background-color: blue; // (debug)
   }
 }

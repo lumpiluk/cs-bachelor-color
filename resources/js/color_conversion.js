@@ -56,3 +56,8 @@ export function cmyk_to_rgb(c, m, y, k) {
 export function cmy_to_rgb(c, m, y) {
     return {r: 1 - c, g: 1 - m, b: 1 - y};
 }
+
+export function cmy_to_cmyk(c, m, y) {
+    let k = Math.min(c, m, y);
+    return {c: c - k, m: m - k, y: y - k, k: k};
+}

@@ -10,10 +10,8 @@ import {get_color_system_by_name} from "../color-systems/color-systems";
 
 export class ColorMatchingTask extends AbstractTask {
     constructor(exercise, task_num, options) {
-        super(exercise, task_num);
+        super(exercise, task_num, options);
         let defaults = {
-            show_visualization: true,
-            visualization_options: {},
             color_systems: ["rgb", "hsl", "hsv", "cmy"], // cmyk not included for now because k depends on cmy...
             max_euclidean_distance: get_euclidean_distance_for_error(.05, 3), // 5% error allowed
             show_current_color: true, // TODO: implement
@@ -23,10 +21,7 @@ export class ColorMatchingTask extends AbstractTask {
         };
         let actual = $.extend({}, defaults, options || {});
 
-        this.show_visualization = actual.show_visualization;
-        this.visualization_options = actual.visualization_options;
         this.max_euclidean_distance = actual.max_euclidean_distance;
-        this.visualization = null;
         this.color_system_name = random_sample(actual.color_systems);
         this.target_color = get_color_system_by_name(this.color_system_name);
         this.current_color = get_color_system_by_name(this.color_system_name);
@@ -40,14 +35,10 @@ export class ColorMatchingTask extends AbstractTask {
         this.current_attempt = 0;
         this.allow_skip_after_first_attempt = actual.allow_skip_after_first_attempt;
 
-        /* Make random target color by setting each property to a random value. */
-        for (let property of this.target_color.properties) {
-            property.set_to_random();
-        }
+        /* Randomize target color. */
+        this.target_color.randomize();
         /* Also randomize current color (for the sliders). */
-        for (let property of this.current_color.properties) {
-            property.set_to_random();
-        }
+        this.current_color.randomize();
 
         /* Attach listener to current color properties. */
         for (let property of this.current_color.properties) {
@@ -58,31 +49,9 @@ export class ColorMatchingTask extends AbstractTask {
     run() {
         super.run();
 
-        /* Attach visualization if needed. */
-        if (this.show_visualization) {
-            this.$container.append(
-                // '<div class="figure">' +
-                    '<div class="visualization"></div>'
-                //'</div>'
-            );
-            let $vis = this.$container.find(".visualization");
-            this.visualization = this.target_color.create_associated_visualization($vis, this.visualization_options);
-            if (this.visualization == null) {
-                /* CMYK, for example, does not have a visualization (as of yet). -> Don't show. */
-                this.$container.remove(".visualization");
-                this.show_visualization = false;
-            } else {
-                this.visualization.render();
-            }
-        }
-
-        /* Attach task title. */
-        this.$container.append(
-            '<div class="figure-title">' +
-                '<b>Task ' + this.task_num + '/' + this.exercise.num_rounds + ':</b> ' +
-                'Adjust the ' + this.current_color.get_name() +
-                ' parameters to match the color on the right to the color on the left.' +
-            '</div>'
+        this.attach_task_title(
+            "Adjust the " + this.current_color.get_name() +
+            " parameters to match the color on the right to the color on the left."
         );
 
         /* Attach color patches. */
@@ -139,11 +108,12 @@ export class ColorMatchingTask extends AbstractTask {
         this.current_attempt += 1;
         let feedback_str = "";
 
-        /* Give feedback. */
+        /* Make feedback container if it doesn't exist yet. */
         if (this.$feedback == null) {
-            this.$container.find(".exercise-button-bar").before('<div class="exercise-feedback"></div>');
-            this.$feedback = this.$container.find(".exercise-feedback");
+            this.$feedback = $('<div class="exercise-feedback"></div>')
+                .insertBefore(this.$container.find(".exercise-button-bar"));
         }
+
         if (this.stats.correct) {
             this.stats.attempts = this.current_attempt;
             this.stats.skipped = false;

@@ -1,4 +1,6 @@
 import {ColorMatchingTask} from "./ColorMatchingTask";
+import {ColorSelectionTask} from "./ColorSelectionTask";
+
 /**
  * Creates an exercise in a given container.
  * On creation, the container's parameters are searched for the following data-attributes:
@@ -60,7 +62,6 @@ export class Exercise {
             options.num_rounds = num_rounds;
         if ($c.data("task-types") != undefined )
             options.task_types = $c.data("task-types"); // JSON.parse() not necessary thanks to JQuery!
-        console.log(options.task_types);
         return options;
     }
 
@@ -88,7 +89,7 @@ export class Exercise {
                     new_task = new ColorMatchingTask(this, this.num_rounds - i, new_task_type.options);
                     break;
                 case "ColorSelection":
-
+                    new_task = new ColorSelectionTask(this, this.num_rounds - i, new_task_type.options);
                     break;
                 case "ColorConversion":
 
@@ -141,7 +142,7 @@ export class Exercise {
                     '<td>' + this.num_skipped + '</td>' +
                 '</tr>' +
                 '<tr>' +
-                    '<td>Average attempts:</td>' +
+                    '<td>Average attempts per correct answer:</td>' +
                     '<td>' + avg_attempts.toFixed(3) + '</td>' +
                 '</tr>' +
             '</table>'
