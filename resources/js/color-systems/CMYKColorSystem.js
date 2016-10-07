@@ -1,6 +1,6 @@
 import {AbstractColorSystem} from "./AbstractColorSystem";
 import {ColorSystemProperty} from "./ColorSystemProperty";
-import {cmyk_to_rgb, cmy_to_cmyk} from "../color_conversion";
+import {cmyk_to_rgb, cmy_to_cmyk, rgb_to_cmyk} from "./color_conversion";
 
 export class CMYKColorSystem extends AbstractColorSystem {
     constructor() {
@@ -48,5 +48,13 @@ export class CMYKColorSystem extends AbstractColorSystem {
             this.properties[2].value,
             this.properties[3].value
         );
+    }
+
+    set_from_rgb(r, g, b) {
+        let cmyk = rgb_to_cmyk(r, g, b);
+        this.properties[0].set_value(cmyk.c);
+        this.properties[1].set_value(cmyk.m);
+        this.properties[2].set_value(cmyk.y);
+        this.properties[3].set_value(cmyk.k);
     }
 }

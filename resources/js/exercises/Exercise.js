@@ -1,5 +1,6 @@
 import {ColorMatchingTask} from "./ColorMatchingTask";
 import {ColorSelectionTask} from "./ColorSelectionTask";
+import {ColorConversionSelectionTask} from "./ColorConversionSelectionTask";
 
 /**
  * Creates an exercise in a given container.
@@ -90,6 +91,9 @@ export class Exercise {
                     break;
                 case "ColorSelection":
                     new_task = new ColorSelectionTask(this, this.num_rounds - i, new_task_type.options);
+                    break;
+                case "ColorConversionSelection":
+                    new_task = new ColorConversionSelectionTask(this, this.num_rounds - i, new_task_type.options);
                     break;
                 case "ColorConversion":
 

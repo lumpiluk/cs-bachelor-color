@@ -36,4 +36,10 @@ export class RGBColorSystem extends AbstractColorSystem {
             b: this.properties[2].value
         }
     }
+
+    set_from_rgb(r, g, b) {
+        this.properties[0].set_value(r);
+        this.properties[1].set_value(g);
+        this.properties[2].set_value(b);
+    }
 }

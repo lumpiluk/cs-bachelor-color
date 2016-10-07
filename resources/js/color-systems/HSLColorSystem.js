@@ -1,6 +1,6 @@
 import {AbstractColorSystem} from "./AbstractColorSystem";
 import {ColorSystemProperty} from "./ColorSystemProperty";
-import {hsl_to_rgb} from "../color_conversion";
+import {hsl_to_rgb, rgb_to_hsl} from "./color_conversion";
 import {HSLVisualization} from "../visualizations/HSLVisualization";
 
 export class HSLColorSystem extends AbstractColorSystem {
@@ -36,5 +36,12 @@ export class HSLColorSystem extends AbstractColorSystem {
             this.properties[1].value,
             this.properties[2].value
         );
+    }
+
+    set_from_rgb(r, g, b) {
+        let hsl = rgb_to_hsl(r, g, b);
+        this.properties[0].set_value(hsl.h);
+        this.properties[1].set_value(hsl.s);
+        this.properties[2].set_value(hsl.l);
     }
 }

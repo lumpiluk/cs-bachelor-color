@@ -222,6 +222,7 @@ input[type=range]:focus::-ms-fill-upper {
   max-width: 40em;
   /* ColorMatchingTask. */
   /* ColorSelectionTask. */
+  /* ColorConversionSelectionTask. */
 }
 .exercise .figure-title {
   padding: 0.45em 0.5em 0.45em 0.5em;
@@ -290,5 +291,25 @@ input[type=range]:focus::-ms-fill-upper {
   height: 5em;
   border: .1em solid black;
   margin: .3em;
-  background-color: blue;
+  background: linear-gradient(red, yellow);
+}
+.exercise .color-conversion-selection-options {
+  display: -webkit-flex;
+  -webkit-flex-flow: column;
+  display: flex;
+  flex-flow: column;
+  padding: 0.45em 0.5em 0.45em 0.5em;
+}
+.exercise .color-conversion-selection-options .color-conversion-selection-option {
+  cursor: hand;
+  cursor: pointer;
+  margin: .3em 0;
+}
+.exercise .color-conversion-selection-options .color-conversion-selection-option .color-patch {
+  display: inline-block;
+  width: 1.3em;
+  height: 1.3em;
+  border: .1em solid black;
+  margin-right: .5em;
+  margin-bottom: -0.3em;
 }

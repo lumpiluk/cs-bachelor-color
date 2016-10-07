@@ -48,3 +48,16 @@ export function shuffle(array) {
 
     return array;
 }
+
+/**
+ * Remove element from array.
+ * http://stackoverflow.com/questions/3596089/how-to-remove-specifc-value-from-array-using-jquery
+ * May be replaced by _.without if underscore were included.
+ * @param array
+ * @param element
+ * @returns {*}
+ */
+export function remove_from_array(array, element) {
+    array.splice($.inArray(element, array), 1);
+    return array;
+}

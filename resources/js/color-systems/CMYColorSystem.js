@@ -1,6 +1,6 @@
 import {AbstractColorSystem} from "./AbstractColorSystem";
 import {ColorSystemProperty} from "./ColorSystemProperty";
-import {cmy_to_rgb} from "../color_conversion";
+import {cmy_to_rgb, rgb_to_cmy} from "./color_conversion";
 import {CMYCubeVisualization} from "../visualizations/CMYCubeVisualization";
 
 
@@ -36,5 +36,12 @@ export class CMYColorSystem extends AbstractColorSystem {
             this.properties[1].value,
             this.properties[2].value
         );
+    }
+
+    set_from_rgb(r, g, b) {
+        let cmy = rgb_to_cmy(r, g, b);
+        this.properties[0].set_value(cmy.c);
+        this.properties[1].set_value(cmy.m);
+        this.properties[2].set_value(cmy.y);
     }
 }

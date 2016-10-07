@@ -1,4 +1,4 @@
-import {cmy_to_rgb} from "../color_conversion";
+import {cmy_to_rgb} from "../color-systems/color_conversion";
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
 import {ColorSystemProperty} from "../color-systems/ColorSystemProperty";

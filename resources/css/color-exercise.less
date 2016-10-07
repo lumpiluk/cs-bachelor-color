@@ -68,6 +68,30 @@
     height: @color_selection_patch_height;
     border: .1em solid black;
     margin: .3em;
-    background-color: blue; // (debug)
+    background: linear-gradient(red, yellow); // (debug)
+  }
+
+  /* ColorConversionSelectionTask. */
+  .color-conversion-selection-options {
+    display: -webkit-flex;
+    -webkit-flex-flow: column;
+    display: flex;
+    flex-flow: column;
+    padding: @figure_title_padding;
+
+    .color-conversion-selection-option {
+      cursor: hand;
+      cursor: pointer;
+      margin: .3em 0; // top-bottom left-right
+
+      .color-patch {
+        display: inline-block;
+        width: 1.3em;
+        height: 1.3em;
+        border: .1em solid black;
+        margin-right: .5em;
+        margin-bottom: -.3em;
+      }
+    }
   }
 }

@@ -1,40 +1,54 @@
 import {AbstractTask} from "./AbstractTask";
-import {random_sample, update_mathjax, shuffle, rgb_to_css} from "../util";
+import {random_sample, update_mathjax, shuffle, rgb_to_css, remove_from_array} from "../util";
 import {get_color_system_by_name} from "../color-systems/color-systems";
-import {RGBColorSystem} from "../color-systems/RGBColorSystem";
 
-export class ColorSelectionTask extends AbstractTask {
+
+export class ColorConversionSelectionTask extends AbstractTask {
     constructor(exercise, task_num, options) {
         super(exercise, task_num, options);
         let defaults = {
-            color_systems: ["rgb", "hsl", "hsv", "cmy", "cmyk"],
+            color_systems: ["rgb", "hsl", "hsv", "cmy", "cmyk"], // TODO: pairs of arrays of allowed from-to
+            mixed_conversion_systems: true, // If true, not all options will be in the same color system.
+            show_target_visualization: false,
+            show_conversion_visualization: false,
             max_attempts: 3, // 0 => infinite
             allow_skip_after_first_attempt: true,
-            num_options: 8, // i.e. number of color patches, including the correct one
+            num_options: 8, // including the correct option
         };
         let actual = $.extend({}, defaults, options || {});
 
+        this.mixed_conversion_systems = actual.mixed_conversion_systems;
         this.max_attempts = actual.max_attempts;
         this.current_attempt = 0;
         this.allow_skip_after_first_attempt = actual.allow_skip_after_first_attempt;
         this.num_options = actual.num_options;
-        this.color_system_name = random_sample(actual.color_systems);
-        this.target_color = get_color_system_by_name(this.color_system_name);
+        this.target_system_name = random_sample(actual.color_systems);
+        this.target_color = get_color_system_by_name(this.target_system_name);
         this.distractor_colors = [];
+        this.$options_container = null;
 
-        this.$patches_container = null;
         this.$next_button = null;
         this.$feedback = null;
 
-        /* Randomize target color. */
+        /* Randomize and convert target color. */
         this.target_color.randomize();
+        let remaining_color_systems = actual.color_systems.slice(); // (copy array)
+        remove_from_array(remaining_color_systems, this.target_system_name);
+        let conversion_system_name = random_sample(remaining_color_systems);
+        this.converted_target_color = get_color_system_by_name(conversion_system_name);
+        let target_rgb = this.target_color.get_rgb();
+        this.converted_target_color.set_from_rgb(target_rgb.r, target_rgb.g, target_rgb.b);
+
         /* Make random distractor colors. */
         for (let i = 0; i < this.num_options - 1; i++) {
-            let c = new RGBColorSystem();
+            if (this.mixed_conversion_systems) {
+                conversion_system_name = random_sample(remaining_color_systems);
+            }
+            let c = get_color_system_by_name(conversion_system_name);
             c.randomize();
             this.distractor_colors.push(c);
         }
-        this.distractor_colors.push(this.target_color);
+        this.distractor_colors.push(this.converted_target_color);
         shuffle(this.distractor_colors);
     }
 
@@ -47,18 +61,19 @@ export class ColorSelectionTask extends AbstractTask {
         );
         update_mathjax(this.$task_title);
 
-        /* Make color patches. */
-        this.$patches_container = $(
-            '<div class="color-selection-patches"></div>'
+        /* Attach distractor colors (including converted target). */
+        this.$options_container = $(
+            '<div class="color-conversion-selection-options"></div>'
         ).appendTo(this.$container);
         for (let c of this.distractor_colors) {
-            let rgb = c.get_rgb();
-            let $patch = $(
-                '<div class="color-selection-patch"></div>'
-            ).appendTo(this.$patches_container);
-            $patch.css("background", rgb_to_css(rgb.r, rgb.g, rgb.b));
-            $patch.click(() => this.on_patch_clicked(c));
+            let $option = $(
+                '<span class="color-conversion-selection-option">' +
+                '\\(' + c.get_tex() + '\\)' +
+                '</span>'
+            ).appendTo(this.$options_container);
+            $option.click(() => this.on_option_clicked(c));
         }
+        update_mathjax(this.$options_container);
 
         /* Attach buttons. */
         this.$container.append(
@@ -70,12 +85,12 @@ export class ColorSelectionTask extends AbstractTask {
         this.$next_button.click(() => this.on_next_click());
     }
 
-    on_patch_clicked(distractor_color) {
+    on_option_clicked(option_color) {
         this.current_attempt += 1;
         if (this.stats.correct || (this.max_attempts != 0 && this.current_attempt > this.max_attempts)) {
             return;
         }
-        this.stats.correct = distractor_color == this.target_color;
+        this.stats.correct = option_color == this.converted_target_color;
         let feedback_str = "";
 
         /* Make feedback container if it doesn't exist yet. */
@@ -92,6 +107,7 @@ export class ColorSelectionTask extends AbstractTask {
             this.$feedback.addClass("correct");
             feedback_str += "<em>Correct!</em>";
             this.$feedback.html(feedback_str);
+            this.resolve();
         } else {
             if (this.allow_skip_after_first_attempt || this.current_attempt == this.max_attempts) {
                 /* (Because this.current_attempt starts at 0, max_attempts=0 means infinite attempts.) */
@@ -105,11 +121,12 @@ export class ColorSelectionTask extends AbstractTask {
                 if (this.current_attempt == this.max_attempts) {
                     let target_rgb = this.target_color.get_rgb();
                     this.stats.skipped = false;
-                    feedback_str += 'The correct solution is:<br/>' +
-                        '<div class="color-selection-patch"></div>';
+                    feedback_str += 'The correct solution is \\(' + this.converted_target_color.get_tex() + '\\).';
                     this.$feedback.html(feedback_str);
+                    update_mathjax(this.$feedback);
                     this.$feedback.find(".color-selection-patch").css("background",
                         rgb_to_css(target_rgb.r, target_rgb.g, target_rgb.b));
+                    this.resolve();
                 } else {
                     this.$feedback.html(feedback_str);
                 }
@@ -121,5 +138,21 @@ export class ColorSelectionTask extends AbstractTask {
 
     on_next_click() {
         this.exercise.on_task_finished(this);
+    }
+
+    resolve() {
+        /* Show color patches next to numerical color representations. */
+        let $options = this.$options_container.find(".color-conversion-selection-option");
+        if ($options.length < this.distractor_colors.length) {
+            return;
+        }
+        for (let i = 0; i < this.distractor_colors.length; i++) {
+            let dom_option = $options[i];
+            let rgb = this.distractor_colors[i].get_rgb();
+            let $option = $(
+                '<span class="color-patch"></span>'
+            ).prependTo($(dom_option));
+            $option.css("background", rgb_to_css(rgb.r, rgb.g, rgb.b));
+        }
     }
 }

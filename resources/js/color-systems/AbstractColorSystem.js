@@ -23,6 +23,10 @@ export class AbstractColorSystem {
 
     }
 
+    set_from_rgb(r, g, b) {
+
+    }
+
     randomize() {
         for (let property of this.properties) {
             property.set_to_random();

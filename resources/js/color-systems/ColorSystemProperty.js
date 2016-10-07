@@ -13,7 +13,7 @@ export class ColorSystemProperty {
      *
      * @param initial_value An initial value.
      * @param name Name of this property as it will appear on labels.
-     * @param short_name An name that can be used as part of an html id.
+     * @param short_name A name that can be used as part of an html id.
      * @param min Minimum value.
      * @param max Maximum value.
      */

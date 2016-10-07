@@ -2,7 +2,7 @@ import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {TextSprite} from "../objects/TextSprite";
 import {CircleSprite} from "../objects/CircleSprite";
 import {ColorSystemProperty} from "../color-systems/ColorSystemProperty";
-import {hsl_to_rgb} from "../color_conversion";
+import {hsl_to_rgb} from "../color-systems/color_conversion";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {DynamicCylinderBufferGeometry} from "../objects/DynamicCylinderBufferGeometry";
 import {CircularArrow} from "../objects/CircularArrow";
