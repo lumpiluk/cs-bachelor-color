@@ -5,12 +5,12 @@ export function hsv_to_rgb(h, s, v) {
     }
 
     let hp = h * 6 % 6;
-    let c1 = Math.floor(hp);
-    let c2 = hp - c1;
+    let c1 = Math.floor(hp); // i
+    let c2 = hp - c1; // f
 
-    let w1 = (1 - s) * v;
-    let w2 = (1 - s * c2) * v;
-    let w3 = (1 - s * (1 - c2)) * v;
+    let w1 = (1 - s) * v; // p
+    let w2 = (1 - s * c2) * v; // q
+    let w3 = (1 - s * (1 - c2)) * v; // t
 
     switch (c1) {
         case 0: return {r: v, g: w3, b: w1};
@@ -27,12 +27,15 @@ export function hsv_to_rgb(h, s, v) {
  * Keep in mind that hue is undefined for saturation=0.
  */
 export function rgb_to_hsv(r, g, b) {
-    let c_high = Math.max(r, g, b);
-    let c_low = Math.min(r, g, b);
+    let c_high = Math.max(r, g, b); // maxc
+    let c_low = Math.min(r, g, b); // minc
     let c_rng = c_high - c_low;
-    let rp = c_high - r;
-    let gp = c_high - g;
-    let bp = c_high - b;
+    if (c_rng == 0) {
+        return {h: 0, s: 0, v: c_high};
+    }
+    let rp = (c_high - r) / c_rng;
+    let gp = (c_high - g) / c_rng;
+    let bp = (c_high - b) / c_rng;
     let hp;
     switch (c_high) {
         case r:
@@ -85,9 +88,9 @@ export function rgb_to_hsl(r, g, b) {
     let c_high = Math.max(r, g, b);
     let c_low = Math.min(r, g, b);
     let c_rng = c_high - c_low;
-    let rp = c_high - r;
-    let gp = c_high - g;
-    let bp = c_high - b;
+    let rp = (c_high - r) / c_rng;
+    let gp = (c_high - g) / c_rng;
+    let bp = (c_high - b) / c_rng;
     let hp;
     switch (c_high) {
         case r:

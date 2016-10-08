@@ -1,3 +1,13 @@
+import {rgb_to_css} from "../util";
+
+
+export function append_color_patch($container, color_system) {
+    let $patch = $('<div class="color-selection-patch"></div>').appendTo($container);
+    let rgb = color_system.get_rgb();
+    $patch.css("background", rgb_to_css(rgb.r, rgb.g, rgb.b));
+}
+
+
 export class AbstractTask {
     constructor(exercise, task_num, options) {
         let defaults = {

@@ -96,7 +96,8 @@ export class Exercise {
                     new_task = new ColorConversionSelectionTask(this, this.num_rounds - i, new_task_type.options);
                     break;
                 case "ColorConversion":
-
+                    /* ColorMatchingTask handles this case as well. */
+                    new_task = new ColorMatchingTask(this, this.num_rounds - i, new_task_type.options);
                     break;
                 case "RGBModification": // TODO: Combine with other types?
 

@@ -27,7 +27,7 @@ export class AbstractColorSystem {
 
     }
 
-    randomize() {
+    randomize(easy) {
         for (let property of this.properties) {
             property.set_to_random();
         }

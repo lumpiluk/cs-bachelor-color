@@ -2,6 +2,13 @@ import {AbstractColorSystem} from "./AbstractColorSystem";
 import {ColorSystemProperty} from "./ColorSystemProperty";
 import {hsl_to_rgb, rgb_to_hsl} from "./color_conversion";
 import {HSLVisualization} from "../visualizations/HSLVisualization";
+import {random_sample} from "../util";
+
+
+var EASY_HUES = [];
+for (let i = 0; i < 1; i += 1/12) {
+    EASY_HUES.push(i);
+}
 
 export class HSLColorSystem extends AbstractColorSystem {
     constructor() {
@@ -43,5 +50,15 @@ export class HSLColorSystem extends AbstractColorSystem {
         this.properties[0].set_value(hsl.h);
         this.properties[1].set_value(hsl.s);
         this.properties[2].set_value(hsl.l);
+    }
+
+    randomize(easy) {
+        super.randomize(easy);
+        if (easy == null) {
+            return;
+        }
+        if (easy) {
+            this.properties[0].set_value(random_sample(EASY_HUES));
+        }
     }
 }
