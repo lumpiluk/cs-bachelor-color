@@ -1,7 +1,7 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
-import {ColorSystemProperty} from "../color-systems/ColorSystemProperty";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
+import {RGBColorSystem} from "../color-systems/RGBColorSystem";
 import {
     ShaderMaterial,
     Vector3
@@ -25,9 +25,8 @@ export class RGBCubeVisualization extends Visualization {
         this.pivot.position.set(.5, .5, .5);
 
         /* Color system. */
-        this.red_property = new ColorSystemProperty(1.0, 0.0, 1.0, "R", "r");
-        this.green_property = new ColorSystemProperty(1.0, 0.0, 1.0, "G", "g");
-        this.blue_property = new ColorSystemProperty(1.0, 0.0, 1.0, "B", "b");
+        this.color_system = new RGBColorSystem();
+        this.color_system.set_from_rgb(1, 1, 1);
 
         /* Initialize color system controls. */
         this.red_control = null;
@@ -39,10 +38,7 @@ export class RGBCubeVisualization extends Visualization {
         }
 
         /* Attach event handlers. */
-        let that = this;
-        this.red_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
-        this.blue_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
-        this.green_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
+        this.color_system.add_listener((event) => this.on_color_system_property_change(event));
     }
 
     init_controls() {
@@ -53,17 +49,17 @@ export class RGBCubeVisualization extends Visualization {
         }
         this.red_control = new VisualizationControlSlider(
             $controls,
-            this.red_property,
+            this.color_system.properties[0],
             0.001
         );
         this.green_control = new VisualizationControlSlider(
             $controls,
-            this.green_property,
+            this.color_system.properties[1],
             0.001
         );
         this.blue_control = new VisualizationControlSlider(
             $controls,
-            this.blue_property,
+            this.color_system.properties[2],
             0.001
         );
     }
@@ -78,20 +74,16 @@ export class RGBCubeVisualization extends Visualization {
     }
 
     on_color_system_property_change(event) {
-        this.set_selected_color(this.red_property.value, this.green_property.value, this.blue_property.value);
+        let r = this.color_system.properties[0].value;
+        let g = this.color_system.properties[1].value;
+        let b = this.color_system.properties[2].value;
 
-        this.rgb_cube.value.set(
-            this.red_property.value,
-            this.green_property.value,
-            this.blue_property.value
-        );
+        this.set_selected_color(r, g, b);
+
+        this.rgb_cube.value.set(r, g, b);
         this.rgb_cube.update_cube();
 
-        this.rgb_cube.current_color_sprite.sprite_material.color.setRGB(
-            this.red_property.value,
-            this.green_property.value,
-            this.blue_property.value
-        );
+        this.rgb_cube.current_color_sprite.sprite_material.color.setRGB(r, g, b);
 
         this.render();
     }
@@ -103,7 +95,7 @@ export class RGBCubeVisualization extends Visualization {
  */
 export function attach_rgb_cube_visualizations() {
     let visualizations = [];
-    $(".visualization.rgb-cube").each(function() {
+    $(".figure > .visualization.rgb-cube").each(function() {
         let rgb_cube = new RGBCubeVisualization($(this));
         rgb_cube.render();
         visualizations.push(rgb_cube);

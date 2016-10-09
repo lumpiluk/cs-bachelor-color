@@ -19,7 +19,9 @@ export class Visualization {
         this.animating = false;
 
         this.$container = $container;
-        this.$figure = $container.parent().hasClass("figure") ? $container.parent() : null;
+        //this.$figure = $container.parent().hasClass("figure") ? $container.parent() : null;
+        this.$figure = $container.closest(".figure");
+        this.$figure = this.$figure.length > 0 ? this.$figure : null;
         this.$controls = this.$figure != null ? this.$figure.find(".visualization-controls") : null;
         this.$controls_advanced = this.$figure != null ?
             this.$figure.find(".visualization-controls-advanced") : null;

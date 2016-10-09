@@ -18,6 +18,7 @@ import {
     Mesh,
     Object3D
 } from "../../../bower_components/three.js/build/three";
+import {HSLColorSystem} from "../color-systems/HSLColorSystem";
 
 
 const HSL_CYLINDER_SHADER = require("../../shaders/hsl-cylinders-fragment.glsl");
@@ -149,9 +150,10 @@ export class HSLVisualization extends Visualization {
         this.hsl_cones.add(this.current_color_sprite.sprite);
 
         /* Color system. */
-        this.hue_property = new ColorSystemProperty(1.0, 0.0, 1.0, "H", "h");
-        this.saturation_property = new ColorSystemProperty(0.0, 0.0, 1.0, "S", "s");
-        this.lightness_property = new ColorSystemProperty(1.0, 0.0, 1.0, "L", "l");
+        this.color_system = new HSLColorSystem();
+        this.color_system.properties[0].set_value(1);
+        this.color_system.properties[1].set_value(0);
+        this.color_system.properties[2].set_value(1);
 
         /* Initialize color system controls. */
         this.hue_control = null;
@@ -164,10 +166,7 @@ export class HSLVisualization extends Visualization {
         }
 
         /* Attach event handlers. */
-        let that = this;
-        this.hue_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
-        this.saturation_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
-        this.lightness_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
+        this.color_system.add_listener((event) => this.on_color_system_property_change(event));
     }
 
     init_controls() {
@@ -178,17 +177,17 @@ export class HSLVisualization extends Visualization {
         }
         this.hue_control = new VisualizationControlSlider(
             $controls,
-            this.hue_property,
+            this.color_system.properties[0],
             0.001
         );
         this.saturation_control = new VisualizationControlSlider(
             $controls,
-            this.saturation_property,
+            this.color_system.properties[1],
             0.001
         );
         this.lightness_control = new VisualizationControlSlider(
             $controls,
-            this.lightness_property,
+            this.color_system.properties[2],
             0.001
         );
     }
@@ -217,41 +216,44 @@ export class HSLVisualization extends Visualization {
     }
 
     on_color_system_property_change(event) {
-        let selected_rgb = hsl_to_rgb(
-            this.hue_property.value, this.saturation_property.value, this.lightness_property.value);
+        let selected_rgb = this.color_system.get_rgb();
+        let h = this.color_system.properties[0].value;
+        let s = this.color_system.properties[1].value;
+        let l = this.color_system.properties[2].value;
+
         this.set_selected_color(selected_rgb.r, selected_rgb.g, selected_rgb.b);
 
-        let lightness_top = Math.max(0, (this.lightness_property.value - .5) * 2);
-        let lightness_bottom = Math.min(1, this.lightness_property.value * 2);
-        let theta = this.hue_property.value * 2 * Math.PI;
-        let current_y = this.lightness_property.value * this.height - this.height / 2;
+        let lightness_top = Math.max(0, (l - .5) * 2);
+        let lightness_bottom = Math.min(1, l * 2);
+        let theta = h * 2 * Math.PI;
+        let current_y = l * this.height - this.height / 2;
 
         this.hsl_cylinder_top_geom.height = lightness_top * this.height / 2;
         this.hsl_cylinder_bottom_geom.height = lightness_bottom * this.height / 2;
         this.hsl_cylinder_top_geom.radius_top = lerp(this.radius, this.bounding_cylinder_top.radius_top, lightness_top);
         this.hsl_cylinder_bottom_geom.radius_top =
             lerp(this.bounding_cylinder_bottom.radius_bottom, this.radius, lightness_bottom);
-        this.hsl_cylinder_top_geom.theta_length = this.hue_property.value * 2 * Math.PI;
-        this.hsl_cylinder_bottom_geom.theta_length = this.hue_property.value * 2 * Math.PI;
+        this.hsl_cylinder_top_geom.theta_length = h * 2 * Math.PI;
+        this.hsl_cylinder_bottom_geom.theta_length = h * 2 * Math.PI;
         this.hsl_cylinder_top_geom.update_cylinder();
         this.hsl_cylinder_bottom_geom.update_cylinder();
 
         this.hsl_cylinder_top.position.set(0, this.hsl_cylinder_top_geom.height / 2, 0);
         this.hsl_cylinder_bottom.position.set(
             0,
-            (this.lightness_property.value <= .5 ? current_y : 0) - this.hsl_cylinder_bottom_geom.height / 2,
+            (l <= .5 ? current_y : 0) - this.hsl_cylinder_bottom_geom.height / 2,
             0
         );
-        this.hsl_cylinder_top.visible = this.lightness_property.value >= .5;
+        this.hsl_cylinder_top.visible = l >= .5;
 
         /* Update current color indicator. */
-        let r = this.lightness_property.value <= .5 ?
+        let radius = l <= .5 ?
             lerp(this.bounding_cylinder_bottom.radius_bottom, this.radius, lightness_bottom) :
             lerp(this.radius, this.bounding_cylinder_top.radius_top, lightness_top);
         this.current_color_sprite.sprite.position.set(
-            Math.cos(theta) * r * this.saturation_property.value,
+            Math.cos(theta) * radius * s,
             current_y,
-            -Math.sin(theta) * r * this.saturation_property.value
+            -Math.sin(theta) * radius * s
         );
         this.current_color_sprite.sprite_material.color.setRGB(selected_rgb.r, selected_rgb.g, selected_rgb.b);
 
@@ -264,20 +266,20 @@ export class HSLVisualization extends Visualization {
         );
         /* Update saturation arrow and label. */
         this.arrow_saturation.position.set(
-            Math.cos(theta) * r,
+            Math.cos(theta) * radius,
             current_y,
-            -Math.sin(theta) * r
+            -Math.sin(theta) * radius
         );
         this.arrow_saturation.setDirection(new Vector3(
             Math.cos(theta),
             0,
             -Math.sin(theta)
         ));
-        r += this.arrow_length_padding + .1;
+        radius += this.arrow_length_padding + .1;
         this.label_saturation.sprite.position.set(
-            Math.cos(theta) * r,
+            Math.cos(theta) * radius,
             current_y,
-            -Math.sin(theta) * r
+            -Math.sin(theta) * radius
         );
         /* Update hue arrow and label. */
         this.circ_arrow_hue.theta = theta;
@@ -285,11 +287,7 @@ export class HSLVisualization extends Visualization {
         this.set_hue_label_position(theta);
 
         /* Update HSL cube (which is not visible by default). */
-        this.hsl_cube.value.set(
-            this.hue_property.value,
-            this.saturation_property.value,
-            this.lightness_property.value
-        );
+        this.hsl_cube.value.set(h, s, l);
         this.hsl_cube.update_cube();
         this.hsl_cube.current_color_sprite.sprite_material.color.setRGB(
             selected_rgb.r, selected_rgb.g, selected_rgb.b);
@@ -328,7 +326,7 @@ export class HSLVisualization extends Visualization {
  */
 export function attach_hsl_visualizations() {
     let visualizations = [];
-    $(".visualization.hsl").each(function() {
+    $(".figure > .visualization.hsl").each(function() {
         let visualization = new HSLVisualization($(this));
         visualization.render();
         visualizations.push(visualization);

@@ -16,8 +16,8 @@ export class RGBColorSystem extends AbstractColorSystem {
         return "RGBCubeVisualization";
     }
 
-    create_associated_visualization($container, options) {
-        return new RGBCubeVisualization($container, options);
+    get_visualization_css_class() {
+        return "rgb-cube";
     }
 
     create_color_system_properties() {
@@ -37,9 +37,9 @@ export class RGBColorSystem extends AbstractColorSystem {
         }
     }
 
-    set_from_rgb(r, g, b) {
-        this.properties[0].set_value(r);
-        this.properties[1].set_value(g);
-        this.properties[2].set_value(b);
+    set_from_rgb(r, g, b, update_sliders, instigating_color_system) {
+        this.properties[0].set_value(r, update_sliders, instigating_color_system);
+        this.properties[1].set_value(g, update_sliders, instigating_color_system);
+        this.properties[2].set_value(b, update_sliders, instigating_color_system);
     }
 }

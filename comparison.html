@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>HSL</title>
+    <title>Color System Comparison</title>
 
     <link rel="stylesheet" type="text/css" href="bower_components/normalize-css/normalize.css">
     <link rel="stylesheet" type="text/css" href="resources/css/color-main.css">
@@ -13,19 +13,16 @@
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
 
     <!-- TODO: .min.js -->
-    <script src="resources/js/build/color.compiled.min.js"></script>
+    <script src="resources/js/build/color.compiled.js"></script>
 </head>
 <body>
-    <h1>HSL</h1>
-    <p>
-        <figref data-fig-id="fig-hsl-vis">The figure</figref> shows the HSL color space.
-        Click and drag to rotate, scroll to zoom.
-        On a touchscreen, drag to rotate around the y-axis and use two fingers to zoom or to rotate around the x-axis.
-    </p>
     <div class="figure" id="fig-hsl-vis">
-        <div class="hsl visualization"></div>
+        <div class="visualizations">
+            <div class="hsl visualization"></div>
+            <div class="rgb-cube visualization"></div>
+        </div>
         <div class="selected-color"></div>
-        <div class="figure-title">The HSL color space.</div>
+        <div class="figure-title">Comparison of two color systems.</div>
         <div class="visualization-controls"></div>
         <div class="visualization-controls-advanced">
         </div>

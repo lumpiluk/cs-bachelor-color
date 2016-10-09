@@ -1,10 +1,7 @@
-/**
- * Created by lumpiluk on 9/21/16.
- */
-
 class ColorSystemPropertyChangeEvent {
-    constructor(property) {
+    constructor(property, instigating_color_system) {
         this.property = property;
+        this.instigating_color_system = instigating_color_system;
     }
 }
 
@@ -24,17 +21,35 @@ export class ColorSystemProperty {
         this.min = min;
         this.max = max;
         this.change_listeners = [];
+        this.sliders = [];
     }
 
     add_listener(callback) {
         this.change_listeners.push(callback);
     }
 
-    set_value(value) {
+    add_slider(slider) {
+        this.sliders.push(slider);
+    }
+
+    /**
+     * @param value The new value.
+     * @param update_slider (optional) If true, property's slider will be updated. Default is false.
+     * Warning: May cause infinite loops if used incorrectly!
+     * @param instigating_color_system The color system that started the event chain.
+     * Required to prevent infinite loops if this color system is connected to other systems.
+     */
+    set_value(value, update_slider, instigating_color_system) {
         this.value = parseFloat(value);
-        let event = new ColorSystemPropertyChangeEvent(this);
+        let event = new ColorSystemPropertyChangeEvent(this, instigating_color_system);
         for (let callback of this.change_listeners) {
             callback(event);
+        }
+
+        if (update_slider) {
+            for (let s of this.sliders) {
+                s.update_slider();
+            }
         }
     }
 

@@ -9,6 +9,14 @@ import {
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {get_color_system_by_name} from "../color-systems/color-systems";
 
+
+export function get_color_matching_results_rows(conversion_tasks_only, matching_tasks_only) {
+    let header = conversion_tasks_only ? "Color Conversion" : "Color Matching";
+    let html = '<th><td>' + header + ' </td></th>';
+    html += "";
+}
+
+
 export class ColorMatchingTask extends AbstractTask {
     constructor(exercise, task_num, options) {
         super(exercise, task_num, options);
@@ -160,6 +168,10 @@ export class ColorMatchingTask extends AbstractTask {
             if (this.is_conversion_task) {
                 append_color_patch(this.$feedback, this.target_color);
             }
+            if (!this.show_current_color) {
+                this.$feedback.append("Your selection:");
+                append_color_patch(this.$feedback, this.current_color);
+            }
             update_mathjax(this.$feedback);
         } else {
             if (this.allow_skip_after_first_attempt || this.current_attempt == this.max_attempts) {
@@ -180,6 +192,10 @@ export class ColorMatchingTask extends AbstractTask {
                         this.$feedback.append("The exact result is \\(" + exact_result_tex + "\\).<br/>");
                         append_color_patch(this.$feedback, this.target_color);
                         update_mathjax(this.$feedback);
+                    }
+                    if (!this.show_current_color) {
+                        this.$feedback.append("Your selection:");
+                        append_color_patch(this.$feedback, this.current_color);
                     }
                 } else {
                     this.$feedback.html(feedback_str);

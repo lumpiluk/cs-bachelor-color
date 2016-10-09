@@ -154,8 +154,17 @@ button:disabled:hover {
   padding: 0.45em 0.5em 0.45em 0.5em;
   background: #e6e6e6;
 }
+.figure .visualizations {
+  width: 100%;
+  display: -webkit-flex;
+  -webkit-flex-flow: row nowrap;
+  display: flex;
+  flex-flow: row nowrap;
+}
 .figure .visualization {
   height: 26.67em;
+  flex-grow: 1;
+  width: 100%;
 }
 .figure .visualization canvas {
   width: 100%;
@@ -228,8 +237,17 @@ figref a:hover {
   padding: 0.45em 0.5em 0.45em 0.5em;
   background: #e6e6e6;
 }
+.exercise .visualizations {
+  width: 100%;
+  display: -webkit-flex;
+  -webkit-flex-flow: row nowrap;
+  display: flex;
+  flex-flow: row nowrap;
+}
 .exercise .visualization {
   height: 26.67em;
+  flex-grow: 1;
+  width: 100%;
 }
 .exercise .visualization canvas {
   width: 100%;

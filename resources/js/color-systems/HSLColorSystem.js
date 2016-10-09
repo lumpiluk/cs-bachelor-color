@@ -24,8 +24,8 @@ export class HSLColorSystem extends AbstractColorSystem {
         return "HSLVisualization";
     }
 
-    create_associated_visualization($container, options) {
-        return new HSLVisualization($container, options);
+    get_visualization_css_class() {
+        return "hsl";
     }
 
     create_color_system_properties() {
@@ -45,11 +45,11 @@ export class HSLColorSystem extends AbstractColorSystem {
         );
     }
 
-    set_from_rgb(r, g, b) {
+    set_from_rgb(r, g, b, update_sliders, instigating_color_system) {
         let hsl = rgb_to_hsl(r, g, b);
-        this.properties[0].set_value(hsl.h);
-        this.properties[1].set_value(hsl.s);
-        this.properties[2].set_value(hsl.l);
+        this.properties[0].set_value(hsl.h, update_sliders, instigating_color_system);
+        this.properties[1].set_value(hsl.s, update_sliders, instigating_color_system);
+        this.properties[2].set_value(hsl.l, update_sliders, instigating_color_system);
     }
 
     randomize(easy) {

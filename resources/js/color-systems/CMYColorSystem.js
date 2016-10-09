@@ -17,8 +17,8 @@ export class CMYColorSystem extends AbstractColorSystem {
         return "CMYCubeVisualization";
     }
 
-    create_associated_visualization($container, options) {
-        return new CMYCubeVisualization($container, options);
+    get_visualization_css_class() {
+        return "cmy-cube";
     }
 
     create_color_system_properties() {
@@ -38,10 +38,10 @@ export class CMYColorSystem extends AbstractColorSystem {
         );
     }
 
-    set_from_rgb(r, g, b) {
+    set_from_rgb(r, g, b, update_sliders, instigating_color_system) {
         let cmy = rgb_to_cmy(r, g, b);
-        this.properties[0].set_value(cmy.c);
-        this.properties[1].set_value(cmy.m);
-        this.properties[2].set_value(cmy.y);
+        this.properties[0].set_value(cmy.c, update_sliders, instigating_color_system);
+        this.properties[1].set_value(cmy.m, update_sliders, instigating_color_system);
+        this.properties[2].set_value(cmy.y, update_sliders, instigating_color_system);
     }
 }

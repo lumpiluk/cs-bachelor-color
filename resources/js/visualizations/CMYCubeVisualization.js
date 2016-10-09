@@ -7,6 +7,7 @@ import {
     ShaderMaterial,
     Vector3
 } from "../../../bower_components/three.js/build/three";
+import {CMYColorSystem} from "../color-systems/CMYColorSystem";
 
 
 const CMY_CUBE_SHADER = require("../../shaders/cmy-fragment.glsl");
@@ -27,9 +28,9 @@ export class CMYCubeVisualization extends Visualization {
         this.pivot.position.set(.5, .5, .5);
 
         /* Color system. */
-        this.cyan_property = new ColorSystemProperty(1.0, 0.0, 1.0, "C", "c");
-        this.magenta_property = new ColorSystemProperty(1.0, 0.0, 1.0, "M", "m");
-        this.yellow_property = new ColorSystemProperty(1.0, 0.0, 1.0, "Y", "y");
+        this.color_system = new CMYColorSystem();
+        this.color_system.set_from_rgb(0, 0, 0);
+        this.set_selected_color(0, 0, 0);
 
         /* Initialize color system controls. */
         this.cyan_control = null;
@@ -41,13 +42,10 @@ export class CMYCubeVisualization extends Visualization {
         }
 
         /* Attach event handlers. */
-        let that = this;
-        this.cyan_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
-        this.magenta_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
-        this.yellow_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
+        this.color_system.add_listener((event) => this.on_color_system_property_change(event));
     }
 
-    init_controls() {
+    init_controls() { // TODO: move to Visualization class
         super.init_controls();
         let $controls = this.$figure.find(".visualization-controls");
         if ($controls.length == 0) {
@@ -55,17 +53,17 @@ export class CMYCubeVisualization extends Visualization {
         }
         this.cyan_control = new VisualizationControlSlider(
             $controls,
-            this.cyan_property,
+            this.color_system.properties[0],
             0.001
         );
         this.magenta_control = new VisualizationControlSlider(
             $controls,
-            this.magenta_property,
+            this.color_system.properties[1],
             0.001
         );
         this.yellow_control = new VisualizationControlSlider(
             $controls,
-            this.yellow_property,
+            this.color_system.properties[2],
             0.001
         );
     }
@@ -80,14 +78,13 @@ export class CMYCubeVisualization extends Visualization {
     }
 
     on_color_system_property_change(event) {
-        let selected_rgb = cmy_to_rgb(
-            this.cyan_property.value, this.magenta_property.value, this.yellow_property.value);
+        let selected_rgb = this.color_system.get_rgb();
         this.set_selected_color(selected_rgb.r, selected_rgb.g, selected_rgb.b);
 
         this.cmy_cube.value.set(
-            this.cyan_property.value,
-            this.magenta_property.value,
-            this.yellow_property.value
+            this.color_system.properties[0].value,
+            this.color_system.properties[1].value,
+            this.color_system.properties[2].value
         );
         this.cmy_cube.update_cube();
 
@@ -104,7 +101,7 @@ export class CMYCubeVisualization extends Visualization {
  */
 export function attach_cmy_cube_visualizations() {
     let visualizations = [];
-    $(".visualization.cmy-cube").each(function() {
+    $(".figure > .visualization.cmy-cube").each(function() {
         let cmy_cube = new CMYCubeVisualization($(this));
         cmy_cube.render();
         visualizations.push(cmy_cube);

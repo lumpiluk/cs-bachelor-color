@@ -61,7 +61,7 @@ export class Exercise {
         let num_rounds = $c.data("num-rounds");
         if (!isNaN(num_rounds))
             options.num_rounds = num_rounds;
-        if ($c.data("task-types") != undefined )
+        if ($c.data("task-types") != null)
             options.task_types = $c.data("task-types"); // JSON.parse() not necessary thanks to JQuery!
         return options;
     }

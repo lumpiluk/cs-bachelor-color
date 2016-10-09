@@ -1,13 +1,14 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {TextSprite} from "../objects/TextSprite";
 import {CircleSprite} from "../objects/CircleSprite";
-import {ColorSystemProperty} from "../color-systems/ColorSystemProperty";
-import {hsv_to_rgb} from "../color-systems/color_conversion";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {DynamicCylinderBufferGeometry} from "../objects/DynamicCylinderBufferGeometry";
 import {DynamicBoundingCylinder} from "../objects/DynamicBoundingCylinder";
 import {CircularArrow} from "../objects/CircularArrow";
 import {lerp} from "../util";
+import {VisualizationControlSelect} from "../controls/VisualizationControlSelect";
+import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
+import {HSVColorSystem} from "../color-systems/HSVColorSystem";
 
 import {
     ShaderMaterial,
@@ -16,8 +17,6 @@ import {
     Mesh,
     Object3D
 } from "../../../bower_components/three.js/build/three";
-import {VisualizationControlSelect} from "../controls/VisualizationControlSelect";
-import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
 
 
 const HSV_CYLINDER_SHADER = require("../../shaders/hsv-cylinder-fragment.glsl");
@@ -124,9 +123,10 @@ export class HSVVisualization extends Visualization {
         this.hsv_cone.add(this.current_color_sprite.sprite);
 
         /* Color system. */
-        this.hue_property = new ColorSystemProperty(1.0, 0.0, 1.0, "H", "h");
-        this.saturation_property = new ColorSystemProperty(0.0, 0.0, 1.0, "S", "s");
-        this.value_property = new ColorSystemProperty(1.0, 0.0, 1.0, "V", "v");
+        this.color_system = new HSVColorSystem();
+        this.color_system.properties[0].set_value(1);
+        this.color_system.properties[1].set_value(0);
+        this.color_system.properties[2].set_value(1);
 
         /* Initialize color system controls. */
         this.hue_control = null;
@@ -139,10 +139,7 @@ export class HSVVisualization extends Visualization {
         }
 
         /* Attach event handlers. */
-        let that = this;
-        this.hue_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
-        this.saturation_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
-        this.value_property.add_listener((event) => that.on_color_system_property_change.call(that, event));
+        this.color_system.add_listener((event) => this.on_color_system_property_change(event));
     }
 
     init_controls() {
@@ -153,17 +150,17 @@ export class HSVVisualization extends Visualization {
         }
         this.hue_control = new VisualizationControlSlider(
             $controls,
-            this.hue_property,
+            this.color_system.properties[0],
             0.001
         );
         this.saturation_control = new VisualizationControlSlider(
             $controls,
-            this.saturation_property,
+            this.color_system.properties[1],
             0.001
         );
         this.value_control = new VisualizationControlSlider(
             $controls,
-            this.value_property,
+            this.color_system.properties[2],
             0.001
         );
     }
@@ -192,62 +189,61 @@ export class HSVVisualization extends Visualization {
     }
 
     on_color_system_property_change(event) {
-        let selected_rgb = hsv_to_rgb(
-            this.hue_property.value, this.saturation_property.value, this.value_property.value);
+        let selected_rgb = this.color_system.get_rgb();
+        let h = this.color_system.properties[0].value;
+        let s = this.color_system.properties[1].value;
+        let v = this.color_system.properties[2].value;
+
         this.set_selected_color(selected_rgb.r, selected_rgb.g, selected_rgb.b);
 
-        let r = lerp(this.bounding_cone.radius_bottom, this.radius, this.value_property.value);
+        let radius = lerp(this.bounding_cone.radius_bottom, this.radius, v);
 
-        this.hsv_cone_geom.height = this.value_property.value;
-        this.hsv_cone_geom.radius_top = r;
-        this.hsv_cone_geom.theta_length = this.hue_property.value * 2 * Math.PI;
+        this.hsv_cone_geom.height = v;
+        this.hsv_cone_geom.radius_top = radius;
+        this.hsv_cone_geom.theta_length = h * 2 * Math.PI;
         this.hsv_cone_geom.update_cylinder();
 
-        this.hsv_cone_mesh.position.set(0, this.value_property.value / 2 - .5, 0);
+        this.hsv_cone_mesh.position.set(0, v / 2 - .5, 0);
 
         /* Update current color indicator. */
         this.current_color_sprite.sprite.position.set(
-            Math.cos(this.hsv_cone_geom.theta_length) * r * this.saturation_property.value,
-            this.value_property.value - .5,
-            -Math.sin(this.hsv_cone_geom.theta_length) * r * this.saturation_property.value
+            Math.cos(this.hsv_cone_geom.theta_length) * radius * s,
+            v - .5,
+            -Math.sin(this.hsv_cone_geom.theta_length) * radius * s
         );
         this.current_color_sprite.sprite_material.color.setRGB(selected_rgb.r, selected_rgb.g, selected_rgb.b);
 
         /* Update length of value arrow. */
-        this.arrow_value.position.set(0, this.value_property.value - .5, 0);
+        this.arrow_value.position.set(0, v - .5, 0);
         this.arrow_value.setLength(
-            1 + this.arrow_length_padding - this.value_property.value,
+            1 + this.arrow_length_padding - v,
             this.arrow_head_length,
             this.arrow_head_width
         );
         /* Update saturation arrow and label. */
         this.arrow_saturation.position.set(
-            Math.cos(this.hsv_cone_geom.theta_length) * r,
-            this.value_property.value - .5,
-            -Math.sin(this.hsv_cone_geom.theta_length) * r
+            Math.cos(this.hsv_cone_geom.theta_length) * radius,
+            v - .5,
+            -Math.sin(this.hsv_cone_geom.theta_length) * radius
         );
         this.arrow_saturation.setDirection(new Vector3(
             Math.cos(this.hsv_cone_geom.theta_length),
             0,
             -Math.sin(this.hsv_cone_geom.theta_length)
         ));
-        r += this.arrow_length_padding + .1;
+        radius += this.arrow_length_padding + .1;
         this.label_saturation.sprite.position.set(
-            Math.cos(this.hsv_cone_geom.theta_length) * r,
-            this.value_property.value - .5,
-            -Math.sin(this.hsv_cone_geom.theta_length) * r
+            Math.cos(this.hsv_cone_geom.theta_length) * radius,
+            v - .5,
+            -Math.sin(this.hsv_cone_geom.theta_length) * radius
         );
         /* Update hue arrow and label. */
-        this.circ_arrow_hue.theta = this.hue_property.value * 2 * Math.PI;
+        this.circ_arrow_hue.theta = h * 2 * Math.PI;
         this.circ_arrow_hue.update_circle();
-        this.set_hue_label_position(this.hue_property.value * 2 * Math.PI);
+        this.set_hue_label_position(h * 2 * Math.PI);
 
         /* Update HSV cube (which is not visible by default). */
-        this.hsv_cube.value.set(
-            this.hue_property.value,
-            this.saturation_property.value,
-            this.value_property.value
-        );
+        this.hsv_cube.value.set(h, s, v);
         this.hsv_cube.update_cube();
         this.hsv_cube.current_color_sprite.sprite_material.color.setRGB(
             selected_rgb.r, selected_rgb.g, selected_rgb.b);
@@ -282,7 +278,7 @@ export class HSVVisualization extends Visualization {
  */
 export function attach_hsv_visualizations() {
     let visualizations = [];
-    $(".visualization.hsv").each(function() {
+    $(".figure > .visualization.hsv").each(function() {
         let visualization = new HSVVisualization($(this));
         visualization.render();
         visualizations.push(visualization);

@@ -1,4 +1,5 @@
 import {rgb_to_css} from "../util";
+import {make_visualization_by_css_class} from "../visualizations/visualizations";
 
 
 export function append_color_patch($container, color_system) {
@@ -46,7 +47,8 @@ export class AbstractTask {
                 //'</div>'
             );
             let $vis = this.$container.find(".visualization");
-            this.visualization = this.target_color.create_associated_visualization($vis, this.visualization_options);
+            this.visualization = make_visualization_by_css_class(this.target_color.get_visualization_css_class(), $vis,
+                this.visualization_options);
             if (this.visualization == null) {
                 /* CMYK, for example, does not have a visualization (as of yet). -> Don't show. */
                 this.$container.remove(".visualization");

@@ -16,7 +16,7 @@ export class CMYKColorSystem extends AbstractColorSystem {
         return null;
     }
 
-    create_associated_visualization($container, options) {
+    get_visualization_css_class() {
         return null;
     }
 
@@ -50,11 +50,11 @@ export class CMYKColorSystem extends AbstractColorSystem {
         );
     }
 
-    set_from_rgb(r, g, b) {
+    set_from_rgb(r, g, b, update_sliders, instigating_color_system) {
         let cmyk = rgb_to_cmyk(r, g, b);
-        this.properties[0].set_value(cmyk.c);
-        this.properties[1].set_value(cmyk.m);
-        this.properties[2].set_value(cmyk.y);
-        this.properties[3].set_value(cmyk.k);
+        this.properties[0].set_value(cmyk.c, update_sliders, instigating_color_system);
+        this.properties[1].set_value(cmyk.m, update_sliders, instigating_color_system);
+        this.properties[2].set_value(cmyk.y, update_sliders, instigating_color_system);
+        this.properties[3].set_value(cmyk.k, update_sliders, instigating_color_system);
     }
 }

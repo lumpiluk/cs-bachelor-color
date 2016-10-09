@@ -17,8 +17,18 @@
     background: @figure_title_background;
   }
 
+  .visualizations {
+    width: 100%;
+    display: -webkit-flex;
+    -webkit-flex-flow: row nowrap;
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
   .visualization {
     height: @visualization_height;
+    flex-grow: 1;
+    width: 100%;
 
     canvas {
       width: 100%;

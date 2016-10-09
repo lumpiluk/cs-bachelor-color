@@ -6,6 +6,7 @@ export class VisualizationControlSlider {
     constructor($parent, color_system_property, step) {
         this.$parent = parent;
         this.color_system_property = color_system_property;
+        this.color_system_property.add_slider(this);
         this.control_id = Math.floor(Math.random() * 1e+15).toString();
         this.slider_id = "vis-ctrl-" + this.control_id + "-slider";
         this.number_id = "vis-ctrl-" + this.control_id + "-number";
@@ -41,5 +42,10 @@ export class VisualizationControlSlider {
     on_number_change(event) {
         $("#" + this.slider_id).val(event.target.value);
         this.color_system_property.set_value(event.target.value);
+    }
+
+    update_slider() {
+        $("#" + this.number_id).val(this.color_system_property.value);
+        $("#" + this.slider_id).val(this.color_system_property.value);
     }
 }
