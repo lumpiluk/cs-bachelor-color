@@ -16,3 +16,8 @@ Development dependencies (mostly run automatically in WebStorm's File Watchers):
 
 Command for browserify with babelify and browserify-shader as it is set in the corresponding File Watcher:
 `browserify -t [browserify-shader --parameterize=true] -t [babelify --presets es2015] $FileName$ -o $FileNameWithoutExtension$.compiled.js`
+
+### PHP
+
+Dependencies for PHP development are installed to ./vendor via `php composer.phar install`.
+The file composer.lock specifies the exact versions of the original installation.

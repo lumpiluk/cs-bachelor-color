@@ -2,6 +2,14 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
+        <item url="file://$PROJECT_DIR$/node_modules/center-align/utils.min.js" />
+        <item url="file://$PROJECT_DIR$/node_modules/center-align/index.min.js" />
+        <item url="file://$PROJECT_DIR$/resources/js/build/color.compiled.min.js" />
+        <item url="file://$PROJECT_DIR$/resources/js/build/color.compiled.js" />
+        <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/propmangle.min.js" />
+        <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/utils.min.js" />
+        <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/sourcemap.min.js" />
+        <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/transform.min.js" />
         <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/scope.min.js" />
         <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/parse.min.js" />
         <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/ast.min.js" />
@@ -14,21 +22,21 @@
         <item url="file://$PROJECT_DIR$/node_modules/uglify-js/tools/exports.min.js" />
         <item url="file://$PROJECT_DIR$/node_modules/uglify-js/tools/node.min.js" />
         <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/output.min.js" />
-        <item url="file://$PROJECT_DIR$/node_modules/center-align/utils.min.js" />
-        <item url="file://$PROJECT_DIR$/node_modules/center-align/index.min.js" />
-        <item url="file://$PROJECT_DIR$/resources/js/build/visualizations.compiled.min.js" />
-        <item url="file://$PROJECT_DIR$/resources/js/build/color.compiled.min.js" />
-        <item url="file://$PROJECT_DIR$/resources/js/build/color.compiled.js" />
-        <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/propmangle.min.js" />
-        <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/utils.min.js" />
-        <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/sourcemap.min.js" />
-        <item url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/transform.min.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
       <root url="file://$PROJECT_DIR$/resources/js/visualizations.compiled.js" />
       <root url="file://$PROJECT_DIR$/resources/js/visualizations.compiled.js" />
       <root url="file://$PROJECT_DIR$/resources/js/visualizations.compiled.min.js" />
+      <root url="file://$PROJECT_DIR$/resources/js/build/visualizations.compiled.min.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/center-align/utils.min.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/center-align/index.min.js" />
+      <root url="file://$PROJECT_DIR$/resources/js/build/color.compiled.min.js" />
+      <root url="file://$PROJECT_DIR$/resources/js/build/color.compiled.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/propmangle.min.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/utils.min.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/sourcemap.min.js" />
+      <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/transform.min.js" />
       <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/scope.min.js" />
       <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/parse.min.js" />
       <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/ast.min.js" />
@@ -41,15 +49,6 @@
       <root url="file://$PROJECT_DIR$/node_modules/uglify-js/tools/exports.min.js" />
       <root url="file://$PROJECT_DIR$/node_modules/uglify-js/tools/node.min.js" />
       <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/output.min.js" />
-      <root url="file://$PROJECT_DIR$/node_modules/center-align/utils.min.js" />
-      <root url="file://$PROJECT_DIR$/node_modules/center-align/index.min.js" />
-      <root url="file://$PROJECT_DIR$/resources/js/build/visualizations.compiled.min.js" />
-      <root url="file://$PROJECT_DIR$/resources/js/build/color.compiled.min.js" />
-      <root url="file://$PROJECT_DIR$/resources/js/build/color.compiled.js" />
-      <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/propmangle.min.js" />
-      <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/utils.min.js" />
-      <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/sourcemap.min.js" />
-      <root url="file://$PROJECT_DIR$/node_modules/uglify-js/lib/transform.min.js" />
     </CLASSES>
     <SOURCES />
   </library>
