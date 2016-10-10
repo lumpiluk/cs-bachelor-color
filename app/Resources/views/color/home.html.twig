@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Color Home{% endblock %}
+
+{% block body %}
+    <h1>Color</h1>
+    
+    <p>While I'm working on building templates, the static HTML test pages can still be found here:</p>
+    <ul>
+        <li><a href="{{ asset('html_test/rgb.html') }}">RGB</a></li>
+        <li><a href="{{ asset('html_test/hsl.html') }}">HSL</a></li>
+        <li><a href="{{ asset('html_test/hsv.html') }}">HSV</a></li>
+        <li><a href="{{ asset('html_test/cmyk.html') }}">CMY(K)</a></li>
+        <li><a href="{{ asset('html_test/exercises/exercise-color-matching.html') }}">Color matching exercise</a></li>
+        <li><a href="{{ asset('html_test/exercises/exercise-color-selection.html') }}">Color selection exercise</a></li>
+        <li><a href="{{ asset('html_test/exercises/exercise-color-conversion-selection.html') }}">Color conversion selection exercise</a></li>
+        <li><a href="{{ asset('html_test/exercises/exercise-color-conversion.html') }}">Color conversion exercise</a></li>
+        <li><a href="{{ asset('html_test/comparison.html') }}">Comparison</a></li>
+    </ul>
+{% endblock %}

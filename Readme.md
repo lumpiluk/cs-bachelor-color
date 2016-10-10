@@ -23,3 +23,5 @@ Dependencies for PHP development are installed to ./vendor via `php composer.pha
 The file composer.lock specifies the exact versions of the original installation.
 
 To run a debug server, execute `php bin/console server:run`.
+
+This project uses Symfony and, for templating, Symfony's Twig. knpuniversity's video tutorials are highly recommended!

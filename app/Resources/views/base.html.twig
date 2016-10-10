@@ -3,8 +3,16 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        {% block stylesheets %}
+            <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/normalize-css/normalize.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/color-main.css') }}">
+        {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {% block javascripts_head %}
+            <script async src="{{ asset('bower_components/MathJax/MathJax.js?config=Tex-MML-AM_CHTML') }}"></script>
+            <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+            <script src="{{ asset('resources/js/build/color.compiled.min.js') }}"></script>
+        {% endblock %}
     </head>
     <body>
         {% block body %}{% endblock %}
