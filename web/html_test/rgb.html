@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RGB</title>
+
+    <link rel="stylesheet" type="text/css" href="../bower_components/normalize-css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="../web/resources/css/color-main.css">
+
+    <script async src="../bower_components/MathJax/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- TODO: .min.js -->
+    <script src="../web/resources/js/build/color.compiled.js"></script>
+</head>
+<body>
+    <h1>RGB</h1>
+    <p>
+        <figref data-fig-id="fig-rgb-vis">The figure</figref> shows the RGB cube.
+        Click and drag to rotate, scroll to zoom.
+        On a touchscreen, drag to rotate around the y-axis and use two fingers to zoom or to rotate around the x-axis.
+    </p>
+    <div class="figure" id="fig-rgb-vis">
+        <div class="rgb-cube visualization"></div>
+        <div class="selected-color"></div>
+        <div class="figure-title">The RGB cube.</div>
+        <div class="visualization-controls"></div>
+        <div class="visualization-controls-advanced"></div>
+    </div>
+</body>
+</html>

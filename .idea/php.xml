@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PhpProjectServersManager">
+    <servers>
+      <server host="localhost" id="4dea2790-9fac-49d5-ba03-c1dbd93578cd" name="XAMPP" use_path_mappings="true">
+        <path_mappings>
+          <mapping local-root="$PROJECT_DIR$" remote-root="/opt/lampp/htdocs/color" />
+          <mapping local-root="$PROJECT_DIR$/web" remote-root="/opt/lampp/htdocs/color/web" />
+        </path_mappings>
+      </server>
+    </servers>
+  </component>
+  <component name="PhpProjectSharedConfiguration" php_language_level="7" />
+</project>
