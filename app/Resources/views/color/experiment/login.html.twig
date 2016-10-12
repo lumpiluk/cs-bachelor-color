@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Color Login{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/normalize-css/normalize.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/color-main.css') }}">
+    {% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    {% block javascripts_head %}
+        <!--
+        <script async src="{{ asset('bower_components/MathJax/MathJax.js?config=TeX-MML-AM_CHTML') }}"></script>
+        <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ asset('resources/js/build/color.compiled.min.js') }}"></script>
+        -->
+    {% endblock %}
+</head>
+<body>
+{% block body %}
+    <h1>Welcome!</h1>
+    <p>
+        While this site is being tested, you will need to log in.
+        If you are not a student at the University of Paderborn, please write me an email.
+        Otherwise, <a href="{{ path('user_registration') }}">register here</a>.
+    </p>
+
+    <h2>Log In</h2>
+        {% if login_error %}
+            <div class="login-error">{{ login_error.messageKey|trans(login_error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <form action="{{ path('login') }}" method="post">
+            <div class="field">
+                <label for="username">Username:</label><br/>
+                <input type="text" id="username" name="_username" value="{{ login_last_username }}" />
+            </div>
+            <div class="field">
+                <label for="password">Key or Password:</label><br/>
+                <input type="password" id="password" name="_password" />
+            </div>
+
+            {#
+                If you want to control the URL the user
+                is redirected to on success (more details below)
+                <input type="hidden" name="_target_path" value="/account" />
+            #}
+
+            <br/>
+            <button type="submit">Log in</button>
+        </form>
+{% endblock %}
+{% block javascripts %}{% endblock %}
+</body>
+</html>

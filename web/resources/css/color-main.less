@@ -1,6 +1,7 @@
 @import "constants";
 @import "color-figure";
 @import "color-exercise";
+@import "color-experiment";
 
 
 html {
@@ -18,7 +19,18 @@ html {
 
 body {
   padding: .5em;
-  border: 1px solid black;
+  //border: 1px solid black;
+
+  section {
+    line-height: 175%;
+    //overflow-x: hidden;
+
+    .eqn {
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+  }
 
   /* On large screens. */
   @media screen {

@@ -144,15 +144,22 @@ button:disabled:hover {
   border-top: 0.1em solid #e8e8e8;
 }
 .figure {
-  margin-left: auto;
-  margin-right: auto;
+  margin: 2em auto;
   box-shadow: 0.1em 0.1em 0.1em #999999;
   background: #fafafa;
+  line-height: 100%;
   max-width: 40em;
+}
+.figure img {
+  width: 100%;
+  height: auto;
 }
 .figure .figure-title {
   padding: 0.45em 0.5em 0.45em 0.5em;
   background: #e6e6e6;
+}
+.figure .figure-title .visualization-instructions {
+  font-size: smaller;
 }
 .figure .visualizations {
   width: 100%;
@@ -214,12 +221,12 @@ button:disabled:hover {
   -webkit-transition: all .3s;
   transition: all .3s;
 }
-figref a:link,
-figref a:visited {
+.figref a:link,
+.figref a:visited {
   text-decoration: none;
   color: #808080;
 }
-figref a:hover {
+.figref a:hover {
   text-decoration: underline;
   color: #333333;
 }

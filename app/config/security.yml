@@ -2,10 +2,51 @@
 # http://symfony.com/doc/current/book/security.html
 security:
 
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        # Remove this pattern to grant everyone access to everything after the experiment:
+        - { path: ^/, roles: [ROLE_FULL_ACCESS, ROLE_USER] }
+
+    # Define how passwords will be encoded.
+    encoders:
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12
+        Symfony\Component\Security\Core\User\User:
+            algorithm: bcrypt
+            cost: 12
+
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
+        # Encode plain text passwords via
+        # php bin/console security:encode-password
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    color_admin:
+                        password: $2y$12$TrX5dHgs5iCmAcpzJdqfduofRr6KWfh24d.rvkxQbZb.mUuyqZetO
+                        roles: ['ROLE_ADMIN', 'ROLE_FULL_ACCESS', 'ROLE_USER']
+                    color_tester:
+                        password: $2y$12$4UteA.sdCVd/XtBEXHjTq.WxX2thCHKQgHIYePsgUpntJE3ZcTaQu
+                        roles: ['ROLE_FULL_ACCESS', 'ROLE_USER']
+                    color_tester_group_a:
+                        password: $2y$12$KBNMfkuJjXafE.NtbZJxKO2koxZjSvC0I3FPCRyry/tEWC3fOIhUi
+                        roles: ['EXPERIMENT_GROUP_A', 'ROLE_USER']
+                    color_tester_group_b:
+                        password: $2y$12$mWD7qI55bnlMrEESBSt1gu4hNtAKjHEeEfXvm/buSrPhEqt6OWz0i
+                        roles: ['EXPERIMENT_GROUP_B', 'ROLE_USER']
+
+        # Define the database as provider for the User entity
+        color_db:
+            entity:
+                class: AppBundle:User
+                property: username
+
+        # Allows loading users from either the DB or from memory (see above).
+        chain_provider:
+            chain:
+                providers: [in_memory, color_db]
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -14,11 +55,18 @@ security:
             security: false
 
         main:
+            pattern: ^/
+
             anonymous: ~
             # activate different ways to authenticate
 
             # http_basic: ~
             # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
 
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+            form_login:
+                # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+                login_path: login
+                check_path: login
+
+            # Use color_db (see above) as the provider of users.
+            provider: chain_provider

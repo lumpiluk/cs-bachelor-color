@@ -17,7 +17,8 @@ Development dependencies (mostly run automatically in WebStorm's File Watchers):
 Command for browserify with babelify and browserify-shader as it is set in the corresponding File Watcher:
 `browserify -t [browserify-shader --parameterize=true] -t [babelify --presets es2015] $FileName$ -o $FileNameWithoutExtension$.compiled.js`
 
-### PHP
+
+## PHP
 
 Dependencies for PHP development are installed to ./vendor via `php composer.phar install`.
 The file composer.lock specifies the exact versions of the original installation.
@@ -25,3 +26,13 @@ The file composer.lock specifies the exact versions of the original installation
 To run a debug server, execute `php bin/console server:run`.
 
 This project uses Symfony and, for templating, Symfony's Twig. knpuniversity's video tutorials are highly recommended!
+
+### Symfony
+
+Useful resources:
+- Registration form: http://symfony.com/doc/current/doctrine/registration_form.html
+- Login form:
+  - http://symfony.com/doc/current/security/form_login_setup.html
+  - http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+- Load users from DB: http://symfony.com/doc/current/security/entity_provider.html
+- Access control, ROLEs: http://symfony.com/doc/current/security.html

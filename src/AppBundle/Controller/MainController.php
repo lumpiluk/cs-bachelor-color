@@ -16,10 +16,29 @@ use Symfony\Component\HttpFoundation\Response;
 class MainController extends Controller
 {
     /**
-     * @Route("/")
+     * @Route("/", name="homepage")
      */
-    public function showAction()
+    public function homeAction()
     {
         return $this->render('color/home.html.twig');
+    }
+
+    /**
+     * @Route("/color-systems/{color_system_name}", name="color_system_page")
+     * @param $color_system_name
+     * @return Response
+     */
+    public function colorSystemAction($color_system_name)
+    {
+        return $this->render('color/color_systems/'.$color_system_name.'_color_system.html.twig');
+    }
+
+    /**
+     * @Route("/exercises/{exercise_name}", name="exercise")
+     * @param $exercise_name
+     * @return Response
+     */
+    public function exerciseAction($exercise_name) {
+        return $this->render('color/exercises/'.$exercise_name.'.html.twig');
     }
 }

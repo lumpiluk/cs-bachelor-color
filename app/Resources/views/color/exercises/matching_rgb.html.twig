@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Color Matching Exercise: RGB{% endblock %}
+
+{% block body %}
+    <h1>Color Matching Exercise: RGB</h1>
+
+    <div class="exercise"
+         data-num-rounds="5"
+         data-task-types='[
+            {
+                "name": "ColorMatching",
+                "options": {
+                    "color_systems": ["rgb"],
+                    "show_visualization": true,
+                    "visualization_options": {},
+                    "max_attempts": 3,
+                    "allow_skip_after_first_attempt": true,
+                    "show_current_color": true,
+                    "show_target_color": true
+                },
+                "weight": 1
+            }
+         ]'
+    >
+    </div>
+{% endblock %}

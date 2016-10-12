@@ -1,0 +1,127 @@
+{% extends 'color/colorsystempage.html.twig' %}
+
+{% set page_title = 'RGB' %}
+
+{% block exercise_recommendations %}
+    <a href="{{ path('exercise', {'exercise_name': 'matching_rgb'}) }}">RGB Color Matching</a>
+{% endblock %}
+
+{% block color_system_content %}
+    <section id="introduction">
+        <p>
+            RGB is an acronym for red, green, and blue.
+            Colors in this system are produced by adding different intensities of red, green and blue light.
+            This principle is called additive color mixing and is used e.g. in LCD displays as shown in
+            <span class="figref" data-fig-id="fig-lcd">the figure below</span>.
+            Each pixel is made up of a red, a green, and a blue subpixel.
+        </p>
+        <div class="figure" id="fig-lcd">
+            <img src="{{ asset('resources/img/macro_zoom.jpg') }}" alt="A macro shot of an LCD monitor."/>
+            <div class="figure-title">Close-up photograph of a matte LCD monitor.</div>
+        </div>
+    </section>
+
+    <section id="model">
+        <h2>The RGB Color Model</h2>
+        <p>
+            The RGB color model can be understood as a cube in a three-dimensional Cartesian coordinate system
+            with one axis each for the red, green and blue channels [BB09b, p. 186].
+            A color can therefore be defined as a vector \((r,g,b)^\mathsf{T}\),
+            where \(r\), \(g\), and \(b\) are the color's intensities for each channel.
+            For the purpose of distinguishing RGB from other color models, we define the
+            tuple \((r, g, b)_\text{RGB} := (r,g,b)^\mathsf{T}\).
+            <span class="figref" data-fig-id="fig-rgb-vis">The figure</span>
+            shows the RGB cube with each channel's value in the \([0, 1]\) interval.
+            However, in computer graphics, integral values between 0 and 255
+            &ndash; between 0 and FF in the hexadecimal system &ndash; are also a popular choice.
+            For example, RGB colors can be specified in either notation both in CSS [Çe11] and OpenGL.
+        </p>
+        <div class="figure" id="fig-rgb-vis">
+            <div class="rgb-cube visualization"></div>
+            <div class="selected-color"></div>
+            <div class="figure-title">
+                The RGB cube.<br/>
+                <span class="visualization-instructions">
+                    Click and drag to rotate, scroll to zoom.
+                    On a touchscreen, drag to rotate around the y-axis and use two fingers to zoom
+                    or to rotate around the x-axis.
+                </span>
+            </div>
+            <div class="visualization-controls"></div>
+            <div class="visualization-controls-advanced"></div>
+        </div>
+    </section>
+
+    <section id="srgb">
+        <h2>The sRGB Color Space</h2>
+        <!-- TODO: include prerequisite twig file -->
+        To better understand this section, it is recommended that you first read about the CIE 1931 XYZ color space.
+        (Page will be included soon!)
+
+        <p>
+            Since the definition of the RGB model does not specify the exact shades of the three primaries
+            red, green, and blue, different RGB color spaces with different gamuts are possible.
+            <!--Some examples are plotted in \autoref{fig:gamut-examples}, which shows the CIE RGB, standard RGB (sRGB), and Adobe (1998) color spaces.-->
+            Among other parameters, sRGB defines locations for the three primaries red, green and blue within the
+            CIE xy space<!--(see \autoref{tab:srgbprimaries})-->,
+            as well as a transfer function for gamma correction<!--\cite[pp.~1f.]{w3crgb}-->.
+            The transfer function for each component \(c_{\text{lin}} \in \lbrace r,g,b \rbrace\) of a color
+            \((r, g, b)_\text{RGB}\) with linear intensities is defined as follows:
+            <div class="eqn">
+                \begin{equation}
+                    c = \begin{cases}
+                        12.92 \cdot c_{\text{lin}} &\text{if } c_{\text{lin}} \leq 0.0031308 \\
+                        1.055 \cdot c_{\text{lin}}^{\frac{1}{2.4}} - 0.055 &\text{if } c_{\text{lin}} > 0.0031308
+                    \end{cases}
+                \end{equation}
+            </div>
+
+            In order to linearize a gamma-corrected RGB color, the above equation can be reversed:
+            <div class="eqn">
+                \begin{equation}\label{eq:srgblinearize}
+                    c_\text{lin} = \begin{cases}
+                        \frac{c}{12.92} &\text{if } c \leq 0.0031308 \cdot 12.92 \\
+                        \left(\frac{c+0.055}{1.055}\right)^{2.4} &\text{if } c > 0.0031308 \cdot 12.92
+                    \end{cases}
+                \end{equation}
+            </div>
+
+            \begin{array}{|l|l|l|}
+                \hline
+                \mathbf{\text{Primary}} & \mathbf{x} & \mathbf{y} \\ \hline
+                R & 0.64 & 0.33 \\
+                G & 0.30 & 0.60 \\
+                B & 0.15 & 0.06 \\ \hline
+            \end{array}
+
+            Linear RGB colors \((r_\text{lin},g_\text{lin},b_\text{lin})_\text{RGB}\) can be converted from
+            CIE XYZ coordinates \((x',y',z')_\text{RGB}\), given the standard illuminant D65,
+            via the transformation in \autoref{eq:xyztorgb} \cite[p.~1]{w3crgb}.
+            Given a linearized RGB color, the XYZ coordinates can be calculated with the
+            inverse matrix as in \autoref{eq:rgbtoxyz}.
+
+        </p>
+    </section>
+
+    <section id="literature" class="bibliography">
+        <h2>Literature</h2>
+        <dl>
+            <dt>[BB09b]</dt>
+            <dd>
+                Burger, Wilhelm; Burge, Mark J.: Principles of Digital Image Processing: Fundamental Techniques.
+                Undergraduate Topics in Computer Science.
+                Springer-Verlag London, 1st edition, 2009.
+            </dd>
+
+            <dt>[Çe11]</dt>
+            <dd>
+                Çelik, Tantek; Lilley, Chris; Baron, L David et al.: CSS Color Module
+                Level 3: W3C Recommendation 07 June 2011. World Wide Web Consortium,
+                <a href="http://www.w3.org/TR/2011/REC-css3-color-20110607">
+                    http://www.w3.org/TR/2011/REC-css3-color-20110607</a>,
+                2011. Accessed: 2016-08-24.
+            </dd>
+        </dl>
+    </section>
+
+{% endblock %}

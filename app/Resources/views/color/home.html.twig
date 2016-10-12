@@ -17,4 +17,12 @@
         <li><a href="{{ asset('html_test/exercises/exercise-color-conversion.html') }}">Color conversion exercise</a></li>
         <li><a href="{{ asset('html_test/comparison.html') }}">Comparison</a></li>
     </ul>
+
+    <p>Templated pages:</p>
+    <ul>
+        <li>Color Systems</li>
+        <ul>
+            <li><a href="{{ path('color_system_page', {'color_system_name': 'rgb'}) }}">RGB and sRGB</a></li>
+        </ul>
+    </ul>
 {% endblock %}

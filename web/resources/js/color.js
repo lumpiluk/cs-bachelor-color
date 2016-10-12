@@ -34,7 +34,7 @@ function initialize_visualizations() {
         $(this).prepend('<b>Figure ' + (index + 1).toString() + ':</b> ');
     });
     /* Update references. */
-    $("figref").each(function() {
+    $(".figref").each(function() {
         let fig_id = $(this).data("fig-id");
         $(this).html('<a href="#' + fig_id + '">Figure ' + figures[fig_id] + '</a>');
     });
