@@ -1,0 +1,154 @@
+{% extends 'color/colorsystempage.html.twig' %}
+
+{% set page_title = 'HSV' %}
+
+{% block color_system_content %}
+    <section id="model">
+        <p>
+            The HSV color model shares most of its properties with
+            <a href="{{ path('color_system_page', {'color_system_name': 'hsl'}) }}">HSL</a>.
+            (It is recommended that you read about HSL first as this page will build on the page about HSL).
+            The letter V stands for value and is sometimes interchanged with the letter B for brightness [BB09b, p. 205],
+            which points to the fact that the third component is defined differently in this color model.
+            Instead of transforming the RGB cube into a biconal shape, HSV starts with a single inverted cone as shown in
+            <span class="figref" data-fig-id="fig-hsvspace">the figure below</span>.
+        </p>
+        <div class="figure" id="fig-hsvspace">
+            {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+                <div class="hsv visualization"></div>
+                <div class="selected-color"></div>
+                <div class="figure-title">
+                    The HSV color space.<br/>
+                    <span class="visualization-instructions">
+                        Click and drag to rotate, scroll to zoom.
+                        On a touchscreen, drag to rotate around the y-axis and use two fingers to zoom
+                        or to rotate around the x-axis.
+                    </span>
+                </div>
+                <div class="visualization-controls"></div>
+                <div class="visualization-controls-advanced"></div>
+            {% else %}
+                <div class="side-by-side">
+                    <div class="img-container">
+                        <img src="{{ asset('resources/img/hsv_space.svg') }}" alt="The HSL cones."/>
+                    </div>
+                </div>
+                <div class="figure-title">
+                    The HSV color space represented as a cone [BB09b, p. 207, adapted].
+                </div>
+            {% endif %}
+        </div>
+
+        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+            <div class="exercise-recommendations">
+                <b>Recommended exercises for this section:</b>
+                <ul>
+                    <li>Color matching:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb']}) }}">RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsv']}) }}">HSV</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsv', 'hsl', 'rgb']}) }}">HSV, HSL, and RGB</a></li>
+                    </ul>
+                    <li>Color selection:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb']}) }}">RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['hsv']}) }}">HSV</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['hsv', 'hsl', 'rgb']}) }}">HSV, HSL, and RGB</a></li>
+                    </ul>
+                </ul>
+            </div>
+        {% endif %}
+    </section>
+    <section id="conversion">
+        <h2>Conversion</h2>
+        <p>
+            The hue is again an angle which can be calculated in the same way as for HSL.
+            With the value or brightness for an RGB color \(c_\text{RGB}=(r,g,b)_\text{RGB}\) now being defined
+            simply as \(v=\max\lbrace r,g,b \rbrace\), the saturation \(s_\text{HSV}\) is defined as follows
+            for \(c_\text{RGB} \neq (0,0,0)_\text{RGB}\) [JG78, p. 22]:
+            <div class="eqn">
+                \begin{equation}
+                    s_\text{HSV} = \frac{\max\lbrace r,g,b \rbrace - \min\lbrace r,g,b \rbrace}{\max\lbrace r,g,b \rbrace}
+                \end{equation}
+            </div>
+        </p>
+        <p>
+            Calculating the RGB values \((r,g,b)_\text{RGB}\) from a given HSV color \((h,s_\text{HSV},v)_\text{HSV}\)
+            works similarly as it does for HSL.
+            {# TODO: Include helper variables from HSL #}
+            <div class="eqn">
+                \begin{array}{cCl}
+                    c_1 &=& \lfloor h' \rfloor \nonumber\\
+                    c_2 &=& h'-c_1 \nonumber\\
+                    w_1 &=& (1-s_\text{HSV}) \cdot v \nonumber\\
+                    w_2 &=& (1-s_\text{HSV} \cdot c_2) \cdot v \nonumber\\
+                    w_3 &=& (1-s_\text{HSV} \cdot (1 - c_2)) \cdot v \nonumber\\
+                    \left(
+                        \begin{matrix}
+                            r \\ g \\ b
+                        \end{matrix}
+                    \right)
+                    &=&
+                    \begin{cases}
+                        (v,w_3,w_1)^\mathsf{T} & \text{if } c_1 = 0 \\
+                        (w_2,v,w_1)^\mathsf{T} & \text{if } c_1 = 1 \\
+                        (w_1,v,w_3)^\mathsf{T} & \text{if } c_1 = 2 \\
+                        (w_1,w_2,v)^\mathsf{T} & \text{if } c_1 = 3 \\
+                        (w_3,w_1,v)^\mathsf{T} & \text{if } c_1 = 4 \\
+                        (v,w_1,w_2)^\mathsf{T} & \text{if } c_1 = 5
+                    \end{cases}
+                \end{array}
+            </div>
+        </p>
+
+        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+            <div class="exercise-recommendations">
+                <b>Recommended exercises for this section:</b>
+                <ul>
+                    <li>Conversion selection:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['hsv', 'rgb']}) }}">HSV and RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['hsl', 'hsv', 'rgb']}) }}">HSL, HSV, and RGB</a></li>
+                    </ul>
+                    <li>Conversion:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['hsv', 'rgb']}) }}">HSV and RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['hsl', 'hsv', 'rgb']}) }}">HSL, HSV, and RGB</a></li>
+                    </ul>
+                </ul>
+            </div>
+        {% endif %}
+    </section>
+
+    <section id="limitations">
+        <h2>Limitations</h2>
+        <p>
+            For the same reason as for
+            <a href="{{ path('color_system_page', {'color_system_name': 'hsl'}) }}">HSL</a>,
+            the value or brightness of an HSV color does not correspond perfectly to a color's brightness as it is
+            perceived by human beings.
+            This means, if the value component is left constant and only saturation or hue are changed,
+            one cannot expect the original and the new color to be perceived as equally bright.
+            Therefore, both value and lightness may at best serve as an approximation of brightness.
+        </p>
+    </section>
+
+    <section id="literature" class="bibliography">
+        <h2>Literature</h2>
+        <dl>
+            <dt>[BB09b]</dt>
+            <dd>
+                Burger, Wilhelm; Burge, Mark J.: Principles of Digital Image Processing: Fundamental Techniques.
+                Undergraduate Topics in Computer Science.
+                Springer-Verlag London, 1st edition, 2009.
+            </dd>
+
+            <dt>[JG78]</dt>
+            <dd>
+                Joblove, George H; Greenberg, Donald: Color spaces for computer
+                graphics. In: ACM siggraph computer graphics. volume 12. ACM,
+                pp. 20–25, 1978.
+            </dd>
+        </dl>
+    </section>
+{% endblock %}

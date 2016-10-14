@@ -153,6 +153,7 @@ button:disabled:hover {
 .figure img {
   width: 100%;
   height: auto;
+  max-height: 26.67em;
 }
 .figure .figure-title {
   padding: 0.45em 0.5em 0.45em 0.5em;
@@ -161,12 +162,29 @@ button:disabled:hover {
 .figure .figure-title .visualization-instructions {
   font-size: smaller;
 }
-.figure .visualizations {
+.figure .visualizations,
+.figure .side-by-side {
   width: 100%;
   display: -webkit-flex;
   -webkit-flex-flow: row nowrap;
   display: flex;
   flex-flow: row nowrap;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+.figure .visualizations .img-container,
+.figure .side-by-side .img-container {
+  flex-grow: 1;
+  width: 100%;
+  /* Center image (if single image, typically). */
+  display: -webkit-flex;
+  -webkit-flex-flow: row nowrap;
+  display: flex;
+  flex-flow: row nowrap;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
 }
 .figure .visualization {
   height: 26.67em;
@@ -252,6 +270,7 @@ button:disabled:hover {
 .exercise img {
   width: 100%;
   height: auto;
+  max-height: 26.67em;
 }
 .exercise .figure-title {
   padding: 0.45em 0.5em 0.45em 0.5em;
@@ -260,12 +279,29 @@ button:disabled:hover {
 .exercise .figure-title .visualization-instructions {
   font-size: smaller;
 }
-.exercise .visualizations {
+.exercise .visualizations,
+.exercise .side-by-side {
   width: 100%;
   display: -webkit-flex;
   -webkit-flex-flow: row nowrap;
   display: flex;
   flex-flow: row nowrap;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+}
+.exercise .visualizations .img-container,
+.exercise .side-by-side .img-container {
+  flex-grow: 1;
+  width: 100%;
+  /* Center image (if single image, typically). */
+  display: -webkit-flex;
+  -webkit-flex-flow: row nowrap;
+  display: flex;
+  flex-flow: row nowrap;
+  overflow: hidden;
+  align-items: center;
+  justify-content: center;
 }
 .exercise .visualization {
   height: 26.67em;

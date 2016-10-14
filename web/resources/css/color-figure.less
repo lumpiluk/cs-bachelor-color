@@ -15,6 +15,7 @@
   img {
     width: 100%;
     height: auto;
+    max-height: @visualization_height;
   }
 
   .figure-title {
@@ -26,12 +27,30 @@
     }
   }
 
-  .visualizations {
+  .visualizations,
+  .side-by-side {
     width: 100%;
     display: -webkit-flex;
     -webkit-flex-flow: row nowrap;
     display: flex;
     flex-flow: row nowrap;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+
+    .img-container {
+      flex-grow: 1;
+      width: 100%;
+
+      /* Center image (if single image, typically). */
+      display: -webkit-flex;
+      -webkit-flex-flow: row nowrap;
+      display: flex;
+      flex-flow: row nowrap;
+      overflow: hidden;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   .visualization {

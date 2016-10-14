@@ -3,7 +3,7 @@
 {% set page_title = 'HSL' %}
 
 {% block color_system_content %}
-    <section id="introduction">
+    <section id="introduction-model">
         <p>
             Even though most human eyes detect colors similarly to how the RGB model works,
             {# TODO: reference some introductory page #}
@@ -27,37 +27,51 @@
             at the position of the current lightness.
         </p>
         <div class="figure" id="fig-hslspace">
-            <div class="hsl visualization"></div>
-            <div class="selected-color"></div>
-            <div class="figure-title">
-                The HSL color space.<br/>
-                <span class="visualization-instructions">
-                    Click and drag to rotate, scroll to zoom.
-                    On a touchscreen, drag to rotate around the y-axis and use two fingers to zoom
-                    or to rotate around the x-axis.
-                </span>
-            </div>
-            <div class="visualization-controls"></div>
-            <div class="visualization-controls-advanced"></div>
+            {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+                <div class="hsl visualization"></div>
+                <div class="selected-color"></div>
+                <div class="figure-title">
+                    The HSL color space.<br/>
+                    <span class="visualization-instructions">
+                        Click and drag to rotate, scroll to zoom.
+                        On a touchscreen, drag to rotate around the y-axis and use two fingers to zoom
+                        or to rotate around the x-axis.
+                    </span>
+                </div>
+                <div class="visualization-controls"></div>
+                <div class="visualization-controls-advanced"></div>
+            {% else %}
+                <div class="side-by-side">
+                    <div class="img-container">
+                        <img src="{{ asset('resources/img/hsl_space.svg') }}" alt="The HSL cones."/>
+                    </div>
+                </div>
+                <div class="figure-title">
+                    The HSL color space in its biconal representation
+                    [BB09b, p. 207, adapted].
+                </div>
+            {% endif %}
         </div>
 
-        <div class="exercise-recommendations">
-            <b>Recommended exercises for this section:</b>
-            <ul>
-                <li>Color matching:</li>
+        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+            <div class="exercise-recommendations">
+                <b>Recommended exercises for this section:</b>
                 <ul>
-                    <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb']}) }}">RGB</a></li>
-                    <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsl']}) }}">HSL</a></li>
-                    <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
+                    <li>Color matching:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb']}) }}">RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsl']}) }}">HSL</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
+                    </ul>
+                    <li>Color selection:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb']}) }}">RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['hsl']}) }}">HSL</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
+                    </ul>
                 </ul>
-                <li>Color selection:</li>
-                <ul>
-                    <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb']}) }}">RGB</a></li>
-                    <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['hsl']}) }}">HSL</a></li>
-                    <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
-                </ul>
-            </ul>
-        </div>
+            </div>
+        {% endif %}
     </section>
 
     <section id="conversion">
@@ -97,15 +111,31 @@
         </p>
 
         <div class="figure" id="fig-rgbhsl">
-            <div class="visualizations">
-                <div class="rgb-cube visualization"></div>
-                <div class="hsl visualization"></div>
-            </div>
-            <div class="selected-color"></div>
-            <div class="figure-title">Comparison of the RGB and HSL color spaces.</div>
-            <div class="visualization-controls"></div>
-            <div class="visualization-controls-advanced">
-            </div>
+            {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+                <div class="visualizations">
+                    <div class="rgb-cube visualization"></div>
+                    <div class="hsl visualization"></div>
+                </div>
+                <div class="selected-color"></div>
+                <div class="figure-title">Comparison of the RGB and HSL color spaces.</div>
+                <div class="visualization-controls"></div>
+                <div class="visualization-controls-advanced">
+                </div>
+            {% else %}
+                <div class="side-by-side">
+                    <div class="img-container">
+                        <img src="{{ asset('resources/img/hsl_space.svg') }}" alt="The HSL cones."/>
+                    </div>
+                    <div class="img-container">
+                        <img src="{{ asset('resources/img/rgb_cube_rot.svg') }}" alt="The rotated RGB cube."/>
+                    </div>
+                </div>
+                <div class="figure-title">
+                    Comparison of the HSL cones with the rotated RGB cube.
+                    (Try to picture the RGB cube on the right this way: Green and yellow are in the back,
+                    magenta and blue are at the front.)
+                </div>
+            {% endif %}
         </div>
 
         <p>
@@ -209,21 +239,24 @@
                 \end{equation}
             </div>
         </p>
-        <div class="exercise-recommendations">
-            <b>Recommended exercises for this section:</b>
-            <ul>
-                <li>Conversion selection:</li>
+
+        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+            <div class="exercise-recommendations">
+                <b>Recommended exercises for this section:</b>
                 <ul>
-                    <li><a href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
-                    <li><a href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['hsl', 'hsv', 'rgb']}) }}">HSL, HSV, and RGB</a></li>
+                    <li>Conversion selection:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['hsl', 'hsv', 'rgb']}) }}">HSL, HSV, and RGB</a></li>
+                    </ul>
+                    <li>Conversion:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['hsl', 'hsv', 'rgb']}) }}">HSL, HSV, and RGB</a></li>
+                    </ul>
                 </ul>
-                <li>Conversion:</li>
-                <ul>
-                    <li><a href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
-                    <li><a href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['hsl', 'hsv', 'rgb']}) }}">HSL, HSV, and RGB</a></li>
-                </ul>
-            </ul>
-        </div>
+            </div>
+        {% endif %}
     </section>
 
     <section id="limitations">
@@ -269,7 +302,6 @@
                 Joblove, George H; Greenberg, Donald: Color spaces for computer
                 graphics. In: ACM siggraph computer graphics. volume 12. ACM,
                 pp. 20–25, 1978.
-
             </dd>
         </dl>
     </section>

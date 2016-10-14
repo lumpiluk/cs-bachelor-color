@@ -24,6 +24,7 @@ security:
         in_memory:
             memory:
                 users:
+                    # (The "ROLE" prefix is important!)
                     color_admin:
                         password: $2y$12$1fABaOj0LnFvZOfOZ97AkehLjV2tyWIF9WGYapEvr2UoTRpv/38yC
                         roles: ['ROLE_ADMIN', 'ROLE_FULL_ACCESS', 'ROLE_USER']
@@ -32,10 +33,10 @@ security:
                         roles: ['ROLE_FULL_ACCESS', 'ROLE_USER']
                     color_tester_group_a:
                         password: $2y$12$KBNMfkuJjXafE.NtbZJxKO2koxZjSvC0I3FPCRyry/tEWC3fOIhUi
-                        roles: ['EXPERIMENT_GROUP_A', 'ROLE_USER']
+                        roles: ['ROLE_EXPERIMENT_GROUP_A', 'ROLE_USER']
                     color_tester_group_b:
                         password: $2y$12$mWD7qI55bnlMrEESBSt1gu4hNtAKjHEeEfXvm/buSrPhEqt6OWz0i
-                        roles: ['EXPERIMENT_GROUP_B', 'ROLE_USER']
+                        roles: ['ROLE_EXPERIMENT_GROUP_B', 'ROLE_USER']
 
         # Define the database as provider for the User entity
         color_db:

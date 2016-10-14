@@ -1,0 +1,187 @@
+{% extends 'color/colorsystempage.html.twig' %}
+
+{% set page_title = 'CMY and CMYK' %}
+
+{% block color_system_content %}
+    <section id="introduction">
+        <p>
+            Unlike <a href="{{ path('color_system_page', {'color_system_name': 'rgb'}) }}">RGB</a>,
+            the CMY color model makes use of subtractive color mixing with the primaries cyan, magenta, and yellow,
+            rather than additive color mixing.
+            Subtractive mixing may be familiar to most from painting with watercolors.
+            Furthermore, pigments for the colors cyan, magenta, and yellow are commonly used in printers.
+            {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
+                The CMY cube, which is equivalent to the flipped RGB cube,
+                is shown in <span class="figref" data-fig-id="fig-cmy-cube">the figure below</span>.
+            {% endif %}
+        </p>
+
+        {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
+            <div class="figure" id="fig-cmy-cube">
+                <div class="cmy-cube visualization"></div>
+                <div class="selected-color"></div>
+                <div class="figure-title">
+                    The CMY cube.<br/>
+                    <span class="visualization-instructions">
+                        Click and drag to rotate, scroll to zoom.
+                        On a touchscreen, drag to rotate around the y-axis and use two fingers to zoom
+                        or to rotate around the x-axis.
+                    </span>
+                </div>
+                <div class="visualization-controls"></div>
+                <div class="visualization-controls-advanced"></div>
+            </div>
+        {% endif %}
+
+        {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
+            <div class="exercise-recommendations">
+                <b>Recommended exercises for this section:</b>
+                <ul>
+                    <li>Color matching:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb']}) }}">RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['cmy']}) }}">CMY</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['cmyk']}) }}">CMYK</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'cmy', 'cmyk']}) }}">RGB, CMY, and CMYK</a></li>
+                    </ul>
+                    <li>Color selection:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb']}) }}">RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['cmy']}) }}">CMY</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['cmyk']}) }}">CMYK</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'cmy', 'cmyk']}) }}">RGB, CMY, and CMYK</a></li>
+                    </ul>
+                </ul>
+            </div>
+        {% endif %}
+    </section>
+
+    <section id="conversion">
+        <h2>Conversion</h2>
+        <p>
+            In principle, converting colors from RGB to CMY and back is simple.
+            In the RGB model, cyan can be obtained from a mixture of only green and blue,
+            which means when used as a filter or pigment, cyan absorbs red light.
+            Similarly, magenta absorbs green and yellow absorbs blue light. Using this information,
+            the conversion between an RGB color \((r,g,b)_\text{RGB}\)
+            and the corresponding CMY color \((c,m,y)_\text{CMY}\)
+            works by starting with white and subtracting the color in the opposite representation [BB09b, p. 223]:
+            <div class="eqn">
+                \begin{equation}
+                    \left(
+                        \begin{matrix}
+                            c \\ m \\ y
+                        \end{matrix}
+                    \right)
+                    =
+                    \left(
+                        \begin{matrix}
+                            1 \\ 1 \\ 1
+                        \end{matrix}
+                    \right)
+                    -
+                    \left(
+                        \begin{matrix}
+                            r \\ g \\ b
+                        \end{matrix}
+                    \right)
+                    \label{eq:rgbtocmy}
+                \end{equation}
+            </div>
+            <div class="eqn">
+                \begin{equation}
+                    \left(
+                        \begin{matrix}
+                            r \\ g \\ b
+                        \end{matrix}
+                    \right)
+                    =
+                    \left(
+                        \begin{matrix}
+                            1 \\ 1 \\ 1
+                        \end{matrix}
+                    \right)
+                    -
+                    \left(
+                        \begin{matrix}
+                            c \\ m \\ y
+                        \end{matrix}
+                    \right)
+                    \label{eq:cmytorgb}
+                \end{equation}
+            </div>
+        </p>
+        <p>
+            However, there is a problem with this method when used in practice.
+            According to Equation <span class="eqref">\ref{eq:rgbtocmy}</span>,
+            black is the mixture of 100% cyan, magenta, and yellow.
+            As can also be experienced with watercolors though, cleaning a brush in a glass of water after painting
+            with different colors more easily turns the water into a brown hue than actual black.
+            The common solution for this problem is to introduce a fourth, black channel K.
+            Another problem is the fact that CMYK and color models like RGB are designed for different kinds of devices
+            which often operate with different gamuts.
+            Conversion to CMYK is nontrivial and device-dependent  [HSF06, p. 159][BB09b, p. 224].
+            This page will only cover the straight-forward method for converting CMY colors \((c,m,y)_\text{CMY}\)
+            to CMYK colors \((c',m',y',k)_\text{CMYK}\):
+            <div class="eqn">
+                \begin{equation}
+                    \left(
+                        \begin{matrix}
+                            c' \\ m' \\ y' \\ k
+                        \end{matrix}
+                    \right)
+                    =
+                    \left(
+                        \begin{matrix}
+                            c-k \\ m-k \\ y-k \\ k
+                        \end{matrix}
+                    \right)
+                    \label{eq:cmytocmyk},
+                \end{equation}
+            </div>
+            where \(k=\min\left\lbrace c,m,y \right\rbrace\) [BB09b, p. 223].
+            Because of the introduction of the K channel, less intensity is needed in the other three channels.
+            This is accounted for by the subtraction of \(k\) from the original CMY color
+            in Equation <span class="eqref">\ref{eq:cmytocmyk}</span>.
+        </p>
+
+        {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
+            <div class="exercise-recommendations">
+                <b>Recommended exercises for this section:</b>
+                <ul>
+                    <li>Conversion selection:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['cmy', 'rgb']}) }}">CMY and RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['cmy', 'cmyk', 'rgb']}) }}">CMY, CMYK, and RGB</a></li>
+                    </ul>
+                    <li>Conversion:</li>
+                    <ul>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['cmy', 'rgb']}) }}">CMY and RGB</a></li>
+                        <li><a href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['cmy', 'cmyk', 'rgb']}) }}">CMY, CMYK, and RGB</a></li>
+                    </ul>
+                </ul>
+            </div>
+        {% endif %}
+    </section>
+
+    <section id="literature" class="bibliography">
+        <h2>Literature</h2>
+        <dl>
+            <dt>[BB09b]</dt>
+            <dd>
+                Burger, Wilhelm; Burge, Mark J.: Principles of Digital Image Processing: Fundamental Techniques.
+                Undergraduate Topics in Computer Science.
+                Springer-Verlag London, 1st edition, 2009.
+            </dd>
+
+            <dt>[HSF06]</dt>
+            <dd>
+                Hrehorova, Erika; Sharma, Abhay; Fleming, PD: Color reproduction
+                studies in RGB and CMYK workflows using inkjet printer drivers and
+                RIPs. In: Proc. 58th TAGA Annual Technical Conference, Vancouver,
+                British Columbia. Citeseer, pp. 159–171, 2006.
+            </dd>
+        </dl>
+    </section>
+
+{% endblock %}

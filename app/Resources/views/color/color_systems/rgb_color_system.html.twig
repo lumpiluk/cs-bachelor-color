@@ -2,9 +2,6 @@
 
 {% set page_title = 'RGB' %}
 
-{% block exercise_recommendations %}
-    <a href="{{ path('exercise', {'exercise_name': 'matching_rgb'}) }}">RGB Color Matching</a>
-{% endblock %}
 
 {% block color_system_content %}
     <section id="introduction">
@@ -49,6 +46,19 @@
             </div>
             <div class="visualization-controls"></div>
             <div class="visualization-controls-advanced"></div>
+        </div>
+        <div class="exercise-recommendations">
+            <b>Recommended exercises for this section:</b>
+            <ul>
+                <li>Color matching:</li>
+                <ul>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb']}) }}">RGB</a></li>
+                </ul>
+                <li>Color selection:</li>
+                <ul>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb']}) }}">RGB</a></li>
+                </ul>
+            </ul>
         </div>
     </section>
 
