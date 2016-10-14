@@ -1,0 +1,276 @@
+{% extends 'color/colorsystempage.html.twig' %}
+
+{% set page_title = 'HSL' %}
+
+{% block color_system_content %}
+    <section id="introduction">
+        <p>
+            Even though most human eyes detect colors similarly to how the RGB model works,
+            {# TODO: reference some introductory page #}
+            we normally do not think or talk about colors as a mixture of these three components.
+            We might, however, talk of colors as being more or less saturated than others,
+            having different hues or tones, or as being brighter than others.
+            For this reason, many software applications (open-source examples are Blender, GIMP, Inkscape, and Krita)
+            include color pickers which try to cater to our perception of colors in the terms mentioned above
+            [JG78, p. 21].
+        </p>
+        <p>
+            One such perceptual color model is HSL (also called HLS [BB09b, p. 207]),
+            which is an acronym for hue, saturation, and lightness.
+            Originally, it was introduced by Joblove and Greenberg as "hue/chroma/intensity" [JG78, pp. 22f.].
+            They describe the color space as a biconal solid similar to
+            <span class="figref" data-fig-id="fig-hslspace">the figure below</span>
+            in which the vertical axis represents all shades of gray between 0 (black) and 1 (white).
+            All fully saturated colors then lie on the outer circle of the common basis of both cones at \(L=0.5\),
+            which allows for the hue to be defined as an angle.
+            The third parameter, saturation, corresponds to the radius of the circle around the vertical axis
+            at the position of the current lightness.
+        </p>
+        <div class="figure" id="fig-hslspace">
+            <div class="hsl visualization"></div>
+            <div class="selected-color"></div>
+            <div class="figure-title">
+                The HSL color space.<br/>
+                <span class="visualization-instructions">
+                    Click and drag to rotate, scroll to zoom.
+                    On a touchscreen, drag to rotate around the y-axis and use two fingers to zoom
+                    or to rotate around the x-axis.
+                </span>
+            </div>
+            <div class="visualization-controls"></div>
+            <div class="visualization-controls-advanced"></div>
+        </div>
+
+        <div class="exercise-recommendations">
+            <b>Recommended exercises for this section:</b>
+            <ul>
+                <li>Color matching:</li>
+                <ul>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb']}) }}">RGB</a></li>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsl']}) }}">HSL</a></li>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
+                </ul>
+                <li>Color selection:</li>
+                <ul>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb']}) }}">RGB</a></li>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['hsl']}) }}">HSL</a></li>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
+                </ul>
+            </ul>
+        </div>
+    </section>
+
+    <section id="conversion">
+        <h2>Conversion</h2>
+
+        <p>
+            Given an RGB color \((r,g,b)_\text{RGB}\), the lightness \(l\) and saturation \(s_\text{HSL}\)
+            of an HSL color \((h,s_\text{HSL},l)_\text{HSL}\) are defined as follows [BB09b, p. 212f.]:
+            <div class="eqn">
+                \begin{equation}
+                    l = \frac{\max\lbrace r,g,b \rbrace + \min\lbrace r,g,b \rbrace}{2}
+                    \label{eq:hsllightness}
+                \end{equation}
+            </div>
+            <div class="eqn">
+                \begin{equation}
+                    s_\text{HSL} = \begin{cases}
+                    0 & \text{if } l = 0 \\
+                    0.5 \cdot \frac{\max\lbrace r,g,b \rbrace - \min\lbrace r,g,b \rbrace}{l} &
+                        \text{if } 0 < l \leq 0.5 \\
+                    0.5 \cdot \frac{\max\lbrace r,g,b \rbrace - \min\lbrace r,g,b \rbrace}{1-l} &
+                        \text{if } 0.5 < l < 1 \\
+                    0 & \text{if } l = 1
+                    \end{cases}
+                    \label{eq:hslsaturation}
+                \end{equation}
+            </div>
+            The reasoning for these conversion formulae can be better understood when
+            visualizing the RGB cube tilted so that black is still in the origin and
+            the diagonal line where \(r=g=b\) now aligns with the vertical axis.
+            A comparison of RGB and HSL is shown in
+            <span class="figref" data-fig-id="fig-rgbhsl">the figure below</span>.
+            For the lightness component, Equation <span class="eqref">\ref{eq:hsllightness}</span> relates
+            the original RGB color to said diagonal within the RGB cube,
+            while Equation <span class="eqref">\ref{eq:hslsaturation}</span> establishes a measure of distance from this
+            diagonal line for the saturation.
+        </p>
+
+        <div class="figure" id="fig-rgbhsl">
+            <div class="visualizations">
+                <div class="rgb-cube visualization"></div>
+                <div class="hsl visualization"></div>
+            </div>
+            <div class="selected-color"></div>
+            <div class="figure-title">Comparison of the RGB and HSL color spaces.</div>
+            <div class="visualization-controls"></div>
+            <div class="visualization-controls-advanced">
+            </div>
+        </div>
+
+        <p>
+            The hue \(h \in [0,1]\) corresponds to an angle \(h \cdot 2\pi\) in radians.
+            It is calculated from the given RGB color with intermediate steps [BB09b, p. 208]:
+            <div class="eqn">
+                \begin{equation}
+                    \left(
+                        \begin{matrix}
+                            r' \\ g' \\ b'
+                        \end{matrix}
+                    \right)
+                    =
+                    \left(
+                        \begin{matrix}
+                            \frac{\max\lbrace r,g,b \rbrace - r}{\max\lbrace r,g,b \rbrace - \min\lbrace r,g,b \rbrace} \\
+                            \frac{\max\lbrace r,g,b \rbrace - g}{\max\lbrace r,g,b \rbrace - \min\lbrace r,g,b \rbrace} \\
+                            \frac{\max\lbrace r,g,b \rbrace - b}{\max\lbrace r,g,b \rbrace - \min\lbrace r,g,b \rbrace}
+                        \end{matrix}
+                    \right)
+                    \label{eq:rgbtohuenormalizedrgb}
+                \end{equation}
+            </div>
+            <div class="eqn">
+                \begin{equation}
+                    h' = \begin{cases}
+                        b'-g' & \text{if } \max\lbrace r,g,b \rbrace = r \\
+                        r'-b'+2 & \text{if } \max\lbrace r,g,b \rbrace = g \\
+                        g'-r'+4 & \text{if } \max\lbrace r,g,b \rbrace = b \\
+                    \end{cases}
+                    \label{eq:rgbtohueintermediate}
+                \end{equation}
+            </div>
+            <div class="eqn">
+                \begin{equation}
+                    h = \frac{h'}{6} \mod 1
+                    \label{eq:rgbtohue}
+                \end{equation}
+            </div>
+            For fully saturated red, green, and blue, this results in hue values of
+            \(0\), \(\frac{2}{6}\), and \(\frac{4}{6}\), respectively.
+            The other non-gray vertices of the RGB cube yellow, cyan, and magenta are assigned the hues
+            \(\frac{1}{6}\), \(\frac{3}{6}\), and \(\frac{5}{6}\).
+            Note that, in the example of yellow where \(\max\lbrace r,g,b \rbrace = r = g\),
+            it makes no difference which of the two fitting cases is calculated.
+        </p>
+        <p>
+            To convert an HSL color \((h,s_\text{HSL},l)_\text{HSL}\) back into the RGB color \((r,g,b)_\text{RGB}\),
+            first the two cases need to be considered where hue and saturation are undefined [BB09b, p. 213]:
+            <div class="eqn">
+                \begin{equation}
+                    \left(
+                    \begin{matrix}
+                    r \\ g \\ b
+                    \end{matrix}
+                    \right) = \begin{cases}
+                    (0,0,0)^\mathsf{T} & \text{if } l = 0 \\
+                    (1,1,1)^\mathsf{T} & \text{if } l = 1
+                    \end{cases}
+                \end{equation}
+            </div>
+            Equation <span class="eqref">\ref{eq:rgbtohueintermediate}</span> partitioned the circle of hues
+            into three times two sectors,
+            depending on which component in the original RGB color was larger than the others.
+            In order to reverse this and to obtain the RGB color,
+            it is helpful to first calculate some intermediate values [BB09b, p. 214]:
+            <div class="eqn">
+                \begin{array}{ccl}
+                    h' &=& (6 \cdot h) \mod 6 \nonumber\\ % mod 6 for h=1!
+                    c_1 &=& \lfloor h' \rfloor \nonumber\\
+                    c_2 &=& h'-c_1 \nonumber\\
+                    d &=& \begin{cases}
+                        s_\text{HSL} \cdot l & \text{if } l \leq 0.5 \\
+                        s_\text{HSL} \cdot (1-l) & \text{if } l > 0.5 % note that there's an error in the book, which says (l-1)
+                    \end{cases} \nonumber\\
+                    u_1 &=& l + d \nonumber\\
+                    u_2 &=& l - d \nonumber\\
+                    u_3 &=& u_1 - (u_1 - u_2) \cdot c_2 \nonumber\\
+                    u_4 &=& u_2 + (u_1 - u_2) \cdot c_2
+                    %\label{eq:hsltorgbhelper}
+                \end{array}
+            </div>
+            Here, \(c_1\) is an index for the hue's sector and \(c_2\) the position in that sector.
+            From these intermediate values above, the final RGB values can be assembled:
+            <div class="eqn">
+                \begin{equation}
+                    \left(
+                        \begin{matrix}
+                        r \\ g \\ b
+                        \end{matrix}
+                    \right)
+                    =
+                    \begin{cases}
+                        (u_1,u_4,u_2)^\mathsf{T} & \text{if } c_1 = 0 \\
+                        (u_3,u_1,u_2)^\mathsf{T} & \text{if } c_1 = 1 \\
+                        (u_2,u_1,u_4)^\mathsf{T} & \text{if } c_1 = 2 \\
+                        (u_2,u_3,u_1)^\mathsf{T} & \text{if } c_1 = 3 \\
+                        (u_4,u_2,u_1)^\mathsf{T} & \text{if } c_1 = 4 \\
+                        (u_1,u_2,u_3)^\mathsf{T} & \text{if } c_1 = 5
+                    \end{cases}
+                \end{equation}
+            </div>
+        </p>
+        <div class="exercise-recommendations">
+            <b>Recommended exercises for this section:</b>
+            <ul>
+                <li>Conversion selection:</li>
+                <ul>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['hsl', 'hsv', 'rgb']}) }}">HSL, HSV, and RGB</a></li>
+                </ul>
+                <li>Conversion:</li>
+                <ul>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['hsl', 'rgb']}) }}">HSL and RGB</a></li>
+                    <li><a href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['hsl', 'hsv', 'rgb']}) }}">HSL, HSV, and RGB</a></li>
+                </ul>
+            </ul>
+        </div>
+    </section>
+
+    <section id="limitations">
+        <h2>Limitations</h2>
+
+        <p>
+            While the HSL color model has been designed to make color-picking easier for human beings,
+            it is not perfect.
+            One reason for this is the assigning of the same lightness to all three primaries.
+            In the sRGB space primaries are assigned different positions on the \(y\) axis.
+            When transforming these definitions of primary red, green, and blue back into XYZ space,
+            differences in the Y component remain.
+            Therefore, the primaries as defined for the sRGB space do not have the same perceived brightness,
+            which means lightness in the HSL model is not the same as perceived brightness.
+            This becomes apparent when comparing the HSL colors of maximum saturation and lightness
+            \(\frac{1}{2}\) with a gray-scale image of the true perceived brightness values as shown in
+            <span class="figref" data-fig-id="fig-hsllightnessdiff">the figure below</span>.
+        </p>
+        <div class="figure" id="fig-hsllightnessdiff">
+            <img src="{{ asset('resources/img/hue_gradient_hsv.png') }}" alt="Maximum saturation HSL hues at L=.5."/>
+            <img src="{{ asset('resources/img/hue_gradient_desaturated.png') }}" alt="Perceived brightness of HSL hues."/>
+            <div class="figure-title">
+                Differences in brightness for equal HSL lightness.
+                Top: HSL colors \((h, 1, \frac{1}{2})_\text{HSL}\ \forall\ h \in [0, 1]\).
+                Bottom: Gray-scale colors produced by keeping the Y component in XYZ space constant
+                while removing all chromaticity.
+            </div>
+        </div>
+    </section>
+
+    <section id="literature" class="bibliography">
+        <h2>Literature</h2>
+        <dl>
+            <dt>[BB09b]</dt>
+            <dd>
+                Burger, Wilhelm; Burge, Mark J.: Principles of Digital Image Processing: Fundamental Techniques.
+                Undergraduate Topics in Computer Science.
+                Springer-Verlag London, 1st edition, 2009.
+            </dd>
+
+            <dt>[JG78]</dt>
+            <dd>
+                Joblove, George H; Greenberg, Donald: Color spaces for computer
+                graphics. In: ACM siggraph computer graphics. volume 12. ACM,
+                pp. 20–25, 1978.
+
+            </dd>
+        </dl>
+    </section>
+{% endblock %}

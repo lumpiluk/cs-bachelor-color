@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Color Selection Exercise{% endblock %}
+
+{% block body %}
+    <h1>Color Selection Exercise</h1>
+    <p>
+        <b>Color systems:</b>
+        {{ color_systems|join(', ') }}
+    </p>
+
+    {# TODO: If e.g. user is in exp. group A and this includes HSV/CMY, block the exercise! #}
+    <div class="exercise"
+         data-num-rounds="10"
+         data-task-types='[
+            {
+                "name": "ColorSelection",
+                "options": {
+                    "color_systems": [
+                        {% set color_system_strs = [] %}
+                        {% for system in color_systems %}
+                            {% set color_system_strs = color_system_strs|merge(['"%s"'|format(system)]) %}
+                        {% endfor %}
+                        {{ color_system_strs|join(',') }}
+                    ],
+                    "show_visualization": false,
+                    "visualization_options": {},
+                    "max_attempts": 3,
+                    "allow_skip_after_first_attempt": true,
+                    "num_options": 8
+                },
+                "weight": 1
+            }
+         ]'
+    >
+    </div>
+{% endblock %}

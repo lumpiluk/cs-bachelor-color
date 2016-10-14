@@ -25,7 +25,7 @@ security:
             memory:
                 users:
                     color_admin:
-                        password: $2y$12$TrX5dHgs5iCmAcpzJdqfduofRr6KWfh24d.rvkxQbZb.mUuyqZetO
+                        password: $2y$12$1fABaOj0LnFvZOfOZ97AkehLjV2tyWIF9WGYapEvr2UoTRpv/38yC
                         roles: ['ROLE_ADMIN', 'ROLE_FULL_ACCESS', 'ROLE_USER']
                     color_tester:
                         password: $2y$12$4UteA.sdCVd/XtBEXHjTq.WxX2thCHKQgHIYePsgUpntJE3ZcTaQu

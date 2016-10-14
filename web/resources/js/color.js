@@ -17,7 +17,8 @@ function initialize_visualizations() {
 
     /* Assigns each figure (HTML-)ID its visible index. */
     let figures = {};
-
+    /* Assigns each table (HTML-)ID its visible index. */
+    let tables = {};
 
     console.log("Initializing visualizations.");
     visualizations.concat(attach_rgb_cube_visualizations());
@@ -33,10 +34,22 @@ function initialize_visualizations() {
         figures[fig_id] = index + 1;
         $(this).prepend('<b>Figure ' + (index + 1).toString() + ':</b> ');
     });
-    /* Update references. */
+    /* Enumerate tables. */
+    $(".table-title").each(function(index) {
+        let tab_id = $(this).parent().attr("id");
+        tables[tab_id] = index + 1;
+        $(this).prepend('<b>Table ' + (index + 1).toString() + ':</b>');
+    });
+
+    /* Update figure references. */
     $(".figref").each(function() {
         let fig_id = $(this).data("fig-id");
         $(this).html('<a href="#' + fig_id + '">Figure ' + figures[fig_id] + '</a>');
+    });
+    /* Update table references. */
+    $(".tabref").each(function() {
+        let tab_id = $(this).data("tab-id");
+        $(this).html('<a href="#' + tab_id + '">Table ' + tables[tab_id] + '</a>');
     });
 
     return {visualizations: visualizations, figures: figures};

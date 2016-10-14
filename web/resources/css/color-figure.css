@@ -222,11 +222,20 @@ button:disabled:hover {
   transition: all .3s;
 }
 .figref a:link,
-.figref a:visited {
+.tabref a:link,
+.eqref a:link,
+.figref a:visited,
+.tabref a:visited,
+.eqref a:visited {
   text-decoration: none;
   color: #808080;
 }
-.figref a:hover {
+.figref a:hover,
+.tabref a:hover,
+.eqref a:hover {
   text-decoration: underline;
   color: #333333;
+}
+.tab {
+  margin: 2em 0;
 }

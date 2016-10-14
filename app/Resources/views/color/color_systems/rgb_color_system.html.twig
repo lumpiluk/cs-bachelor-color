@@ -63,12 +63,13 @@
             red, green, and blue, different RGB color spaces with different gamuts are possible.
             <!--Some examples are plotted in \autoref{fig:gamut-examples}, which shows the CIE RGB, standard RGB (sRGB), and Adobe (1998) color spaces.-->
             Among other parameters, sRGB defines locations for the three primaries red, green and blue within the
-            CIE xy space<!--(see \autoref{tab:srgbprimaries})-->,
+            CIE xy space (see <span class="tabref" data-tab-id="tab-srgbprimaries">the table below</span>),
             as well as a transfer function for gamma correction<!--\cite[pp.~1f.]{w3crgb}-->.
             The transfer function for each component \(c_{\text{lin}} \in \lbrace r,g,b \rbrace\) of a color
-            \((r, g, b)_\text{RGB}\) with linear intensities is defined as follows:
+            \((r, g, b)_\text{RGB}\) with linear intensities is shown in Equation
+            <span class="eqref">\ref{eq:rgbgamma}</span>:
             <div class="eqn">
-                \begin{equation}
+                \begin{equation}\label{eq:rgbgamma}
                     c = \begin{cases}
                         12.92 \cdot c_{\text{lin}} &\text{if } c_{\text{lin}} \leq 0.0031308 \\
                         1.055 \cdot c_{\text{lin}}^{\frac{1}{2.4}} - 0.055 &\text{if } c_{\text{lin}} > 0.0031308
@@ -76,7 +77,8 @@
                 \end{equation}
             </div>
 
-            In order to linearize a gamma-corrected RGB color, the above equation can be reversed:
+            In order to linearize a gamma-corrected RGB color, Equation
+            <span class="eqref">\ref{eq:rgbgamma}</span> can be reversed:
             <div class="eqn">
                 \begin{equation}\label{eq:srgblinearize}
                     c_\text{lin} = \begin{cases}
@@ -86,20 +88,98 @@
                 \end{equation}
             </div>
 
-            \begin{array}{|l|l|l|}
-                \hline
-                \mathbf{\text{Primary}} & \mathbf{x} & \mathbf{y} \\ \hline
-                R & 0.64 & 0.33 \\
-                G & 0.30 & 0.60 \\
-                B & 0.15 & 0.06 \\ \hline
-            \end{array}
-
+            <div class="tab" id="tab-srgbprimaries">
+                <div class="table-title">
+                    Specification of the sRGB primary colors within the CIE 1931 \(x,y\) color space [Ho, p. 1].
+                </div>
+                \begin{array}{|l|l|l|}
+                    \hline
+                    \mathbf{\text{Primary}} & \mathbf{x} & \mathbf{y} \\ \hline
+                    R & 0.64 & 0.33 \\
+                    G & 0.30 & 0.60 \\
+                    B & 0.15 & 0.06 \\ \hline
+                \end{array}
+            </div>
+        </p>
+        <p>
             Linear RGB colors \((r_\text{lin},g_\text{lin},b_\text{lin})_\text{RGB}\) can be converted from
             CIE XYZ coordinates \((x',y',z')_\text{RGB}\), given the standard illuminant D65,
-            via the transformation in \autoref{eq:xyztorgb} \cite[p.~1]{w3crgb}.
+            via the transformation in Equation <span class="eqref">\ref{eq:xyztorgb}</span> [Ho, p. 1].
             Given a linearized RGB color, the XYZ coordinates can be calculated with the
-            inverse matrix as in \autoref{eq:rgbtoxyz}.
+            inverse matrix as in Equation <span class="eqref">\ref{eq:rgbtoxyz}</span>.
 
+            <div class="eqn">
+                \begin{equation}
+                    \left(
+                        \begin{matrix}
+                            r_\text{lin} \\
+                            g_\text{lin} \\
+                            b_\text{lin}
+                        \end{matrix}
+                    \right)
+                    =
+                    M \cdot
+                    \left(
+                        \begin{matrix}
+                            x' \\
+                            y' \\
+                            z'
+                        \end{matrix}
+                    \right)
+                    =
+                    \left[
+                        \begin{matrix}
+                            3.2406255 & -1.537208 & -0.4986286 \\
+                            -0.9689307 & 1.8757561 & 0.0415175 \\
+                            0.0557101 & -0.2040211 & 1.0569959
+                        \end{matrix}
+                    \right]
+                    \cdot
+                    \left(
+                        \begin{matrix}
+                            x' \\
+                            y' \\
+                            z'
+                        \end{matrix}
+                    \right)
+                    \label{eq:xyztorgb}
+                \end{equation}
+                \begin{equation}
+                    \left(
+                        \begin{matrix}
+                            x' \\
+                            y' \\
+                            z'
+                        \end{matrix}
+                    \right)
+                    =
+                    M^{-1} \cdot
+                    \left(
+                        \begin{matrix}
+                            r_\text{lin} \\
+                            g_\text{lin} \\
+                            b_\text{lin}
+                        \end{matrix}
+                    \right)
+                    =
+                    \left[
+                        \begin{matrix}
+                            0.4124 & 0.3576 & 0.1805 \\
+                            0.2126 & 0.7152 & 0.0722 \\
+                            0.0193 & 0.1192 & 0.9505
+                        \end{matrix}
+                    \right]
+                    \cdot
+                    \left(
+                        \begin{matrix}
+                            r_\text{lin} \\
+                            g_\text{lin} \\
+                            b_\text{lin}
+                        \end{matrix}
+                    \right)
+                    \label{eq:rgbtoxyz}
+                \end{equation}
+            </div>
         </p>
     </section>
 
@@ -120,6 +200,14 @@
                 <a href="http://www.w3.org/TR/2011/REC-css3-color-20110607">
                     http://www.w3.org/TR/2011/REC-css3-color-20110607</a>,
                 2011. Accessed: 2016-08-24.
+            </dd>
+
+            <dt>[Ho]</dt>
+            <dd>
+                How to interpret the sRGB color space (specified in IEC 61966-2-1) for
+                ICC profiles. World Wide Web Consortium,
+                <a href="https://www.w3.org/Graphics/Color/srgb">https://www.w3.org/Graphics/Color/srgb</a>.
+                Accessed: 2016-08-24.
             </dd>
         </dl>
     </section>

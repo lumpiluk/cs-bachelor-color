@@ -10,6 +10,7 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -35,10 +36,13 @@ class MainController extends Controller
 
     /**
      * @Route("/exercises/{exercise_name}", name="exercise")
+     * @param Request $request
      * @param $exercise_name
      * @return Response
      */
-    public function exerciseAction($exercise_name) {
-        return $this->render('color/exercises/'.$exercise_name.'.html.twig');
+    public function exerciseAction(Request $request, $exercise_name) {
+        return $this->render('color/exercises/'.$exercise_name.'.html.twig', array(
+            'color_systems' => $request->get('color_systems')
+        ));
     }
 }

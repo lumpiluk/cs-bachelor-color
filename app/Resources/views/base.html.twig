@@ -11,6 +11,11 @@
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         {% block javascripts_head %}
+            <script type="text/x-mathjax-config">
+                MathJax.Hub.Config({
+                  TeX: { equationNumbers: { autoNumber: "AMS" } }
+                });
+            </script>
             <script async src="{{ asset('bower_components/MathJax/MathJax.js?config=TeX-MML-AM_CHTML') }}"></script>
             <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
             <script src="{{ asset('resources/js/build/color.compiled.min.js') }}"></script>
