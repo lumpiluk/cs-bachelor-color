@@ -10,6 +10,7 @@ figure {
   box-shadow: .05em .05em .6em 0 rgb(50%, 50%, 50%);
   background: rgb(250, 250, 250);
   line-height: 100%;
+  overflow: hidden; // Also hides the box-shadow of figcaptions.
 
   max-width: @visualization_max_width;
 
@@ -23,6 +24,7 @@ figure {
   figcaption {
     padding: @figure_title_padding;
     background: @figure_title_background;
+    box-shadow: 0 .05em .15em 0 rgb(50%, 50%, 50%);
 
     .visualization-instructions {
       font-size: smaller;
@@ -82,12 +84,22 @@ figure {
   .visualization-control {
     padding: .5em 0 .5em 0; // top right bottom left
   }
+
+  .visualization-controls-group {
+    margin-bottom: 1em;
+  }
+
+  .visualization-controls-system-header {
+    font-size: 1em;
+    margin: .5em 0 0 0; // top right bottom left
+  }
 }
 
 .visualization-controls-advanced-toggle {
   margin: 0;
   padding: @figure_title_padding;
   background: @visualization_controls_advanced_toggle_background;
+  box-shadow: 0 .05em .15em 0 rgb(50%, 50%, 50%);
   cursor: hand;
   cursor: pointer;
   font-size: 1em;

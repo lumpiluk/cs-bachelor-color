@@ -107,13 +107,13 @@ export class HSVVisualization extends Visualization {
         this.circ_arrow_hue.position.set(0, .5, 0);
         this.hsv_cone.add(this.circ_arrow_hue);
         /* Labels. */
-        this.label_value = new TextSprite("V", .075);
+        this.label_value = new TextSprite("V", .15);
         this.label_value.sprite.position.set(0, .6 + this.arrow_length_padding, 0);
         this.hsv_cone.add(this.label_value.sprite);
-        this.label_saturation = new TextSprite("S", .075);
+        this.label_saturation = new TextSprite("S", .15);
         this.label_saturation.sprite.position.set(this.radius + this.arrow_length_padding + .1, .5, 0);
         this.hsv_cone.add(this.label_saturation.sprite);
-        this.label_hue = new TextSprite("H", .075);
+        this.label_hue = new TextSprite("H", .15);
         this.set_hue_label_position(2 * Math.PI);
         this.hsv_cone.add(this.label_hue.sprite);
         /* Current color indicator. */
@@ -144,7 +144,7 @@ export class HSVVisualization extends Visualization {
 
     init_controls() {
         super.init_controls();
-        let $controls = this.$figure.find(".visualization-controls");
+        let $controls = this.$controls;
         if ($controls.length == 0) {
             return;
         }
@@ -166,7 +166,7 @@ export class HSVVisualization extends Visualization {
     }
 
     init_advanced_controls() {
-        super.init_advanced_controls();
+        super.init_advanced_controls(this.color_system.get_name());
         let that = this;
         let $controls = this.$figure.find(".visualization-controls-advanced");
         if ($controls.length == 0) {

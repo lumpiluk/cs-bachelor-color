@@ -193,7 +193,7 @@ export class HSLVisualization extends Visualization {
     }
 
     init_advanced_controls() {
-        super.init_advanced_controls();
+        super.init_advanced_controls(this.color_system.get_name());
         let that = this;
         let $controls = this.$controls_advanced;
         if ($controls.length == 0) {

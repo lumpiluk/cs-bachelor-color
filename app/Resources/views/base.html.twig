@@ -70,6 +70,7 @@
                                 <li>{{ _self.menuItem('Color Selection', path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'hsl', 'hsv']})) }} </li>
                                 <li>{{ _self.menuItem('Color Conversion Selection', path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['rgb', 'hsl', 'hsv']})) }} </li>
                                 <li>{{ _self.menuItem('Color Conversion', path('exercise', {'exercise_name': 'conversion', 'color_systems': ['rgb', 'hsl', 'hsv']})) }} </li>
+                                <li>{{ _self.menuItem('Mixed', path('exercise', {'exercise_name': 'mixed', 'color_systems': ['rgb', 'hsl', 'hsv']})) }} </li>
                             </ul>
                         {% elseif is_granted('ROLE_EXPERIMENT_GROUP_A') %}
                             <ul>
@@ -77,6 +78,7 @@
                                 <li>{{ _self.menuItem('Color Selection', path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'cmy', 'cmyk']})) }} </li>
                                 <li>{{ _self.menuItem('Color Conversion Selection', path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['rgb', 'cmy', 'cmyk']})) }} </li>
                                 <li>{{ _self.menuItem('Color Conversion', path('exercise', {'exercise_name': 'conversion', 'color_systems': ['rgb', 'cmy', 'cmyk']})) }} </li>
+                                <li>{{ _self.menuItem('Mixed', path('exercise', {'exercise_name': 'mixed', 'color_systems': ['rgb', 'cmy', 'cmyk']})) }} </li>
                             </ul>
                         {% else %}
                             <ul>
@@ -84,6 +86,7 @@
                                 <li>{{ _self.menuItem('Color Selection', path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv']})) }} </li>
                                 <li>{{ _self.menuItem('Color Conversion Selection', path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv']})) }} </li>
                                 <li>{{ _self.menuItem('Color Conversion', path('exercise', {'exercise_name': 'conversion', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv']})) }} </li>
+                                <li>{{ _self.menuItem('Mixed', path('exercise', {'exercise_name': 'mixed', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv']})) }} </li>
                             </ul>
                         {% endif %}
                     </li>

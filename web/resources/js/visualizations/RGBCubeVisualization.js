@@ -43,7 +43,7 @@ export class RGBCubeVisualization extends Visualization {
 
     init_controls() {
         super.init_controls();
-        let $controls = this.$figure.find(".visualization-controls");
+        let $controls = this.$controls;
         if ($controls.length == 0) {
             return;
         }
@@ -65,12 +65,12 @@ export class RGBCubeVisualization extends Visualization {
     }
 
     init_advanced_controls() {
-        super.init_advanced_controls();
-        let $controls = this.$figure.find(".visualization-controls-advanced");
-        if ($controls.length == 0) {
-            return;
-        }
-        // TODO?
+        // super.init_advanced_controls(this.color_system.get_name());
+        // let $controls = this.$figure.find(".visualization-controls-advanced");
+        // if ($controls.length == 0) {
+        //     return;
+        // }
+        // TODO: units (0..255, [0,1], ...)
     }
 
     on_color_system_property_change(event) {

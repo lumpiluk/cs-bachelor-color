@@ -104,7 +104,8 @@
         {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
             <p>
                 A comparison of RGB and HSV is shown in
-                <span class="figref" data-fig-id="fig-rgbhsv">the figure below</span>.
+                <span class="figref" data-fig-id="fig-rgbhsv">the figure below</span>;
+                HSL and HSV are comparable in <span class="figref" data-fig-id="fig-hslhsv">the figure below that</span>
             </p>
             <div class="figure" id="fig-rgbhsv">
                 <div class="visualizations">
@@ -113,6 +114,17 @@
                 </div>
                 <div class="selected-color"></div>
                 <div class="figure-title">Comparison of the RGB and HSV color spaces.</div>
+                <div class="visualization-controls"></div>
+                <div class="visualization-controls-advanced"></div>
+            </div>
+
+            <div class="figure" id="fig-hslhsv">
+                <div class="visualizations">
+                    <div class="hsl visualization"></div>
+                    <div class="hsv visualization"></div>
+                </div>
+                <div class="selected-color"></div>
+                <div class="figure-title">Comparison of the HSL and HSV color spaces.</div>
                 <div class="visualization-controls"></div>
                 <div class="visualization-controls-advanced"></div>
             </div>

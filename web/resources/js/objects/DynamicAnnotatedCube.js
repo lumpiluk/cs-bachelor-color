@@ -65,16 +65,16 @@ export class DynamicAnnotatedCube extends Object3D {
         this.add(this.arrow_y);
         this.add(this.arrow_z);
         /* Labels */
-        this.label_x = new TextSprite(label_x, 0.15);
+        this.label_x = new TextSprite(label_x, 0.2);
         this.label_x.sprite.position.set(1.2, -.1, -.1);
         this.add(this.label_x.sprite);
-        this.label_y = new TextSprite(label_y, 0.15);
+        this.label_y = new TextSprite(label_y, 0.2);
         this.label_y.sprite.position.set(-.1, 1.2, -.1);
         this.add(this.label_y.sprite);
-        this.label_z = new TextSprite(label_z, 0.15);
+        this.label_z = new TextSprite(label_z, 0.2);
         this.label_z.sprite.position.set(-.1, -.1, 1.2);
         this.add(this.label_z.sprite);
-        this.label_origin = new TextSprite("0", 0.15);
+        this.label_origin = new TextSprite("0", 0.2);
         this.label_origin.sprite.position.set(-.1, -.1, -.1);
         this.add(this.label_origin.sprite);
         /* Current color indicator. */

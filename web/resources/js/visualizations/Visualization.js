@@ -22,9 +22,15 @@ export class Visualization {
         //this.$figure = $container.parent().hasClass("figure") ? $container.parent() : null;
         this.$figure = $container.closest(".figure");
         this.$figure = this.$figure.length > 0 ? this.$figure : null;
+
         this.$controls = this.$figure != null ? this.$figure.find(".visualization-controls") : null;
+        if (this.$controls != null) {
+            this.$controls = $('<div class="visualization-controls-group"></div>')
+                .appendTo(this.$controls);
+        }
         this.$controls_advanced = this.$figure != null ?
             this.$figure.find(".visualization-controls-advanced") : null;
+
         this.fov = 45;
         this.min_focal_length = 10; // for zooming, assuming full frame (35mm) camera sensor
         this.max_focal_length = 400; // for zooming
@@ -98,23 +104,31 @@ export class Visualization {
      * .visualization-controls-advanced.
      * Not called in default constructor!
      */
-    init_advanced_controls() {
-        /* Add toggle for showing/hiding controls. */
-        this.$controls_advanced.before(
-            '<h3 class="visualization-controls-advanced-toggle">' +
-            '<span class="arrow">&#x25B6;&nbsp;</span><span class="text">Advanced controls</span></h3>'
+    init_advanced_controls(color_system_name) {
+        if (this.$figure.find(".visualization-controls-advanced-toggle").length == 0) {
+            /* Add toggle for showing/hiding controls. */
+            this.$controls_advanced.before(
+                '<h3 class="visualization-controls-advanced-toggle">' +
+                '<span class="arrow">&#x25B6;&nbsp;</span><span class="text">Advanced controls</span></h3>'
+            );
+            this.$controls_advanced.hide();
+            let $toggle = this.$figure.find(".visualization-controls-advanced-toggle");
+            let that = this;
+            $toggle.click(function () {
+                if (that.$controls_advanced.is(":visible")) {
+                    $toggle.find(".arrow").removeClass("arrow-rotated");
+                } else {
+                    $toggle.find(".arrow").addClass("arrow-rotated");
+                }
+                that.$controls_advanced.toggle(300);
+            });
+        }
+
+        this.$controls_advanced.append(
+            '<h3 class="visualization-controls-system-header">' +
+                color_system_name +
+            '</h3>'
         );
-        this.$controls_advanced.hide();
-        let $toggle = this.$figure.find(".visualization-controls-advanced-toggle");
-        let that = this;
-        $toggle.click(function () {
-            if (that.$controls_advanced.is(":visible")) {
-                $toggle.find(".arrow").removeClass("arrow-rotated");
-            } else {
-                $toggle.find(".arrow").addClass("arrow-rotated");
-            }
-            that.$controls_advanced.toggle(300);
-        });
     }
 
     update_rotation(delta_x, delta_y) {

@@ -36,3 +36,4 @@ Useful resources:
   - http://symfony.com/doc/current/cookbook/security/form_login_setup.html
 - Load users from DB: http://symfony.com/doc/current/security/entity_provider.html
 - Access control, ROLEs: http://symfony.com/doc/current/security.html
+
