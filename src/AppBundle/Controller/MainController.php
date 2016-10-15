@@ -25,6 +25,15 @@ class MainController extends Controller
     }
 
     /**
+     * @Route("/color-systems", name="color_systems_general")
+     * @return Response
+     */
+    public function colorSystemsGeneralAction()
+    {
+        return $this->render('color/color_systems.html.twig');
+    }
+
+    /**
      * @Route("/color-systems/{color_system_name}", name="color_system_page")
      * @param $color_system_name
      * @return Response

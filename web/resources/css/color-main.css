@@ -143,27 +143,37 @@ button:disabled:hover {
   border-left: 0.1em solid #e8e8e8;
   border-top: 0.1em solid #e8e8e8;
 }
-.figure {
+.figure,
+figure {
   margin: 2em auto;
-  box-shadow: 0.1em 0.1em 0.1em #999999;
+  box-shadow: 0.05em 0.05em 0.6em 0 #808080;
   background: #fafafa;
   line-height: 100%;
   max-width: 40em;
 }
-.figure img {
+.figure img,
+figure img {
   width: 100%;
   height: auto;
   max-height: 26.67em;
 }
-.figure .figure-title {
+.figure .figure-title,
+figure .figure-title,
+.figure figcaption,
+figure figcaption {
   padding: 0.45em 0.5em 0.45em 0.5em;
   background: #e6e6e6;
 }
-.figure .figure-title .visualization-instructions {
+.figure .figure-title .visualization-instructions,
+figure .figure-title .visualization-instructions,
+.figure figcaption .visualization-instructions,
+figure figcaption .visualization-instructions {
   font-size: smaller;
 }
 .figure .visualizations,
-.figure .side-by-side {
+figure .visualizations,
+.figure .side-by-side,
+figure .side-by-side {
   width: 100%;
   display: -webkit-flex;
   -webkit-flex-flow: row nowrap;
@@ -174,7 +184,9 @@ button:disabled:hover {
   justify-content: center;
 }
 .figure .visualizations .img-container,
-.figure .side-by-side .img-container {
+figure .visualizations .img-container,
+.figure .side-by-side .img-container,
+figure .side-by-side .img-container {
   flex-grow: 1;
   width: 100%;
   /* Center image (if single image, typically). */
@@ -186,16 +198,19 @@ button:disabled:hover {
   align-items: center;
   justify-content: center;
 }
-.figure .visualization {
+.figure .visualization,
+figure .visualization {
   height: 26.67em;
   flex-grow: 1;
   width: 100%;
 }
-.figure .visualization canvas {
+.figure .visualization canvas,
+figure .visualization canvas {
   width: 100%;
   height: 100%;
 }
-.figure .selected-color {
+.figure .selected-color,
+figure .selected-color {
   padding: 0.5em 0.5em 0.5em 0.5em;
   color: black;
   text-shadow: -0.1em 0 0 white, 0 -0.1em 0 white, 0.1em 0 0 white, 0 0.1em 0 white;
@@ -259,7 +274,7 @@ button:disabled:hover {
 }
 .exercise {
   margin: 2em auto;
-  box-shadow: 0.1em 0.1em 0.1em #999999;
+  box-shadow: 0.05em 0.05em 0.6em 0 #808080;
   background: #fafafa;
   line-height: 100%;
   max-width: 40em;
@@ -272,11 +287,13 @@ button:disabled:hover {
   height: auto;
   max-height: 26.67em;
 }
-.exercise .figure-title {
+.exercise .figure-title,
+.exercise figcaption {
   padding: 0.45em 0.5em 0.45em 0.5em;
   background: #e6e6e6;
 }
-.exercise .figure-title .visualization-instructions {
+.exercise .figure-title .visualization-instructions,
+.exercise figcaption .visualization-instructions {
   font-size: smaller;
 }
 .exercise .visualizations,
@@ -396,34 +413,139 @@ button:disabled:hover {
 form .field {
   padding: .2em 0;
 }
-html {
+.sidenav {
+  height: 100%;
+  /* 100% Full-height */
+  width: 0;
+  /* 0 width - change this with JavaScript */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Stay on top */
+  top: 0;
+  left: 0;
+  background: #333333;
+  overflow-x: hidden;
+  /* Disable horizontal scroll */
+  transition: 0.5s;
+  color: #a6a6a6;
+  /* On large screens. */
+}
+.sidenav ul {
+  list-style-type: none;
+  padding: .25em .5em 0 .75em;
+}
+.sidenav ul li {
+  margin-top: 1em;
+}
+.sidenav ul li ul > li {
+  margin-top: .25em;
+}
+.sidenav ul li > ul {
+  list-style-type: disc;
+  padding-left: 1em;
+}
+.sidenav a {
+  text-decoration: none;
+  display: block;
+  transition: .3s;
+  color: #ffffff;
+}
+.sidenav a:hover,
+.sidenav a:focus {
+  color: #bfbfbf;
+}
+.sidenav a.is-active {
+  color: #cccccc;
+}
+.sidenav a.is-active:before {
+  content: "\25BA";
+  margin-right: .25em;
+}
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: .2em;
+  font-size: 350%;
+  margin-left: 0;
+}
+@media screen and (min-width: 54em) {
+  .sidenav {
+    width: 13em;
+    box-shadow: 0 0 .6em 0 black;
+  }
+  .sidenav .closebtn {
+    display: none;
+  }
+}
+.sidenav.open {
+  width: 13em;
+  box-shadow: 0 0 .6em 0 black;
+}
+/* On large screens. */
+@media screen and (min-width: 54em) {
+  .main-container {
+    transition: margin-left 0.5s;
+    margin-left: 13em;
+  }
+}
+.topnav {
+  background: #333333;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  /* On large screens. */
+}
+@media screen and (min-width: 54em) {
+  .topnav {
+    display: none;
+  }
+}
+.menu-button {
+  padding: .25em .5em;
+  font-size: 150%;
+  display: inline-block;
+  cursor: pointer;
+}
+.menu-button div {
+  width: 1em;
+  height: 0.14285714em;
+  background-color: white;
+  margin: 0.2em 0;
+  transition: 0.4s;
+}
+.menu-button:hover div,
+.menu-button:focus div {
+  background-color: #bfbfbf;
+}
+body {
   height: 100%;
   background-color: #ffffff;
   /* On large screens. */
 }
-@media screen and (min-width: 50em) {
-  html {
+@media screen and (min-width: 54em) {
+  body {
     padding-left: .5em;
     padding-right: .5em;
   }
 }
-body {
+main {
   padding: .5em;
+  margin-left: auto;
+  margin-right: auto;
   /* On large screens. */
 }
-body section {
+main section {
   line-height: 175%;
 }
-body section .eqn {
+main section .eqn {
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
 }
-@media screen and (min-width: 50em) {
-  body {
+@media screen and (min-width: 54em) {
+  main {
     max-width: 60em;
-    margin-left: auto;
-    margin-right: auto;
     padding: 1em;
   }
 }

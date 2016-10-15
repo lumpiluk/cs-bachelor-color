@@ -1,0 +1,143 @@
+@import "constants";
+
+@nav_width: 13em;
+@nav_transition_time: .5s;
+
+@menu_link_color: rgb(100%, 100%, 100%);
+@menu_link_color_hover: rgb(75%, 75%, 75%);
+@menu_link_color_active: rgb(80%, 80%, 80%);
+
+@sidenav_bg: rgb(20%, 20%, 20%);
+@topnav_bg: @sidenav_bg;
+
+@menu_button_line_height: 1em / 7;
+@menu_button_line_spacing: (1em / 5);
+
+// Adapted from http://www.w3schools.com/howto/howto_js_sidenav.asp
+
+.sidenav {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  background: @sidenav_bg;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: @nav_transition_time;
+  color: rgb(65%, 65%, 65%);
+
+  ul {
+    list-style-type: none;
+    padding: .25em .5em 0 .75em; // top right bottom left
+
+    li {
+      margin-top: 1em;
+
+      ul > li {
+        margin-top: .25em;
+      }
+    }
+
+    li > ul {
+      list-style-type: disc;
+      padding-left: 1em;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    display: block;
+    transition: .3s;
+    color: @menu_link_color;
+  }
+
+  a:hover,
+  a:focus {
+    color: @menu_link_color_hover;
+  }
+
+  a.is-active {
+    color: @menu_link_color_active;
+  }
+
+  a.is-active:before {
+    content: "\25BA";
+    margin-right: .25em;
+  }
+
+  .closebtn {
+    position: absolute;
+    top: 0;
+    right: .2em;
+    font-size: 350%;
+    margin-left: 0;
+  }
+
+  /* On large screens. */
+  @media screen {
+    @media (min-width: @wide_min_width) {
+      width: @nav_width;
+      box-shadow: 0 0 .6em 0 black;
+
+      .closebtn {
+        display: none;
+      }
+    }
+  }
+}
+
+.sidenav.open {
+  width: @nav_width;
+  box-shadow: 0 0 .6em 0 black;
+}
+
+/* On large screens. */
+@media screen {
+  @media (min-width: @wide_min_width) {
+    /* Push main content to the right. */
+    .main-container {
+      transition: margin-left @nav_transition_time;
+      margin-left: @nav_width;
+    }
+  }
+}
+
+.topnav {
+  background: @topnav_bg;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  //position: absolute;
+  //top: 0;
+  //left: 0;
+
+  /* On large screens. */
+  @media screen {
+    @media (min-width: @wide_min_width) {
+      display: none;
+    }
+  }
+}
+
+.menu-button {
+  padding: .25em .5em; // top-bottom left-right
+  font-size: 150%;
+  display: inline-block;
+  cursor: pointer;
+
+  div {
+    width: 1em;
+    height: @menu_button_line_height;
+    background-color: white;
+    margin: @menu_button_line_spacing 0;
+    transition: 0.4s;
+  }
+}
+
+.menu-button:hover,
+.menu-button:focus {
+  div {
+    background-color: @menu_link_color_hover;
+  }
+}

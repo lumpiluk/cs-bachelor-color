@@ -102,6 +102,23 @@
         </p>
 
         {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+            <p>
+                A comparison of RGB and HSV is shown in
+                <span class="figref" data-fig-id="fig-rgbhsv">the figure below</span>.
+            </p>
+            <div class="figure" id="fig-rgbhsv">
+                <div class="visualizations">
+                    <div class="rgb-cube visualization"></div>
+                    <div class="hsv visualization"></div>
+                </div>
+                <div class="selected-color"></div>
+                <div class="figure-title">Comparison of the RGB and HSV color spaces.</div>
+                <div class="visualization-controls"></div>
+                <div class="visualization-controls-advanced"></div>
+            </div>
+        {% endif %}
+
+        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
             <div class="exercise-recommendations">
                 <b>Recommended exercises for this section:</b>
                 <ul>

@@ -144,6 +144,22 @@
             This is accounted for by the subtraction of \(k\) from the original CMY color
             in Equation <span class="eqref">\ref{eq:cmytocmyk}</span>.
         </p>
+        {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
+            <p>
+                A comparison of RGB and CMY is shown in
+                <span class="figref" data-fig-id="fig-rgbcmy">the figure below</span>.
+            </p>
+            <div class="figure" id="fig-rgbcmy">
+                <div class="visualizations">
+                    <div class="rgb-cube visualization"></div>
+                    <div class="cmy-cube visualization"></div>
+                </div>
+                <div class="selected-color"></div>
+                <div class="figure-title">Comparison of the RGB and CMY cubes.</div>
+                <div class="visualization-controls"></div>
+                <div class="visualization-controls-advanced"></div>
+            </div>
+        {% endif %}
 
         {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
             <div class="exercise-recommendations">

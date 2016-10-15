@@ -2,9 +2,10 @@
 @import "color-figure";
 @import "color-exercise";
 @import "color-experiment";
+@import "navigation";
 
 
-html {
+body {
   height: 100%;
   background-color: @background_color;
 
@@ -17,9 +18,11 @@ html {
   }
 }
 
-body {
+main {
   padding: .5em;
-  //border: 1px solid black;
+  margin-left: auto;
+  margin-right: auto;
+
 
   section {
     line-height: 175%;
@@ -36,8 +39,8 @@ body {
   @media screen {
     @media (min-width: @wide_min_width) {
       max-width: @max_body_width;
-      margin-left: auto;
-      margin-right: auto;
+      //margin-left: auto;
+      //margin-right: auto;
       padding: 1em;
     }
   }

@@ -19,43 +19,48 @@
     {% endblock %}
 </head>
 <body>
-{% block body %}
-    {% if registration_success %}
-        <h1>Registration successful!</h1>
-        <p>
-            An email has been sent to you with a log-in key.
-            You can <a href="{{ path('login') }}">log in</a> now or enter your IMT username again to receive a new key.
-            {% if app.environment == 'dev' or is_granted('ROLE_ADMIN') %}
-                <br/>
-                New experimental group: {{ new_experimental_group }}<br/>
-                <b>If you see this text and you are not the admin, please contact me!</b>
-            {% endif %}
-        </p>
-    {% elseif save_user_exception %}
-        <h1>Registration failed!</h1>
-        <p>User could not be saved. Maybe you typed in an invalid username?</p>
-        {% if app.environment == 'dev' or is_granted('ROLE_ADMIN') %}
-            <b>Exception: {{ new_experimental_group }}</b>
-        {% endif %}
-    {% else %}
-        <h1>Register</h1>
-        <p>
-            Please enter your IMT username. An email with a log-in key will be sent to your @mail.upb.de address.
-        </p>
-    {% endif %}
-    {{ form_start(registration_form) }}
-        <div class="field">
-            IMT username:
-            {{ form_errors(registration_form.username) }}<br/>
-            {{ form_widget(registration_form.username) }}
-        </div>
-        <br/>
-        <button type="submit">Send mail</button>
-    {{ form_end(registration_form) }}
-    <p>
-        Already registered? <a href="{{ path('login') }}">Log in</a>!
-    </p>
-{% endblock %}
-{% block javascripts %}{% endblock %}
+    <div class="main-container" style="margin-left: 0;">
+        {# Override margin left which is normally applied on wide screens because of the side navigation. #}
+        <main>
+            {% block body %}
+                {% if registration_success %}
+                    <h1>Registration successful!</h1>
+                    <p>
+                        An email has been sent to you with a log-in key.
+                        You can <a href="{{ path('login') }}">log in</a> now or enter your IMT username again to receive a new key.
+                        {% if app.environment == 'dev' or is_granted('ROLE_ADMIN') %}
+                            <br/>
+                            New experimental group: {{ new_experimental_group }}<br/>
+                            <b>If you see this text and you are not the admin, please contact me!</b>
+                        {% endif %}
+                    </p>
+                {% elseif save_user_exception %}
+                    <h1>Registration failed!</h1>
+                    <p>User could not be saved. Maybe you typed in an invalid username?</p>
+                    {% if app.environment == 'dev' or is_granted('ROLE_ADMIN') %}
+                        <b>Exception: {{ new_experimental_group }}</b>
+                    {% endif %}
+                {% else %}
+                    <h1>Register</h1>
+                    <p>
+                        Please enter your IMT username. An email with a log-in key will be sent to your @mail.upb.de address.
+                    </p>
+                {% endif %}
+                {{ form_start(registration_form) }}
+                    <div class="field">
+                        IMT username:
+                        {{ form_errors(registration_form.username) }}<br/>
+                        {{ form_widget(registration_form.username) }}
+                    </div>
+                    <br/>
+                    <button type="submit">Send mail</button>
+                {{ form_end(registration_form) }}
+                <p>
+                    Already registered? <a href="{{ path('login') }}">Log in</a>!
+                </p>
+            {% endblock %}
+        </main>
+    </div>
+    {% block javascripts %}{% endblock %}
 </body>
 </html>

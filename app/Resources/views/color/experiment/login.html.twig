@@ -19,39 +19,44 @@
     {% endblock %}
 </head>
 <body>
-{% block body %}
-    <h1>Welcome!</h1>
-    <p>
-        While this site is being tested, you will need to log in.
-        If you are not a student at the University of Paderborn, please write me an email.
-        Otherwise, <a href="{{ path('user_registration') }}">register here</a>.
-    </p>
+    <div class="main-container" style="margin-left: 0;">
+        {# Override margin left which is normally applied on wide screens because of the side navigation. #}
+        <main>
+            {% block body %}
+                <h1>Welcome!</h1>
+                <p>
+                    While this site is being tested, you will need to log in.
+                    If you are not a student at the University of Paderborn, please write me an email.
+                    Otherwise, <a href="{{ path('user_registration') }}">register here</a>.
+                </p>
 
-    <h2>Log In</h2>
-        {% if login_error %}
-            <div class="login-error">{{ login_error.messageKey|trans(login_error.messageData, 'security') }}</div>
-        {% endif %}
+                <h2>Log In</h2>
+                    {% if login_error %}
+                        <div class="login-error">{{ login_error.messageKey|trans(login_error.messageData, 'security') }}</div>
+                    {% endif %}
 
-        <form action="{{ path('login') }}" method="post">
-            <div class="field">
-                <label for="username">Username:</label><br/>
-                <input type="text" id="username" name="_username" value="{{ login_last_username }}" />
-            </div>
-            <div class="field">
-                <label for="password">Key or Password:</label><br/>
-                <input type="password" id="password" name="_password" />
-            </div>
+                    <form action="{{ path('login') }}" method="post">
+                        <div class="field">
+                            <label for="username">Username:</label><br/>
+                            <input type="text" id="username" name="_username" value="{{ login_last_username }}" />
+                        </div>
+                        <div class="field">
+                            <label for="password">Key or Password:</label><br/>
+                            <input type="password" id="password" name="_password" />
+                        </div>
 
-            {#
-                If you want to control the URL the user
-                is redirected to on success (more details below)
-                <input type="hidden" name="_target_path" value="/account" />
-            #}
+                        {#
+                            If you want to control the URL the user
+                            is redirected to on success (more details below)
+                            <input type="hidden" name="_target_path" value="/account" />
+                        #}
 
-            <br/>
-            <button type="submit">Log in</button>
-        </form>
-{% endblock %}
-{% block javascripts %}{% endblock %}
+                        <br/>
+                        <button type="submit">Log in</button>
+                    </form>
+            {% endblock %}
+        </main>
+    </div>
+    {% block javascripts %}{% endblock %}
 </body>
 </html>

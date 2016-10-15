@@ -143,27 +143,37 @@ button:disabled:hover {
   border-left: 0.1em solid #e8e8e8;
   border-top: 0.1em solid #e8e8e8;
 }
-.figure {
+.figure,
+figure {
   margin: 2em auto;
-  box-shadow: 0.1em 0.1em 0.1em #999999;
+  box-shadow: 0.05em 0.05em 0.6em 0 #808080;
   background: #fafafa;
   line-height: 100%;
   max-width: 40em;
 }
-.figure img {
+.figure img,
+figure img {
   width: 100%;
   height: auto;
   max-height: 26.67em;
 }
-.figure .figure-title {
+.figure .figure-title,
+figure .figure-title,
+.figure figcaption,
+figure figcaption {
   padding: 0.45em 0.5em 0.45em 0.5em;
   background: #e6e6e6;
 }
-.figure .figure-title .visualization-instructions {
+.figure .figure-title .visualization-instructions,
+figure .figure-title .visualization-instructions,
+.figure figcaption .visualization-instructions,
+figure figcaption .visualization-instructions {
   font-size: smaller;
 }
 .figure .visualizations,
-.figure .side-by-side {
+figure .visualizations,
+.figure .side-by-side,
+figure .side-by-side {
   width: 100%;
   display: -webkit-flex;
   -webkit-flex-flow: row nowrap;
@@ -174,7 +184,9 @@ button:disabled:hover {
   justify-content: center;
 }
 .figure .visualizations .img-container,
-.figure .side-by-side .img-container {
+figure .visualizations .img-container,
+.figure .side-by-side .img-container,
+figure .side-by-side .img-container {
   flex-grow: 1;
   width: 100%;
   /* Center image (if single image, typically). */
@@ -186,16 +198,19 @@ button:disabled:hover {
   align-items: center;
   justify-content: center;
 }
-.figure .visualization {
+.figure .visualization,
+figure .visualization {
   height: 26.67em;
   flex-grow: 1;
   width: 100%;
 }
-.figure .visualization canvas {
+.figure .visualization canvas,
+figure .visualization canvas {
   width: 100%;
   height: 100%;
 }
-.figure .selected-color {
+.figure .selected-color,
+figure .selected-color {
   padding: 0.5em 0.5em 0.5em 0.5em;
   color: black;
   text-shadow: -0.1em 0 0 white, 0 -0.1em 0 white, 0.1em 0 0 white, 0 0.1em 0 white;

@@ -11,18 +11,102 @@
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         {% block javascripts_head %}
+            <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+
+            <script>
+                /* Show and hide the main menu. */
+                function open_nav() {
+                    $(".sidenav").addClass("open");
+                }
+
+                function close_nav() {
+                    $(".sidenav").removeClass("open");
+                }
+            </script>
+
             <script type="text/x-mathjax-config">
                 MathJax.Hub.Config({
                   TeX: { equationNumbers: { autoNumber: "AMS" } }
                 });
             </script>
             <script async src="{{ asset('bower_components/MathJax/MathJax.js?config=TeX-MML-AM_CHTML') }}"></script>
-            <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
             <script src="{{ asset('resources/js/build/color.compiled.min.js') }}"></script>
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% macro menuItem(name, url, subitems) %}
+            {% spaceless %}
+                {#
+                    A macro for creating and automatically highlighting active menu items.
+                    From http://stackoverflow.com/questions/9496212/navigation-highlight-current-page
+                    (Subitems don't seem to work, so I removed that functionality and automatic 'li' generation.)
+                #}
+                {% set currentUrl = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
+                {% set isActive = currentUrl == url %}
+
+                <a{% if isActive %} class="is-active"{% endif %} href="{{ url }}">{{ name|trans() }}</a>
+            {% endspaceless %}
+        {% endmacro %}
+
+        {% block main_menu %}
+            <nav class="sidenav">
+                <a href="javascript:void(0)" class="closebtn" onclick="close_nav()">&times;</a>
+                <ul>
+                    <li>{{ _self.menuItem('Home', path('homepage')) }}</li>
+                    <li>
+                        {{ _self.menuItem('Color Systems', path('color_systems_general')) }}
+                        <ul>
+                            <li>{{ _self.menuItem('RGB and sRGB', path('color_system_page', {'color_system_name': 'rgb'})) }}</li>
+                            <li>{{ _self.menuItem('CMY and CMYK', path('color_system_page', {'color_system_name': 'cmy'})) }}</li>
+                            <li>{{ _self.menuItem('HSL', path('color_system_page', {'color_system_name': 'hsl'})) }}</li>
+                            <li>{{ _self.menuItem('HSV', path('color_system_page', {'color_system_name': 'hsv'})) }}</li>
+                        </ul>
+                    </li>
+                    <li>
+                        Exercises for All Available Color Systems
+                        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') %}
+                            <ul>
+                                <li>{{ _self.menuItem('Color Matching', path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'hsl', 'hsv']})) }} </li>
+                                <li>{{ _self.menuItem('Color Selection', path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'hsl', 'hsv']})) }} </li>
+                                <li>{{ _self.menuItem('Color Conversion Selection', path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['rgb', 'hsl', 'hsv']})) }} </li>
+                                <li>{{ _self.menuItem('Color Conversion', path('exercise', {'exercise_name': 'conversion', 'color_systems': ['rgb', 'hsl', 'hsv']})) }} </li>
+                            </ul>
+                        {% elseif is_granted('ROLE_EXPERIMENT_GROUP_A') %}
+                            <ul>
+                                <li>{{ _self.menuItem('Color Matching', path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'cmy', 'cmyk']})) }} </li>
+                                <li>{{ _self.menuItem('Color Selection', path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'cmy', 'cmyk']})) }} </li>
+                                <li>{{ _self.menuItem('Color Conversion Selection', path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['rgb', 'cmy', 'cmyk']})) }} </li>
+                                <li>{{ _self.menuItem('Color Conversion', path('exercise', {'exercise_name': 'conversion', 'color_systems': ['rgb', 'cmy', 'cmyk']})) }} </li>
+                            </ul>
+                        {% else %}
+                            <ul>
+                                <li>{{ _self.menuItem('Color Matching', path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv']})) }} </li>
+                                <li>{{ _self.menuItem('Color Selection', path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv']})) }} </li>
+                                <li>{{ _self.menuItem('Color Conversion Selection', path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv']})) }} </li>
+                                <li>{{ _self.menuItem('Color Conversion', path('exercise', {'exercise_name': 'conversion', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv']})) }} </li>
+                            </ul>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        {% endblock %}
+
+        {% block top_nav %}
+            {# Contains the menu button. This will only be visible on small screens. #}
+            <nav class="topnav">
+                <div id="menu-button" class="menu-button" onclick="open_nav()">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
+            </nav>
+        {% endblock %}
+
+        <div class="main-container">
+            <main>
+                {% block body %}{% endblock %}
+            </main>
+        </div>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
