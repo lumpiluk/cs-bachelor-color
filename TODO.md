@@ -7,6 +7,7 @@
 - Exercises
     - Log unique exercises to DB when completed.
     - 'Restart' button.
+    - Easy colors.
 - Visualizations
     - Option to dynamically load any visualization for comparison.
     - Make edges more visible.

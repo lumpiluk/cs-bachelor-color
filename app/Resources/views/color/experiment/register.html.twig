@@ -38,8 +38,14 @@
                     <h1>Registration failed!</h1>
                     <p>User could not be saved. Maybe you typed in an invalid username?</p>
                     {% if app.environment == 'dev' or is_granted('ROLE_ADMIN') %}
-                        <b>Exception: {{ new_experimental_group }}</b>
+                        <b>Exception: {{ save_user_exception }}</b>
                     {% endif %}
+                {% elseif username_blocked %}
+                    <h1>Registration failed!</h1>
+                    <p>
+                        It appears that your IMT username is not in the list for the GdC lecture.
+                        Please check that you didn't mistype and send me an email to enable your username.
+                    </p>
                 {% else %}
                     <h1>Register</h1>
                     <p>
@@ -53,7 +59,7 @@
                         {{ form_widget(registration_form.username) }}
                     </div>
                     <br/>
-                    <button type="submit">Send mail</button>
+                    <button type="submit">Register</button>
                 {{ form_end(registration_form) }}
                 <p>
                     Already registered? <a href="{{ path('login') }}">Log in</a>!
