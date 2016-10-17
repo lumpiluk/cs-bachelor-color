@@ -37,3 +37,13 @@ Useful resources:
 - Load users from DB: http://symfony.com/doc/current/security/entity_provider.html
 - Access control, ROLEs: http://symfony.com/doc/current/security.html
 
+
+## Experiment
+
+### Enable / Disable
+TODO!
+
+### Registration
+
+RegistrationController.php will check for the file app/Resources/students.txt.
+If it exists, it acts as a whitelist. If it doesn't exist, everyone may register.

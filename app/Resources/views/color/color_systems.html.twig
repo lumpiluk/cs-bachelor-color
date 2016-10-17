@@ -7,7 +7,70 @@
 {% block body %}
     <h1>{{ page_title }}</h1>
 
-    <section>
+    <section id="introduction">
+        <p>
+            Physically, color is made up of visible light, which is electromagnetic radiation of wavelengths
+            between about 380nm and 700nm [Wa10].
+            Pure spectral colors, known as the colors of the rainbow, are composed of only one wavelength of light.
+            All other colors including white and pink, for example, must therefore be a mixture of several wavelengths.
+            Physiologically, human beings with normal color vision perceive color with
+            three different kinds of cone cells in their eyes.
+            These cones differ in sensitivity to certain wavelengths,
+            peaking at about 419nm, 531nm, and 558nm [DBM83, p. 121],
+            which correspond roughly to blue, green and red.
+        </p>
+        <p>
+            In the literature, the terms color model, color space, and color system are sometimes used interchangeably
+            [AKM07, p. 1345].
+            In a more precise definition, a color model describes an abstract way in which colors can be represented
+            via a number of components, for example red, green, and blue.
+            By this definition,
+            a system can only be called a color space if such a model is combined with a definition for how to
+            interpret the components [GRR10, p. 394].
+            For instance, in the example of a color model with components for red, green, and blue,
+            one color space may specify a green value equal to the number one
+            with all other components equal to zero to be slightly more saturated and slightly more yellow than another.
+            The term color system will be used synonymously for both color model and color space on this site.
+            If not otherwise specified, component parameters will always be considered to be in the [0,1] interval.
+        </p>
+    </section>
 
+    <section id="literature" class="bibliography">
+        <h2>Literature</h2>
+        <dl>
+            <dt>[AKM07]</dt>
+            <dd>
+                Ahirwal, Balkrishan; Khadtare, Mahesh; Mehta, Rakesh: FPGA based
+                system for color space transformation RGB to YIQ and YCbCr. In:
+                International Conference on Intelligent and Advanced Systems 2007.
+                IEEE, pp. 1345–1349, 2007.
+            </dd>
+
+            <dt>[DBM83]</dt>
+            <dd>
+                Dartnall, Herbert JA; Bowmaker, James K; Mollon, John D: Human visual
+                pigments: microspectrophotometric results from the eyes of seven
+                persons. Proceedings of the Royal Society of London B: Biological Sciences,
+                220(1218):115–130, 1983.
+            </dd>
+
+            <dt>[GRR10]</dt>
+            <dd>
+                Ganesan, P; Rajini, V; Rajkumar, R Immanuvel: Segmentation and
+                edge detection of color images using CIELAB color space and edge
+                detectors. In: Emerging Trends in Robotics and Communication Technologies
+                (INTERACT), 2010 International Conference on. IEEE, pp.
+                393–397, 2010.
+            </dd>
+
+            <dt>[Wa10]</dt>
+            <dd>
+                Wavelengths of Visible Light. National Aeronautics and Space Administration,
+                Science Mission Directorate,
+                <a href="http://missionscience.nasa.gov/ems/09_visiblelight.html">
+                    http://missionscience.nasa.gov/ems/09_visiblelight.html</a>,
+                2010. Accessed: 2016-09-13.
+            </dd>
+        </dl>
     </section>
 {% endblock %}

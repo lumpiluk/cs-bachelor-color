@@ -1,15 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'color/exercise_base.html.twig' %}
 
-{% block title %}Color Conversion Exercise{% endblock %}
+{% set exercise_title = 'Color Conversion Exercise' %}
 
-{% block body %}
-    <h1>Color Conversion Exercise</h1>
-    <p>
-        <b>Color systems:</b>
-        {{ color_systems|join(', ') }}
-    </p>
-
-    {# TODO: If e.g. user is in exp. group A and this includes HSV/CMY, block the exercise! #}
+{% block exercise %}
     <div class="exercise"
          data-num-rounds="10"
          data-task-types='[
@@ -17,10 +10,6 @@
                 "name": "ColorConversion",
                 "options": {
                     "color_systems": [
-                        {% set color_system_strs = [] %}
-                        {% for system in color_systems %}
-                            {% set color_system_strs = color_system_strs|merge(['"%s"'|format(system)]) %}
-                        {% endfor %}
                         {{ color_system_strs|join(',') }}
                     ],
                     "show_target_visualization": false,

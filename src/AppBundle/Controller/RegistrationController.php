@@ -37,7 +37,7 @@ class RegistrationController extends Controller
             $save_user_exception = null;
 
             // Determine a random experimental group.
-            $exp_groups = array('EXPERIMENT_GROUP_A', 'EXPERIMENT_GROUP_B');
+            $exp_groups = array('ROLE_EXPERIMENT_GROUP_A', 'ROLE_EXPERIMENT_GROUP_B');
             $random_role = $exp_groups[array_rand($exp_groups, 1)];
 
             $username_blocked = $this->is_username_blocked($user);
@@ -56,14 +56,18 @@ class RegistrationController extends Controller
                     $user = $existing;
                 }
 
-                // 2.1) Determine a random password (key)
+                // Determine a random password (key)
                 $key = $this->random_str($length = 16);
                 $user->setPlainPassword($key);
-
-                // 3) Encode the password. If the user already exists, it will be overridden.
+                // Encode the password. If the user already exists, it will be overridden.
                 $password = $this->get('security.password_encoder')
                     ->encodePassword($user, $user->getPlainPassword());
                 $user->setPassword($password);
+
+                // Determine a random survey key if the user does not yet exist.
+                if (!$existing) {
+                    $user->setSurveyKey($this->random_str(8));
+                }
 
                 // Save the user.
                 try {

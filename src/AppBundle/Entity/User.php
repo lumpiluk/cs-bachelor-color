@@ -41,9 +41,15 @@ class User implements UserInterface, \Serializable
     private $username;
 
     /**
+     * The encoded password.
      * @ORM\Column(type="string", length=64)
      */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=8)
+     */
+    public $surveyKey;
 
     /**
      * The serialized array of roles.
@@ -82,6 +88,16 @@ class User implements UserInterface, \Serializable
     public function setUsername($username)
     {
         $this->username = $username;
+    }
+
+    public function setSurveyKey($key)
+    {
+        $this->surveyKey = $key;
+    }
+
+    public function getSurveyKey()
+    {
+        return $this->surveyKey;
     }
 
     public function getPlainPassword()

@@ -4,8 +4,25 @@
 
 {% block body %}
     <h1>Color</h1>
-    
-    <p>
-        TODO: Introduction, task description for GdC.
-    </p>
+
+    {% if experiment_active %}
+        <h2>Evaluation, Task 2</h2>
+        <p>
+            Once you are finished with Task 1, please head over to this Google Forms survey:
+            <a href="https://goo.gl/forms/2oAE1Zf9w8aARzRo2">https://goo.gl/forms/2oAE1Zf9w8aARzRo2</a>.
+            Please do not look at the questions before you are actually going to take the survey.
+            You will need to enter the following key for the fulfillment of the homework requirements:
+        </p>
+        <div class="survey-key">
+            {% if app.user and app.user.surveyKey is defined %}
+                <b>{{ app.user.surveyKey }}</b>
+            {% else %}
+                <b>
+                    There is no survey key assigned to your account.
+                    Unless you are logged in with a test account, this shouldn't happen.
+                    Please contact me.
+                </b>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ exercise_title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ exercise_title }}</h1>
+    <p>
+        <b>Color systems:</b>
+        {{ color_systems|join(', ') }}
+    </p>
+
+    {%
+        if (is_granted('ROLE_EXPERIMENT_GROUP_B') and ('cmy' in color_systems or 'cmyk' in color_systems)) or
+            (is_granted('ROLE_EXPERIMENT_GROUP_A') and ('hsl' in color_systems or 'hsv' in color_systems))
+    %}
+        <p>
+            Sorry, this exercise isn't available to you yet. Please check back when the evaluation is complete.
+            Admittedly, this website isn't at all cheat-proof,
+            but please delay further attempts until after you've filled out the evaluation forms.
+        </p>
+    {% else %}
+        {% set color_system_strs = [] %}
+        {% for system in color_systems %}
+            {% set color_system_strs = color_system_strs|merge(['"%s"'|format(system)]) %}
+        {% endfor %}
+
+        {% block exercise %}{% endblock %}
+    {% endif %}
+{% endblock %}
