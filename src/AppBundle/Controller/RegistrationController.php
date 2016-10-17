@@ -82,8 +82,8 @@ class RegistrationController extends Controller
                     $message = \Swift_Message::newInstance()
                         ->setSubject('GdC Color Exercise. Registration successful.')
                         ->setFrom('info@lukas-stratmann.com')
-                        ->setTo('lumpiluk@gmail.com')// TODO: remove this line and use @mail.upb.de!
-                        //->setTo($user->get_email()) // TODO: use this line instead
+                        //->setTo('lumpiluk@gmail.com')// TODO: remove this line and use @mail.upb.de!
+                        ->setTo($user->get_email()) // TODO: use this line instead
                         ->setReplyTo('lumpiluk@mail.upb.de')
                         ->setBody(
                             $this->renderView('color/experiment/registration_mail.html.twig', array(
