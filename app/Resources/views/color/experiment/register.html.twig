@@ -30,6 +30,8 @@
                         You can <a href="{{ path('login') }}">log in</a> now or enter your IMT username again to receive a new key.
                         {% if app.environment == 'dev' or is_granted('ROLE_ADMIN') %}
                             <br/>
+                            {% if app.environment == 'dev' %}<b>DEV ENVIRONMENT</b><br/>{% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}<b>Your are logged in as admin.</b>{% endif %}
                             New experimental group: {{ new_experimental_group }}<br/>
                             <b>If you see this text and you are not the admin, please contact me!</b>
                         {% endif %}
