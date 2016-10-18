@@ -5,7 +5,7 @@
     - Explain how to enable/disable experiment.
 - Prevent experimental groups access to exercises accordingly. Make a Twig exercise superclass for this purpose.
 - Exercises
-    - Log unique exercises to DB when completed.
+    - * Log unique exercises to DB when completed.
     - 'Restart' button.
     - Easy colors.
 - Visualizations
@@ -14,5 +14,6 @@
     - Option to hide anything but the color solid.
     - HSL, HSV: Option to not slice the cylinders/cones.
     - Comparison: Fix NaN.
+    - * Scrolling in Firefox, Edge!
 
 

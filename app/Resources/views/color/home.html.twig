@@ -14,8 +14,8 @@
             You will need to enter the following key for the fulfillment of the homework requirements:
         </p>
         <div class="survey-key">
-            {% if app.user and app.user.surveyKey is defined %}
-                <b>{{ app.user.surveyKey }}</b>
+            {% if app.user is defined and app.user.surveyKey is defined %}
+                Survey key: <b>{{ app.user.surveyKey }}</b>
             {% else %}
                 <b>
                     There is no survey key assigned to your account.
