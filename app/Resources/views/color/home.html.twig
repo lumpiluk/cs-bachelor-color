@@ -6,7 +6,36 @@
     <h1>Color</h1>
 
     {% if experiment_active %}
-        <h2>Evaluation, Task 2</h2>
+        <h2>Task 5</h2>
+        {% if app.user is defined and app.user.exerciseMatchingComplete is defined %}
+            <p>Your progress in task 5.3:</p>
+            <ul>
+                <li>
+                    Color Matching: {% if app.user.exerciseMatchingComplete %}<b>Completed at least once.</b>{% else %}Not completed yet.{% endif %}
+                </li>
+                <li>
+                    Color Selection: {% if app.user.exerciseSelectionComplete %}<b>Completed at least once.</b>{% else %}Not completed yet.{% endif %}
+                </li>
+                <li>
+                    Color Conversion Selection: {% if app.user.exerciseConversionComplete %}<b>Completed at least once.</b>{% else %}Not completed yet.{% endif %}
+                </li>
+                <li>
+                    Color Conversion: {% if app.user.exerciseConversionSelectionComplete %}<b>Completed at least once.</b>{% else %}Not completed yet.{% endif %}
+                </li>
+            </ul>
+            <p>
+                Please note that the exercises above will probably be easier once you have done task 5.2.
+                Please also note that there are more exercises on the pages of the individual color systems
+                which may be worth doing.
+            </p>
+        {% else %}
+            <p>
+                You are not logged in as a regular user.
+                If you were, you would see your progress for the GdC exercise here.
+            </p>
+        {% endif %}
+
+        <h2>Evaluation, Task 6</h2>
         <p>
             Once you are finished with Task 1, please head over to this Google Forms survey:
             <a href="https://goo.gl/forms/2oAE1Zf9w8aARzRo2">https://goo.gl/forms/2oAE1Zf9w8aARzRo2</a>.

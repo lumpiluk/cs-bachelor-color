@@ -1,0 +1,7 @@
+{% if success %}
+    The exercise has successfully been marked as complete.
+{% elseif not user_valid %}
+    You are not logged in with a user account, therefore this exercise will not be marked as completed.
+{% else %}
+    Unable to set the exercise to completed for your user account. Please contact the site owner.
+{% endif %}

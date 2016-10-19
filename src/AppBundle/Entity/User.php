@@ -52,6 +52,26 @@ class User implements UserInterface, \Serializable
     public $surveyKey;
 
     /**
+     * @ORM\Column(name="exercise_matching_complete", type="boolean")
+     */
+    private $exerciseMatchingComplete;
+
+    /**
+     * @ORM\Column(name="exercise_selection_complete", type="boolean")
+     */
+    private $exerciseSelectionComplete;
+
+    /**
+     * @ORM\Column(name="exercise_conversion_complete", type="boolean")
+     */
+    private $exerciseConversionComplete;
+
+    /**
+     * @ORM\Column(name="exercise_conversion_selection_complete", type="boolean")
+     */
+    private $exerciseConversionSelectionComplete;
+
+    /**
      * The serialized array of roles.
      * @ORM\Column(type="string", length=255)
      */
@@ -257,5 +277,69 @@ class User implements UserInterface, \Serializable
     public function getIsActive()
     {
         return $this->isActive;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExerciseMatchingComplete()
+    {
+        return $this->exerciseMatchingComplete;
+    }
+
+    /**
+     * @param mixed $exerciseMatchingComplete
+     */
+    public function setExerciseMatchingComplete($exerciseMatchingComplete)
+    {
+        $this->exerciseMatchingComplete = $exerciseMatchingComplete;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExerciseSelectionComplete()
+    {
+        return $this->exerciseSelectionComplete;
+    }
+
+    /**
+     * @param mixed $exerciseSelectionComplete
+     */
+    public function setExerciseSelectionComplete($exerciseSelectionComplete)
+    {
+        $this->exerciseSelectionComplete = $exerciseSelectionComplete;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExerciseConversionComplete()
+    {
+        return $this->exerciseConversionComplete;
+    }
+
+    /**
+     * @param mixed $exerciseConversionComplete
+     */
+    public function setExerciseConversionComplete($exerciseConversionComplete)
+    {
+        $this->exerciseConversionComplete = $exerciseConversionComplete;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getExerciseConversionSelectionComplete()
+    {
+        return $this->exerciseConversionSelectionComplete;
+    }
+
+    /**
+     * @param mixed $exerciseConversionSelectionComplete
+     */
+    public function setExerciseConversionSelectionComplete($exerciseConversionSelectionComplete)
+    {
+        $this->exerciseConversionSelectionComplete = $exerciseConversionSelectionComplete;
     }
 }

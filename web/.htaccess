@@ -67,6 +67,9 @@ DirectoryIndex app.php
     </IfModule>
 </IfModule>
 
+
+# --- Custom modifications. ---
+
 <IfModule mod_expires.c>
     # Set cache expiration.
     ExpiresActive on

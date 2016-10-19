@@ -22,6 +22,9 @@
                 "weight": 1
             }
          ]'
+         {% if experiment_active and app.user is defined and all_available_ex is defined and all_available_ex %}
+             data-post-to="{{ path('exercise-complete', {'exercise_name': 'matching'}) }}"
+         {% endif %}
     >
     </div>
 {% endblock %}

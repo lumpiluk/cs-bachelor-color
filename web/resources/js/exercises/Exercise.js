@@ -21,7 +21,8 @@ export class Exercise {
         this.$container = $container;
         let defaults = {
             task_types: [], // length 0 => let the user choose. Every task can be for different color systems.
-            num_rounds: 10
+            num_rounds: 10,
+            post_to: null // URL to which to post results on completion.
         };
         let container_options = this.read_options_from_container();
         /*
@@ -30,6 +31,7 @@ export class Exercise {
          */
         let actual = $.extend({}, defaults, container_options || {}, options || {});
         this.num_rounds = actual.num_rounds;
+        this.post_to = actual.post_to;
         this.task_types = actual.task_types;
         /**
          * Weights can be specified in the data-taskTypes attribute in HTML.
@@ -63,6 +65,8 @@ export class Exercise {
             options.num_rounds = num_rounds;
         if ($c.data("task-types") != null)
             options.task_types = $c.data("task-types"); // JSON.parse() not necessary thanks to JQuery!
+        if ($c.data("post-to") != null)
+            options.post_to = $c.data("post-to");
         return options;
     }
 
@@ -117,8 +121,7 @@ export class Exercise {
 
     next_task() {
         if (this._remaining_tasks.length == 0) {
-            this.current_task = null;
-            this.show_results();
+            this.on_exercise_end();
             return;
         }
         this.current_task = this._remaining_tasks.pop();
@@ -130,6 +133,37 @@ export class Exercise {
         this.num_attempts += task.stats.attempts;
         this.num_skipped += task.stats.skipped ? 1 : 0;
         this.next_task();
+    }
+
+    on_exercise_end() {
+        let avg_attempts = this.num_attempts / this.num_correct_answers;
+        this.current_task = null;
+        let that = this;
+
+        this.show_results();
+
+        if (this.post_to != null) {
+            $.post(this.post_to,
+                {
+                    avg_attempts: avg_attempts,
+                    num_correct_answers: this.num_correct_answers,
+                    num_skipped: this.num_skipped,
+                    num_rounds: this.num_rounds
+                },
+                function(data, status) {
+                    // on post response
+                    if (status == "success") {
+                        that.$container.find(".post-result").html(
+                            data
+                        );
+                    } else {
+                        that.$container.find(".post-result").html(
+                            "Unable to reach the server. " + data
+                        );
+                    }
+                }
+            );
+        }
     }
 
     show_results() {
@@ -150,7 +184,8 @@ export class Exercise {
                     '<td>Average attempts per correct answer:</td>' +
                     '<td>' + avg_attempts.toFixed(3) + '</td>' +
                 '</tr>' +
-            '</table>'
+            '</table>' +
+            '<div class="post-result"></div>'
         );
     }
 }

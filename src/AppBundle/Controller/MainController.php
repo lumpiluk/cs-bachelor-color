@@ -8,6 +8,8 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\User;
+use Exception;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,7 +53,56 @@ class MainController extends Controller
      */
     public function exerciseAction(Request $request, $exercise_name) {
         return $this->render('color/exercises/'.$exercise_name.'.html.twig', array(
-            'color_systems' => $request->get('color_systems')
+            'color_systems' => $request->get('color_systems'),
+            'all_available_ex' => $request->get('all_available_ex') // Only relevant for the experiment to log completed exercises.
+        ));
+    }
+
+    /**
+     * Set the user flags for the respective exercises to true.
+     * This indicates that an exercise has been completed.
+     * This function should be called via AJAX once a user has completed an exercise.
+     * @Route("/exercise-complete/{exercise_name}", name="exercise-complete")
+     * @param Request $request
+     * @param $exercise_name
+     * @return Response
+     */
+    public function exerciseCompleteAction(Request $request, $exercise_name) {
+        $user = $this->getUser();
+        $error_msg = null;
+        if (!($user instanceof User)) {
+            return $this->render('color/ajax_responses/exercise_complete.html.twig', array(
+                'success' => false,
+                'user_valid' => false,
+                'error_msg' => null
+            ));
+        }
+        switch ($exercise_name) {
+            case "conversion":
+                $user->setExerciseConversionComplete(true);
+                break;
+            case "conversion_selection":
+                $user->setExerciseConversionSelectionComplete(true);
+                break;
+            case "matching":
+                $user->setExerciseMatchingComplete(true);
+                break;
+            case "selection":
+                $user->setExerciseSelectionComplete(true);
+                break;
+        }
+        try {
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->merge($user);
+            $em->flush();
+        } catch (Exception $e) {
+            $error_msg = $e->getMessage();
+        }
+
+        return $this->render('color/ajax_responses/exercise_complete.html.twig', array(
+            'success' => !$error_msg,
+            'user_valid' => true,
+            'error_msg' => $error_msg
         ));
     }
 }

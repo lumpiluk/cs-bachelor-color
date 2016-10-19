@@ -8,6 +8,7 @@
     - * Log unique exercises to DB when completed.
     - 'Restart' button.
     - Easy colors.
+    - Let each task type summarize its own results.
 - Visualizations
     - Option to dynamically load any visualization for comparison.
     - Make edges more visible.
@@ -15,5 +16,7 @@
     - HSL, HSV: Option to not slice the cylinders/cones.
     - Comparison: Fix NaN.
     - * Scrolling in Firefox, Edge!
+    
+   
 
 
