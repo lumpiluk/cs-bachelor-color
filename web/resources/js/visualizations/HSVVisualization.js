@@ -17,6 +17,7 @@ import {
     Mesh,
     Object3D
 } from "../../../bower_components/three.js/build/three";
+import {DynamicBoundingCylinderSliced} from "../objects/DynamicBoundingCylinderSliced";
 
 
 const HSV_CYLINDER_SHADER = require("../../shaders/hsv-cylinder-fragment.glsl");
@@ -72,6 +73,17 @@ export class HSVVisualization extends Visualization {
             true // include_bottom_circle
         );
         this.hsv_cone.add(this.bounding_cone);
+        /* HSV bounding wireframe for current color indication. */
+        this.bounding_slice = new DynamicBoundingCylinderSliced(
+            this.circle_segments,
+            0x000000,
+            this.radius, // radius_top
+            0, // radius_bottom
+            true, // include_top_circle
+            false, // include_bottom_circle
+            2 * Math.PI // theta
+        );
+        this.hsv_cone.add(this.bounding_slice);
         /* Arrows. */
         this.arrow_length_padding = .15;
         let arrow_color_hex = 0xffffff;
@@ -205,6 +217,13 @@ export class HSVVisualization extends Visualization {
 
         this.hsv_cone_mesh.position.set(0, v / 2 - .5, 0);
 
+        /* Updated sliced bounding cylinder. */
+        this.bounding_slice.scale.set(1, v, 1);
+        this.bounding_slice.radius_top = radius;
+        this.bounding_slice.theta_length = h * 2 * Math.PI;
+        this.bounding_slice.update_cylinder();
+        this.bounding_slice.position.set(0, v / 2 - .5, 0);
+
         /* Update current color indicator. */
         this.current_color_sprite.sprite.position.set(
             Math.cos(this.hsv_cone_geom.theta_length) * radius * s,
@@ -261,6 +280,8 @@ export class HSVVisualization extends Visualization {
             this.hsv_cone_geom.update_cylinder();
             this.bounding_cone.radius_bottom = r;
             this.bounding_cone.update_cylinder();
+            this.bounding_slice.radius_bottom = r;
+            this.bounding_slice.update_cylinder();
             this.hsv_cone_mat.uniforms.radiusBottom.value = r;
             this.pivot.position.copy(this.pivot_position_cylinder);
         } else if (type == "Cube") {

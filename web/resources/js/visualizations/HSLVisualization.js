@@ -1,8 +1,6 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {TextSprite} from "../objects/TextSprite";
 import {CircleSprite} from "../objects/CircleSprite";
-import {ColorSystemProperty} from "../color-systems/ColorSystemProperty";
-import {hsl_to_rgb} from "../color-systems/color_conversion";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {DynamicCylinderBufferGeometry} from "../objects/DynamicCylinderBufferGeometry";
 import {CircularArrow} from "../objects/CircularArrow";
@@ -19,6 +17,7 @@ import {
     Object3D
 } from "../../../bower_components/three.js/build/three";
 import {HSLColorSystem} from "../color-systems/HSLColorSystem";
+import {DynamicBoundingCylinderSliced} from "../objects/DynamicBoundingCylinderSliced";
 
 
 const HSL_CYLINDER_SHADER = require("../../shaders/hsl-cylinders-fragment.glsl");
@@ -99,6 +98,31 @@ export class HSLVisualization extends Visualization {
         this.bounding_cylinder_bottom.scale.set(1, this.height / 2, 1);
         this.bounding_cylinder_bottom.position.set(0, -this.height / 4, 0);
         this.hsl_cones.add(this.bounding_cylinder_bottom);
+        /* HSL bounding wireframe for indicating the current color (sliced cylinder/cone). */
+        this.bounding_slice_top = new DynamicBoundingCylinderSliced(
+            this.circle_segments,
+            0x000000, // color
+            0, // radius_top
+            this.radius, // radius_bottom
+            true, // include_top_circle
+            false, // include_bottom_circle
+            2 * Math.PI // theta
+        );
+        this.bounding_slice_top.scale.set(1, this.height / 2, 1);
+        this.bounding_slice_top.position.set(0, this.height / 4, 0);
+        this.hsl_cones.add(this.bounding_slice_top);
+        this.bounding_slice_bottom = new DynamicBoundingCylinderSliced(
+            this.circle_segments,
+            0x000000, // color
+            this.radius, // radius_top
+            0, // radius_bottom
+            true, // include_top_circle
+            false, // include_bottom_circle
+            2 * Math.PI // theta
+        );
+        this.bounding_slice_bottom.scale.set(1, this.height / 2, 1);
+        this.bounding_slice_bottom.position.set(0, -this.height / 4, 0);
+        this.hsl_cones.add(this.bounding_slice_bottom);
         /* Arrows. */
         this.arrow_length_padding = .15;
         let arrow_color_hex = 0xffffff;
@@ -228,6 +252,7 @@ export class HSLVisualization extends Visualization {
         let theta = h * 2 * Math.PI;
         let current_y = l * this.height - this.height / 2;
 
+        /* Update color solid. */
         this.hsl_cylinder_top_geom.height = lightness_top * this.height / 2;
         this.hsl_cylinder_bottom_geom.height = lightness_bottom * this.height / 2;
         this.hsl_cylinder_top_geom.radius_top = lerp(this.radius, this.bounding_cylinder_top.radius_top, lightness_top);
@@ -245,6 +270,24 @@ export class HSLVisualization extends Visualization {
             0
         );
         this.hsl_cylinder_top.visible = l >= .5;
+
+        /* Update sliced bounding cylinder. */
+        this.bounding_slice_top.scale.set(1, this.height / 2 * lightness_top, 1);
+        this.bounding_slice_bottom.scale.set(1, this.height / 2 * lightness_bottom, 1);
+        this.bounding_slice_top.position.set(0, this.height / 4 * lightness_top, 0);
+        this.bounding_slice_bottom.position.set(
+            0,
+            //-this.height / 4 * lightness_bottom,
+            (l <= .5 ? current_y : 0) - this.hsl_cylinder_bottom_geom.height / 2,
+            0
+        );
+        this.bounding_slice_top.radius_top = this.hsl_cylinder_top_geom.radius_top;
+        this.bounding_slice_bottom.radius_top = this.hsl_cylinder_bottom_geom.radius_top;
+        this.bounding_slice_top.theta_length = this.hsl_cylinder_top_geom.theta_length;
+        this.bounding_slice_bottom.theta_length = this.hsl_cylinder_bottom_geom.theta_length;
+        this.bounding_slice_top.update_cylinder();
+        this.bounding_slice_bottom.update_cylinder();
+        this.bounding_slice_top.visible = l >= .5;
 
         /* Update current color indicator. */
         let radius = l <= .5 ?
@@ -308,6 +351,10 @@ export class HSLVisualization extends Visualization {
             this.bounding_cylinder_bottom.radius_bottom = r;
             this.bounding_cylinder_top.update_cylinder();
             this.bounding_cylinder_bottom.update_cylinder();
+            this.bounding_slice_top.radius_top = r;
+            this.bounding_slice_bottom.radius_bottom = r;
+            this.bounding_slice_top.update_cylinder();
+            this.bounding_slice_bottom.update_cylinder();
             this.hsl_cylinder_mat.uniforms.radiusTop.value = r;
             this.hsl_cylinder_mat.uniforms.radiusBottom.value = r;
             this.pivot.position.copy(this.pivot_position_cylinders);

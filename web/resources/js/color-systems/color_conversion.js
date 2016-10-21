@@ -88,6 +88,9 @@ export function rgb_to_hsl(r, g, b) {
     let c_high = Math.max(r, g, b);
     let c_low = Math.min(r, g, b);
     let c_rng = c_high - c_low;
+    if (c_rng == 0) {
+        return {h: 0, s: 0, l: c_high};
+    }
     let rp = (c_high - r) / c_rng;
     let gp = (c_high - g) / c_rng;
     let bp = (c_high - b) / c_rng;
