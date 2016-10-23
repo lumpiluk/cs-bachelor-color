@@ -291,6 +291,24 @@ export class HSVVisualization extends Visualization {
         }
         this.on_color_system_property_change(null);
     }
+
+    show_only_color_solid_changed(event) {
+        super.show_only_color_solid_changed(event);
+        let visible = !event.checked;
+        this.bounding_cone.visible = visible;
+        this.bounding_slice.visible = visible;
+        this.circ_arrow_hue.visible = visible;
+        this.arrow_saturation.visible = visible;
+        this.arrow_value.visible = visible;
+        this.label_hue.sprite.visible = visible;
+        this.label_saturation.sprite.visible = visible;
+        this.label_value.sprite.visible = visible;
+        this.current_color_sprite.sprite.visible = visible;
+
+        this.hsv_cube.show_only_color_solid(event.checked);
+
+        this.render();
+    }
 }
 
 /**

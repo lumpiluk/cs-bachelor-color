@@ -30,7 +30,7 @@ export class DynamicAnnotatedCube extends Object3D {
         this.add(this.cube_mesh);
 
         /* Coordinate system, arrows. */
-        /* Cube bounding box. */
+        /* Cube bounding box (static). */
         this.wireframe_cube_geometry = new BoxGeometry(1, 1, 1);
         this.wireframe_cube = new BoxHelper(
             new Mesh(this.wireframe_cube_geometry),
@@ -40,6 +40,16 @@ export class DynamicAnnotatedCube extends Object3D {
         this.wireframe_cube.position.set(.5, .5, .5);
         this.wireframe_cube.updateMatrix();
         this.add(this.wireframe_cube);
+        /* Cube bounding box (dynamic). */
+        this.dynamic_wireframe_cube_geom = new BoxGeometry(1, 1, 1);
+        this.dynamic_wireframe_cube = new BoxHelper(
+            new Mesh(this.dynamic_wireframe_cube_geom),
+            0x000000
+        );
+        this.dynamic_wireframe_cube.matrixAutoUpdate = false; // Remember to do this manually!
+        this.dynamic_wireframe_cube.position.set(.5, .5, .5);
+        this.dynamic_wireframe_cube.updateMatrix();
+        this.add(this.dynamic_wireframe_cube);
         /*
          * Arrows.
          * Helpful example: view-source:https://stemkoski.github.io/Three.js/Helpers.html
@@ -97,10 +107,27 @@ export class DynamicAnnotatedCube extends Object3D {
         );
         this.cube_mesh.updateMatrix();
 
+        this.dynamic_wireframe_cube.position.copy(this.cube_mesh.position);
+        this.dynamic_wireframe_cube.scale.copy(this.cube_mesh.scale);
+        this.dynamic_wireframe_cube.updateMatrix();
+
         this.current_color_sprite.sprite.position.set(
             this.value.x,
             this.value.y,
             this.value.z
         );
+    }
+
+    show_only_color_solid(value) {
+        this.wireframe_cube.visible = !value;
+        this.dynamic_wireframe_cube.visible = !value;
+        this.arrow_x.visible = !value;
+        this.arrow_y.visible = !value;
+        this.arrow_z.visible = !value;
+        this.label_x.sprite.visible = !value;
+        this.label_y.sprite.visible = !value;
+        this.label_z.sprite.visible = !value;
+        this.label_origin.sprite.visible = !value;
+        this.current_color_sprite.sprite.visible = !value;
     }
 }

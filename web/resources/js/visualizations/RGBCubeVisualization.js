@@ -65,8 +65,7 @@ export class RGBCubeVisualization extends Visualization {
     }
 
     init_advanced_controls() {
-        // super.init_advanced_controls(this.color_system.get_name());
-        // let $controls = this.$figure.find(".visualization-controls-advanced");
+        super.init_advanced_controls(this.color_system.get_name());
         // if ($controls.length == 0) {
         //     return;
         // }
@@ -85,6 +84,12 @@ export class RGBCubeVisualization extends Visualization {
 
         this.rgb_cube.current_color_sprite.sprite_material.color.setRGB(r, g, b);
 
+        this.render();
+    }
+
+    show_only_color_solid_changed(event) {
+        super.show_only_color_solid_changed(event);
+        this.rgb_cube.show_only_color_solid(event.checked);
         this.render();
     }
 }

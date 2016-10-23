@@ -118,6 +118,10 @@ input[type=range]:focus::-ms-fill-upper {
 .visualization-control.select .select-container select {
   width: 100%;
 }
+.visualization-control.check label {
+  margin-left: .5em;
+  cursor: pointer;
+}
 button {
   background: #e8e8e8;
   border: none;

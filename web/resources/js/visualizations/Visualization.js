@@ -1,6 +1,7 @@
 import {Vector2, Euler, Matrix4, PerspectiveCamera, Object3D, WebGLRenderer, Scene}
     from "../../../bower_components/three.js/build/three";
 import {rgb_to_css} from "../util";
+import {VisualizationControlCheck} from "../controls/VisualizationControlCheck";
 
 
 /* Load .glsl shader file via browserify plugin browserify-shader. */
@@ -79,6 +80,8 @@ export class Visualization {
         this.$container.on("touchmove", (event) => that.on_touch_move.call(that, event));
         this.$container.on("touchcancel", (event) => that.on_touch_cancel.call(that, event));
         this.$container.on("touchend", (event) => that.on_touch_end.call(that, event));
+
+        this.show_only_color_solid_control = null;
     }
 
     render() {
@@ -105,6 +108,7 @@ export class Visualization {
      * Not called in default constructor!
      */
     init_advanced_controls(color_system_name) {
+        let that = this;
         if (this.$figure.find(".visualization-controls-advanced-toggle").length == 0) {
             /* Add toggle for showing/hiding controls. */
             this.$controls_advanced.before(
@@ -113,7 +117,6 @@ export class Visualization {
             );
             this.$controls_advanced.hide();
             let $toggle = this.$figure.find(".visualization-controls-advanced-toggle");
-            let that = this;
             $toggle.click(function () {
                 if (that.$controls_advanced.is(":visible")) {
                     $toggle.find(".arrow").removeClass("arrow-rotated");
@@ -129,6 +132,12 @@ export class Visualization {
                 color_system_name +
             '</h3>'
         );
+        this.show_only_color_solid_control = new VisualizationControlCheck(
+            this.$controls_advanced,
+            "Show the color solid only"
+        );
+        this.show_only_color_solid_control.add_listener((event) =>
+            that.show_only_color_solid_changed.call(that, event));
     }
 
     update_rotation(delta_x, delta_y) {
@@ -282,5 +291,13 @@ export class Visualization {
         }
         let css_color = rgb_to_css(r, g, b);
         this.$figure.find(".selected-color").css("background-color", css_color)
+    }
+
+    /**
+     * Called whenever the checkbox "Show only color solid" is clicked.
+     * @param event A CheckChangeEvent with a property called check.
+     */
+    show_only_color_solid_changed(event) {
+        /* To be implemented in subclasses. */
     }
 }

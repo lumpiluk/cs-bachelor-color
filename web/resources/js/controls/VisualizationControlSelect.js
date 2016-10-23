@@ -41,8 +41,9 @@ export class VisualizationControlSelect {
 
     _on_change(event) {
         let option = this.$select.val();
+        let e = new SelectChangeEvent(option, event);
         for (let callback of this.change_listeners) {
-            callback(new SelectChangeEvent(option, event));
+            callback(e);
         }
     }
 }

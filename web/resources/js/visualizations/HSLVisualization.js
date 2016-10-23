@@ -287,7 +287,7 @@ export class HSLVisualization extends Visualization {
         this.bounding_slice_bottom.theta_length = this.hsl_cylinder_bottom_geom.theta_length;
         this.bounding_slice_top.update_cylinder();
         this.bounding_slice_bottom.update_cylinder();
-        this.bounding_slice_top.visible = l >= .5;
+        this.bounding_slice_top.visible = l >= .5 && this.bounding_slice_bottom.visible;
 
         /* Update current color indicator. */
         let radius = l <= .5 ?
@@ -364,6 +364,26 @@ export class HSLVisualization extends Visualization {
             this.pivot.position.copy(this.pivot_position_cube);
         }
         this.on_color_system_property_change(null);
+    }
+
+    show_only_color_solid_changed(event) {
+        super.show_only_color_solid_changed(event);
+        let visible = !event.checked;
+        this.bounding_cylinder_top.visible = visible;
+        this.bounding_cylinder_bottom.visible = visible;
+        this.bounding_slice_top.visible = visible;
+        this.bounding_slice_bottom.visible = visible;
+        this.circ_arrow_hue.visible = visible;
+        this.arrow_saturation.visible = visible;
+        this.arrow_lightness.visible = visible;
+        this.label_hue.sprite.visible = visible;
+        this.label_saturation.sprite.visible = visible;
+        this.label_lightness.sprite.visible = visible;
+        this.current_color_sprite.sprite.visible = visible;
+
+        this.hsl_cube.show_only_color_solid(event.checked);
+
+        this.render();
     }
 }
 

@@ -8,6 +8,9 @@
         <b>Color systems:</b>
         {{ color_systems|join(', ') }}
     </p>
+    <p>
+        Warning: Your progress in individual exercises will not be saved.
+    </p>
 
     {%
         if (is_granted('ROLE_EXPERIMENT_GROUP_B') and ('cmy' in color_systems or 'cmyk' in color_systems)) or
