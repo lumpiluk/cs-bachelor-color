@@ -54,6 +54,11 @@ class RegistrationController extends Controller
                     ->findOneBy(array('username' => $user->getUsername()));
                 if ($existing) {
                     $user = $existing;
+                } else {
+                    $user->setExerciseSelectionComplete(false);
+                    $user->setExerciseMatchingComplete(false);
+                    $user->setExerciseConversionSelectionComplete(false);
+                    $user->setExerciseConversionComplete(false);
                 }
 
                 // Determine a random password (key)
