@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        {% set experiment_active = true %}
-        {% set group_a = is_granted('ROLE_EXPERIMENT_GROUP_A') %}
-        {% set group_b = is_granted('ROLE_EXPERIMENT_GROUP_B') %}
+        {% set experiment_active = false %}
+        {% set group_a = false %}
+        {% set group_b = false %}
+        {% set full_access = true %}
+        {# set full_access = is_granted('ROLE_FULL_ACCESS') #}
+        {# {% set group_a = is_granted('ROLE_EXPERIMENT_GROUP_A') %} #}
+        {# {% set group_b = is_granted('ROLE_EXPERIMENT_GROUP_B') %} #}
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 

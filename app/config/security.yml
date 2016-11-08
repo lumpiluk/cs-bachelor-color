@@ -3,10 +3,10 @@
 security:
 
     access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, roles: ROLE_ADMIN } # roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/register, roles: ROLE_ADMIN } # roles: IS_AUTHENTICATED_ANONYMOUSLY }
         # Remove this pattern to grant everyone access to everything after the experiment:
-        - { path: ^/, roles: [ROLE_FULL_ACCESS, ROLE_USER] }
+        # - { path: ^/, roles: [ROLE_FULL_ACCESS, ROLE_USER] }
 
     # Define how passwords will be encoded.
     encoders:
