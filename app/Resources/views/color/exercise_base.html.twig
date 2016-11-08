@@ -13,8 +13,8 @@
     </p>
 
     {%
-        if (is_granted('ROLE_EXPERIMENT_GROUP_B') and ('cmy' in color_systems or 'cmyk' in color_systems)) or
-            (is_granted('ROLE_EXPERIMENT_GROUP_A') and ('hsl' in color_systems or 'hsv' in color_systems))
+        if (group_b and ('cmy' in color_systems or 'cmyk' in color_systems)) or
+            (group_a and ('hsl' in color_systems or 'hsv' in color_systems))
     %}
         <p>
             Sorry, this exercise isn't available to you yet. Please check back when the evaluation is complete.

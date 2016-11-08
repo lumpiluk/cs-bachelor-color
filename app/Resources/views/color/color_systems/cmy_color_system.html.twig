@@ -10,13 +10,13 @@
             rather than additive color mixing.
             Subtractive mixing may be familiar to most from painting with watercolors.
             Furthermore, pigments for the colors cyan, magenta, and yellow are commonly used in printers.
-            {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
+            {% if group_a or is_granted('ROLE_FULL_ACCESS') %}
                 The CMY cube, which is equivalent to the flipped RGB cube,
                 is shown in <span class="figref" data-fig-id="fig-cmy-cube">the figure below</span>.
             {% endif %}
         </p>
 
-        {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
+        {% if group_a or is_granted('ROLE_FULL_ACCESS') %}
             <div class="figure" id="fig-cmy-cube">
                 <div class="cmy-cube visualization"></div>
                 <div class="selected-color"></div>
@@ -33,7 +33,7 @@
             </div>
         {% endif %}
 
-        {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
+        {% if group_a or is_granted('ROLE_FULL_ACCESS') %}
             <div class="exercise-recommendations">
                 <b>Recommended exercises for this section:</b>
                 <ul>
@@ -144,7 +144,7 @@
             This is accounted for by the subtraction of \(k\) from the original CMY color
             in Equation <span class="eqref">\ref{eq:cmytocmyk}</span>.
         </p>
-        {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
+        {% if group_a or is_granted('ROLE_FULL_ACCESS') %}
             <p>
                 A comparison of RGB and CMY is shown in
                 <span class="figref" data-fig-id="fig-rgbcmy">the figure below</span>.
@@ -161,7 +161,7 @@
             </div>
         {% endif %}
 
-        {% if is_granted('ROLE_EXPERIMENT_GROUP_A') or is_granted('ROLE_FULL_ACCESS') %}
+        {% if group_a or is_granted('ROLE_FULL_ACCESS') %}
             <div class="exercise-recommendations">
                 <b>Recommended exercises for this section:</b>
                 <ul>

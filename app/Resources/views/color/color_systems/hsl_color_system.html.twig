@@ -27,7 +27,7 @@
             at the position of the current lightness.
         </p>
         <div class="figure" id="fig-hslspace">
-            {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+            {% if group_b or is_granted('ROLE_FULL_ACCESS') %}
                 <div class="hsl visualization"></div>
                 <div class="selected-color"></div>
                 <div class="figure-title">
@@ -53,7 +53,7 @@
             {% endif %}
         </div>
 
-        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+        {% if group_b or is_granted('ROLE_FULL_ACCESS') %}
             <div class="exercise-recommendations">
                 <b>Recommended exercises for this section:</b>
                 <ul>
@@ -111,7 +111,7 @@
         </p>
 
         <div class="figure" id="fig-rgbhsl">
-            {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+            {% if group_b or is_granted('ROLE_FULL_ACCESS') %}
                 <div class="visualizations">
                     <div class="rgb-cube visualization"></div>
                     <div class="hsl visualization"></div>
@@ -239,7 +239,7 @@
             </div>
         </p>
 
-        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+        {% if group_b or is_granted('ROLE_FULL_ACCESS') %}
             <div class="exercise-recommendations">
                 <b>Recommended exercises for this section:</b>
                 <ul>

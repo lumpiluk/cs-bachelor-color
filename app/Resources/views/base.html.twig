@@ -2,6 +2,8 @@
 <html>
     <head>
         {% set experiment_active = true %}
+        {% set group_a = is_granted('ROLE_EXPERIMENT_GROUP_A') %}
+        {% set group_b = is_granted('ROLE_EXPERIMENT_GROUP_B') %}
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -65,7 +67,7 @@
                     </li>
                     <li>
                         Exercises for All Available Color Systems
-                        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') %}
+                        {% if group_b %}
                             <ul>
                                 <li>{{ _self.menuItem('Color Matching', path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
                                 <li>{{ _self.menuItem('Color Selection', path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
@@ -73,7 +75,7 @@
                                 <li>{{ _self.menuItem('Color Conversion', path('exercise', {'exercise_name': 'conversion', 'color_systems': ['rgb', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
                                 <li>{{ _self.menuItem('Mixed', path('exercise', {'exercise_name': 'mixed', 'color_systems': ['rgb', 'hsl', 'hsv']})) }} </li>
                             </ul>
-                        {% elseif is_granted('ROLE_EXPERIMENT_GROUP_A') %}
+                        {% elseif group_a %}
                             <ul>
                                 <li>{{ _self.menuItem('Color Matching', path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'cmy', 'cmyk'], 'all_available_ex': true})) }} </li>
                                 <li>{{ _self.menuItem('Color Selection', path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'cmy', 'cmyk'], 'all_available_ex': true})) }} </li>

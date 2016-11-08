@@ -14,7 +14,7 @@
             <span class="figref" data-fig-id="fig-hsvspace">the figure below</span>.
         </p>
         <div class="figure" id="fig-hsvspace">
-            {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+            {% if group_b or is_granted('ROLE_FULL_ACCESS') %}
                 <div class="hsv visualization"></div>
                 <div class="selected-color"></div>
                 <div class="figure-title">
@@ -39,7 +39,7 @@
             {% endif %}
         </div>
 
-        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+        {% if group_b or is_granted('ROLE_FULL_ACCESS') %}
             <div class="exercise-recommendations">
                 <b>Recommended exercises for this section:</b>
                 <ul>
@@ -101,7 +101,7 @@
             </div>
         </p>
 
-        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+        {% if group_b or is_granted('ROLE_FULL_ACCESS') %}
             <p>
                 A comparison of RGB and HSV is shown in
                 <span class="figref" data-fig-id="fig-rgbhsv">the figure below</span>;
@@ -130,7 +130,7 @@
             </div>
         {% endif %}
 
-        {% if is_granted('ROLE_EXPERIMENT_GROUP_B') or is_granted('ROLE_FULL_ACCESS') %}
+        {% if group_b or is_granted('ROLE_FULL_ACCESS') %}
             <div class="exercise-recommendations">
                 <b>Recommended exercises for this section:</b>
                 <ul>
