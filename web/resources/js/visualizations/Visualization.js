@@ -2,6 +2,7 @@ import {Vector2, Euler, Matrix4, PerspectiveCamera, Object3D, WebGLRenderer, Sce
     from "../../../bower_components/three.js/build/three";
 import {rgb_to_css} from "../util";
 import {VisualizationControlCheck} from "../controls/VisualizationControlCheck";
+import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 
 
 /* Load .glsl shader file via browserify plugin browserify-shader. */
@@ -10,8 +11,10 @@ export let DEFAULT_VERTEX_SHADER = require("../../shaders/default-vertex.glsl");
 
 export class Visualization {
 
-    constructor($container) {
+    constructor($container, color_system) {
         let that = this; // for event listeners (which will typically not be called by this class)
+
+        this.color_system = color_system;
 
         /**
          * If set to true, this.render() will keep updating until this.animating is false again.
@@ -82,6 +85,13 @@ export class Visualization {
         this.$container.on("touchend", (event) => that.on_touch_end.call(that, event));
 
         this.show_only_color_solid_control = null;
+
+        /* Initialize color system controls. */
+        this.color_system_controls = [];
+        if (this.$figure != null) {
+            this.init_controls();
+            this.init_advanced_controls();
+        }
     }
 
     render() {
@@ -95,17 +105,27 @@ export class Visualization {
      * Add controls to the figure for the current color system.
      * This requires that the visualization is inside a .figure and that this .figure contains a
      * .visualization-controls.
-     * Not called in default constructor!
      */
     init_controls() {
-        /* To be implemented in subclasses. */
+        let $controls = this.$controls;
+        if ($controls.length == 0) {
+            return;
+        }
+        for (let i = 0; i < this.color_system.properties.length; i++) {
+            this.color_system_controls.push(
+                new VisualizationControlSlider(
+                    $controls,
+                    this.color_system.properties[i],
+                    0.001
+                ) // (Automatically adds itself to that property's sliders.)
+            );
+        }
     }
 
     /**
      * Add advanced controls to the figure for the current color system.
      * This requires that the visualization is inside a .figure and that this .figure contains a
      * .visualization-controls-advanced.
-     * Not called in default constructor!
      */
     init_advanced_controls(color_system_name) {
         let that = this;

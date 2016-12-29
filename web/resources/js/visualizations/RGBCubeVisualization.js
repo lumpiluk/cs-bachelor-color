@@ -1,6 +1,5 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
-import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {RGBColorSystem} from "../color-systems/RGBColorSystem";
 import {
     ShaderMaterial,
@@ -12,7 +11,10 @@ const RGB_CUBE_SHADER = require("../../shaders/rgb-fragment.glsl");
 
 export class RGBCubeVisualization extends Visualization {
     constructor($container) {
-        super($container);
+        super($container, new RGBColorSystem());
+
+        /* Color system (set in super constructor). */
+        this.color_system.set_from_rgb(1, 1, 1);
 
         this.rgb_cube_mat = new ShaderMaterial({
             vertexShader: DEFAULT_VERTEX_SHADER(),
@@ -24,44 +26,8 @@ export class RGBCubeVisualization extends Visualization {
         /* Rotate around center of the cube rather than the origin. */
         this.pivot.position.set(.5, .5, .5);
 
-        /* Color system. */
-        this.color_system = new RGBColorSystem();
-        this.color_system.set_from_rgb(1, 1, 1);
-
-        /* Initialize color system controls. */
-        this.red_control = null;
-        this.green_control = null;
-        this.blue_control = null;
-        if (this.$figure != null) {
-            this.init_controls();
-            this.init_advanced_controls();
-        }
-
         /* Attach event handlers. */
         this.color_system.add_listener((event) => this.on_color_system_property_change(event));
-    }
-
-    init_controls() {
-        super.init_controls();
-        let $controls = this.$controls;
-        if ($controls.length == 0) {
-            return;
-        }
-        this.red_control = new VisualizationControlSlider(
-            $controls,
-            this.color_system.properties[0],
-            0.001
-        );
-        this.green_control = new VisualizationControlSlider(
-            $controls,
-            this.color_system.properties[1],
-            0.001
-        );
-        this.blue_control = new VisualizationControlSlider(
-            $controls,
-            this.color_system.properties[2],
-            0.001
-        );
     }
 
     init_advanced_controls() {

@@ -14,7 +14,11 @@ const CMY_CUBE_SHADER = require("../../shaders/cmy-fragment.glsl");
 
 export class CMYCubeVisualization extends Visualization {
     constructor($container) {
-        super($container);
+        super($container, new CMYColorSystem());
+
+        /* Color system. */
+        this.color_system.set_from_rgb(0, 0, 0);
+        this.set_selected_color(0, 0, 0);
 
         this.cmy_cube_mat = new ShaderMaterial({
             vertexShader: DEFAULT_VERTEX_SHADER(),
@@ -27,45 +31,8 @@ export class CMYCubeVisualization extends Visualization {
         /* Rotate around center of the cube rather than the origin. */
         this.pivot.position.set(.5, .5, .5);
 
-        /* Color system. */
-        this.color_system = new CMYColorSystem();
-        this.color_system.set_from_rgb(0, 0, 0);
-        this.set_selected_color(0, 0, 0);
-
-        /* Initialize color system controls. */
-        this.cyan_control = null;
-        this.magenta_control = null;
-        this.yellow_control = null;
-        if (this.$figure != null) {
-            this.init_controls();
-            this.init_advanced_controls();
-        }
-
         /* Attach event handlers. */
         this.color_system.add_listener((event) => this.on_color_system_property_change(event));
-    }
-
-    init_controls() { // TODO: move to Visualization class
-        super.init_controls();
-        let $controls = this.$controls;
-        if ($controls.length == 0) {
-            return;
-        }
-        this.cyan_control = new VisualizationControlSlider(
-            $controls,
-            this.color_system.properties[0],
-            0.001
-        );
-        this.magenta_control = new VisualizationControlSlider(
-            $controls,
-            this.color_system.properties[1],
-            0.001
-        );
-        this.yellow_control = new VisualizationControlSlider(
-            $controls,
-            this.color_system.properties[2],
-            0.001
-        );
     }
 
     init_advanced_controls() {

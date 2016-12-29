@@ -26,7 +26,17 @@ const HSL_CUBE_SHADER = require("../../shaders/hsl-cube-fragment.glsl");
 
 export class HSLVisualization extends Visualization {
     constructor($container) {
-        super($container);
+        super($container, new HSLColorSystem());
+
+        /* Color system. */
+        this.color_system.properties[0].set_value(1);
+        this.color_system.properties[1].set_value(0);
+        this.color_system.properties[2].set_value(1);
+
+        /* Initialize color system controls. */
+        this.representation_select_control = null; // TODO: make units selectable
+        /* Set hue to degrees by default. */
+        this.color_system.properties[0].set_unit_scale(360);
 
         this.radius = .5;
         this.height = 1;
@@ -173,47 +183,8 @@ export class HSLVisualization extends Visualization {
         this.current_color_sprite.sprite.position.set(0, this.height / 2, 0);
         this.hsl_cones.add(this.current_color_sprite.sprite);
 
-        /* Color system. */
-        this.color_system = new HSLColorSystem();
-        this.color_system.properties[0].set_value(1);
-        this.color_system.properties[1].set_value(0);
-        this.color_system.properties[2].set_value(1);
-
-        /* Initialize color system controls. */
-        this.hue_control = null;
-        this.saturation_control = null;
-        this.lightness_control = null;
-        this.representation_select_control = null;
-        if (this.$figure != null) {
-            this.init_controls();
-            this.init_advanced_controls();
-        }
-
         /* Attach event handlers. */
         this.color_system.add_listener((event) => this.on_color_system_property_change(event));
-    }
-
-    init_controls() {
-        super.init_controls();
-        let $controls = this.$controls;
-        if ($controls.length == 0) {
-            return;
-        }
-        this.hue_control = new VisualizationControlSlider(
-            $controls,
-            this.color_system.properties[0],
-            0.001
-        );
-        this.saturation_control = new VisualizationControlSlider(
-            $controls,
-            this.color_system.properties[1],
-            0.001
-        );
-        this.lightness_control = new VisualizationControlSlider(
-            $controls,
-            this.color_system.properties[2],
-            0.001
-        );
     }
 
     init_advanced_controls() {

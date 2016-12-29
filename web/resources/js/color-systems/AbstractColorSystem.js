@@ -59,10 +59,10 @@ export class AbstractColorSystem {
         }
     }
 
-    get_tex() {
+    get_tex(scaled=true) {
         let s = "(";
         for (let i = 0; i < this.properties.length; i++) {
-            s += this.properties[i].value.toFixed(3);
+            s += this.properties[i].get_value(scaled).toFixed(3);
             if (i != this.properties.length - 1) {
                 s += ",";
             }

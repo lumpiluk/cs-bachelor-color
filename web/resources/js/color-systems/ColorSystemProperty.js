@@ -13,15 +13,39 @@ export class ColorSystemProperty {
      * @param short_name A name that can be used as part of an html id.
      * @param min Minimum value.
      * @param max Maximum value.
+     * @param unit_scale Values will be stored as floating point numbers between 0 and 1.
+     * To use this property as degrees, for example, you can set unit_scale to 360.
+     * You can retrieve the scaled value using get_value().
      */
-    constructor(initial_value, min, max, name, short_name) {
+    constructor(initial_value, min, max, name, short_name, unit_scale=1) {
         this.value = initial_value;
         this.name = name;
         this.short_name = short_name;
         this.min = min;
         this.max = max;
+        this.unit_scale = unit_scale;
         this.change_listeners = [];
         this.sliders = [];
+    }
+
+    /**
+     * @param scaled If scaled is true, will return this property's value scaled by its unit_scale.
+     * Otherwise a value between 0 and 1 is returned.
+     * @returns {*} This property's value.
+     */
+    get_value(scaled=false) {
+        if (scaled) {
+            return this.value * this.unit_scale;
+        }
+        return this.value;
+    }
+
+    get_scaled_min() {
+        return this.min * this.unit_scale;
+    }
+
+    get_scaled_max() {
+        return this.max * this.unit_scale;
     }
 
     add_listener(callback) {
@@ -33,7 +57,7 @@ export class ColorSystemProperty {
     }
 
     /**
-     * @param value The new value.
+     * @param value The new value (between 0 and 1).
      * @param update_slider (optional) If true, property's slider will be updated. Default is false.
      * Warning: May cause infinite loops if used incorrectly!
      * @param instigating_color_system The color system that started the event chain.
@@ -50,6 +74,13 @@ export class ColorSystemProperty {
             for (let s of this.sliders) {
                 s.update_slider();
             }
+        }
+    }
+
+    set_unit_scale(value) {
+        this.unit_scale = value;
+        for (let slider of this.sliders) {
+            slider.update_unit_scale();
         }
     }
 
