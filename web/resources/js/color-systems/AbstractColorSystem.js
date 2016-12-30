@@ -1,3 +1,5 @@
+import {DEFAULT_COLOR_SYSTEM_UNITS} from "./ColorSystemUnits";
+
 class ColorSystemChangeEvent {
     constructor(system, property) {
         this.system = system;
@@ -6,8 +8,12 @@ class ColorSystemChangeEvent {
 }
 
 export class AbstractColorSystem {
-    constructor() {
-        this.properties = this.create_color_system_properties();
+    constructor(color_system_units=null) {
+        if (color_system_units == null) {
+            color_system_units = DEFAULT_COLOR_SYSTEM_UNITS;
+        }
+        this.properties = this.create_color_system_properties(color_system_units);
+
         this.change_listeners = [];
         this.connected_systems = [];
         for (let p of this.properties) {
@@ -17,6 +23,17 @@ export class AbstractColorSystem {
 
     add_listener(callback) {
         this.change_listeners.push(callback);
+    }
+
+    change_units_to(color_system_units) {
+        let u = color_system_units;
+        if (this.properties.length > u.unit_scales.length ||
+                this.properties.length > u.unit_symbols.length) {
+            throw "Insufficient unit parameters for color system properties.";
+        }
+        for (let i = 0; i < this.properties.length; i++) {
+            this.properties[i].change_unit_scale_to(u.unit_scales[i], u.unit_symbols[i]);
+        }
     }
 
     get_name() {
@@ -59,10 +76,13 @@ export class AbstractColorSystem {
         }
     }
 
-    get_tex(scaled=true) {
+    get_tex(scaled=true, with_units=true) {
         let s = "(";
         for (let i = 0; i < this.properties.length; i++) {
             s += this.properties[i].get_value(scaled).toFixed(3);
+            if (with_units) {
+                s += "\\text{" + this.properties[i].unit_symbol + "}";
+            }
             if (i != this.properties.length - 1) {
                 s += ",";
             }

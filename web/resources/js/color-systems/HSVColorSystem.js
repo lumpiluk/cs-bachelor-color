@@ -4,8 +4,8 @@ import {hsv_to_rgb, rgb_to_hsv} from "./color_conversion";
 import {HSVVisualization} from "../visualizations/HSVVisualization";
 
 export class HSVColorSystem extends AbstractColorSystem {
-    constructor() {
-        super();
+    constructor(color_system_units=null) {
+        super(color_system_units);
         // nothing to do
     }
 
@@ -21,12 +21,13 @@ export class HSVColorSystem extends AbstractColorSystem {
         return "hsv";
     }
 
-    create_color_system_properties() {
+    create_color_system_properties(color_system_units) {
         super.create_color_system_properties();
         let properties = [];
-        properties.push(new ColorSystemProperty(1, 0, 1, "H", "h"));
-        properties.push(new ColorSystemProperty(1, 0, 1, "S", "s"));
-        properties.push(new ColorSystemProperty(1, 0, 1, "V", "v"));
+        let u = color_system_units;
+        properties.push(new ColorSystemProperty(1, 0, 1, "H", "h", u.unit_scales[0], u.unit_symbols[0]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "S", "s", u.unit_scales[1], u.unit_symbols[1]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "V", "v", u.unit_scales[2], u.unit_symbols[2]));
         return properties;
     }
 

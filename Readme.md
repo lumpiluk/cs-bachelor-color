@@ -1,6 +1,17 @@
 # Color
 
-## Installation
+This project is online at [color.lukas-stratmann.com](http://color.lukas-stratmann.com).
+Alternatively, you can run the debug version on your local machine as follows:
+
+TODO
+
+
+## Deployment
+
+TODO
+
+
+## Installation for Development
 
 This project uses bower for managing client-side dependencies, which are listed in bower.json. After cloning this project's repository, simply run `bower install`.
 For development dependencies, the project makes use of the Node.js Package Manager. After cloning, run `npm install` for both development tools and client-side tools which are required by some of the former. To install only the latter, run `npm install --production`.

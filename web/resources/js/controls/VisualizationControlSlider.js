@@ -16,21 +16,36 @@ export class VisualizationControlSlider {
         let ranges = 'min="' + this.color_system_property.get_scaled_min() + '" ' +
             'max="' + this.color_system_property.get_scaled_max() + '" ' +
             'step="' + (this.step * this.color_system_property.unit_scale).toString() + '" ' +
-            'value="' + this.color_system_property.value.toString() + '"';
+            'value="' + this.color_system_property.get_value(true).toString() + '"';
 
-        $parent.append(
-            '<div class="visualization-control slider">' +
-                '<label for="' + this.slider_id + '">' + this.color_system_property.name + ':</label>' +
-                '<input type="number" value="' + this.color_system_property.value.toString() +
+        this.$control = $(
+            '<tr class="visualization-control slider"></tr>'
+        ).appendTo(this.$parent);
+
+        this.$label = $(
+            '<td class="shrink">' + // label
+                '<label for="' + this.slider_id + '">' +
+                    this.color_system_property.name + this.color_system_property.unit_symbol +
+                ':</label>' +
+            '</td>'
+        ).appendTo(this.$control);
+        this.$label = this.$label.find("label");
+
+        this.$slider = $(
+            '<td class="expand">' +
+                '<input type="range" name="' + this.slider_id + '" id="' + this.slider_id +
+                    '" ' + ranges + ' />' +
+            '</td>'
+        ).appendTo(this.$control);
+        this.$slider = this.$slider.find("input");
+
+        this.$number = $(
+            '<td class="shrink">' +
+                '<input type="number"' +
                     '" id="' + this.number_id + '" ' + ranges + ' />' +
-                '<span class="slider-container">' +
-                    '<input type="range" name="' + this.slider_id + '" id="' + this.slider_id +
-                        '" ' + ranges + ' />' +
-                '</span>' +
-            '</div>'
-        );
-        this.$slider = this.$parent.find("#" + this.slider_id);
-        this.$number = this.$parent.find("#" + this.number_id);
+            '</td>'
+        ).appendTo(this.$control);
+        this.$number = this.$number.find("input");
 
         /* Attach event handlers. */
         let that = this;
@@ -49,19 +64,19 @@ export class VisualizationControlSlider {
     }
 
     update_slider() {
-        $("#" + this.number_id).val(this.color_system_property.get_value(true).toFixed(this.decimal_points));
-        $("#" + this.slider_id).val(this.color_system_property.get_value(true).toFixed(this.decimal_points));
+        this.$number.val(this.color_system_property.get_value(true).toFixed(this.decimal_points));
+        this.$slider.val(this.color_system_property.get_value(true).toFixed(this.decimal_points));
     }
 
     update_unit_scale() {
-        console.log("slider: updating unit scale");
-
         this.$slider.attr("min", this.color_system_property.get_scaled_min());
         this.$slider.attr("max", this.color_system_property.get_scaled_max());
         this.$slider.attr("step", this.step * this.color_system_property.unit_scale);
         this.$number.attr("min", this.color_system_property.get_scaled_min());
         this.$number.attr("max", this.color_system_property.get_scaled_max());
         this.$number.attr("step", this.step * this.color_system_property.unit_scale);
+
+        this.$label.text(this.color_system_property.name + this.color_system_property.unit_symbol + ":");
 
         this.$slider.val(this.color_system_property.get_value(true).toFixed(this.decimal_points));
         this.$number.val(this.color_system_property.get_value(true).toFixed(this.decimal_points));

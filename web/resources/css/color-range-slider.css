@@ -103,3 +103,6 @@ input[type=range]:focus::-ms-fill-upper {
   overflow: hidden;
   display: block;
 }
+.visualization-control.slider input[type=range] {
+  width: 100%;
+}

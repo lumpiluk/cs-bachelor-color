@@ -3,8 +3,8 @@ import {ColorSystemProperty} from "./ColorSystemProperty";
 import {RGBCubeVisualization} from "../visualizations/RGBCubeVisualization";
 
 export class RGBColorSystem extends AbstractColorSystem {
-    constructor() {
-        super();
+    constructor(color_system_units=null) {
+        super(color_system_units);
         // nothing to do
     }
 
@@ -20,12 +20,13 @@ export class RGBColorSystem extends AbstractColorSystem {
         return "rgb-cube";
     }
 
-    create_color_system_properties() {
+    create_color_system_properties(color_system_units) {
         super.create_color_system_properties();
         let properties = [];
-        properties.push(new ColorSystemProperty(1, 0, 1, "R", "r"));
-        properties.push(new ColorSystemProperty(1, 0, 1, "G", "g"));
-        properties.push(new ColorSystemProperty(1, 0, 1, "B", "b"));
+        let u = color_system_units;
+        properties.push(new ColorSystemProperty(1, 0, 1, "R", "r", u.unit_scales[0], u.unit_symbols[0]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "G", "g", u.unit_scales[1], u.unit_symbols[1]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "B", "b", u.unit_scales[2], u.unit_symbols[2]));
         return properties;
     }
 

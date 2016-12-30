@@ -1,13 +1,13 @@
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {TextSprite} from "../objects/TextSprite";
 import {CircleSprite} from "../objects/CircleSprite";
-import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {DynamicCylinderBufferGeometry} from "../objects/DynamicCylinderBufferGeometry";
 import {CircularArrow} from "../objects/CircularArrow";
 import {DynamicBoundingCylinder} from "../objects/DynamicBoundingCylinder";
 import {VisualizationControlSelect} from "../controls/VisualizationControlSelect";
 import {lerp} from "../util";
 import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
+import {UNITS_DEG_UNIT_UNIT, UNITS_OPTIONS_HSL_HSV} from "../color-systems/ColorSystemUnits";
 
 import {
     ShaderMaterial,
@@ -26,7 +26,7 @@ const HSL_CUBE_SHADER = require("../../shaders/hsl-cube-fragment.glsl");
 
 export class HSLVisualization extends Visualization {
     constructor($container) {
-        super($container, new HSLColorSystem());
+        super($container, new HSLColorSystem(UNITS_DEG_UNIT_UNIT));
 
         /* Color system. */
         this.color_system.properties[0].set_value(1);
@@ -34,9 +34,8 @@ export class HSLVisualization extends Visualization {
         this.color_system.properties[2].set_value(1);
 
         /* Initialize color system controls. */
-        this.representation_select_control = null; // TODO: make units selectable
-        /* Set hue to degrees by default. */
-        this.color_system.properties[0].set_unit_scale(360);
+        this.representation_select_control = null;
+        this.units_select_control = null;
 
         this.radius = .5;
         this.height = 1;
@@ -195,9 +194,16 @@ export class HSLVisualization extends Visualization {
             return;
         }
         this.representation_select_control = new VisualizationControlSelect(
-            $controls, ["Cones", "Cylinder", "Cube"], "Representation");
+            $controls, ["Cones", "Cylinder", "Cube"], "Representation"
+        );
         this.representation_select_control.add_listener((event) =>
             that.on_representation_type_changed.call(that, event.option));
+
+        this.units_select_control = new VisualizationControlSelect(
+            $controls, UNITS_OPTIONS_HSL_HSV, "Units"
+        );
+        this.units_select_control.add_listener((event) =>
+            this.color_system.change_units_to(event.option));
     }
 
     set_hue_label_position(angle) {

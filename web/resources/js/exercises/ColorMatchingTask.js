@@ -107,7 +107,9 @@ export class ColorMatchingTask extends AbstractTask {
         this.$container.append(
             '<div class="color-matching-sliders visualization-controls"></div>'
         );
-        let $sliders_container = this.$container.find(".color-matching-sliders");
+        let $sliders_container = $('<table class="controls-table"></table>').appendTo(
+            this.$container.find(".color-matching-sliders")
+        );
         for (let property of this.current_color.properties) {
             this._sliders.push(new VisualizationControlSlider(
                 $sliders_container,

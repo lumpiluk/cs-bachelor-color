@@ -16,14 +16,16 @@ export class ColorSystemProperty {
      * @param unit_scale Values will be stored as floating point numbers between 0 and 1.
      * To use this property as degrees, for example, you can set unit_scale to 360.
      * You can retrieve the scaled value using get_value().
+     * @param unit_symbol E.g. "°" or "rad".
      */
-    constructor(initial_value, min, max, name, short_name, unit_scale=1) {
+    constructor(initial_value, min, max, name, short_name, unit_scale=1, unit_symbol="") {
         this.value = initial_value;
         this.name = name;
         this.short_name = short_name;
         this.min = min;
         this.max = max;
         this.unit_scale = unit_scale;
+        this.unit_symbol = unit_symbol;
         this.change_listeners = [];
         this.sliders = [];
     }
@@ -77,8 +79,9 @@ export class ColorSystemProperty {
         }
     }
 
-    set_unit_scale(value) {
+    change_unit_scale_to(value, symbol="") {
         this.unit_scale = value;
+        this.unit_symbol = symbol;
         for (let slider of this.sliders) {
             slider.update_unit_scale();
         }

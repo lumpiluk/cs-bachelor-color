@@ -3,8 +3,8 @@ import {ColorSystemProperty} from "./ColorSystemProperty";
 import {cmyk_to_rgb, cmy_to_cmyk, rgb_to_cmyk} from "./color_conversion";
 
 export class CMYKColorSystem extends AbstractColorSystem {
-    constructor() {
-        super();
+    constructor(color_system_units=null) {
+        super(color_system_units);
         // nothing to do
     }
 
@@ -31,13 +31,14 @@ export class CMYKColorSystem extends AbstractColorSystem {
         this.properties[3].set_value(cmyk.k);
     }
 
-    create_color_system_properties() {
+    create_color_system_properties(color_system_units) {
         super.create_color_system_properties();
         let properties = [];
-        properties.push(new ColorSystemProperty(1, 0, 1, "C", "c"));
-        properties.push(new ColorSystemProperty(1, 0, 1, "M", "m"));
-        properties.push(new ColorSystemProperty(1, 0, 1, "Y", "y"));
-        properties.push(new ColorSystemProperty(1, 0, 1, "K", "k"));
+        let u = color_system_units;
+        properties.push(new ColorSystemProperty(1, 0, 1, "C", "c", u.unit_scales[0], u.unit_symbols[0]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "M", "m", u.unit_scales[1], u.unit_symbols[1]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "Y", "y", u.unit_scales[2], u.unit_symbols[2]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "K", "k", u.unit_scales[3], u.unit_symbols[3]));
         return properties;
     }
 

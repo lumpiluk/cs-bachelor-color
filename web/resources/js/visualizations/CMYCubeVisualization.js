@@ -1,14 +1,12 @@
-import {cmy_to_rgb} from "../color-systems/color_conversion";
 import {Visualization, DEFAULT_VERTEX_SHADER} from "./Visualization";
 import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
-import {ColorSystemProperty} from "../color-systems/ColorSystemProperty";
-import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {
     ShaderMaterial,
     Vector3
 } from "../../../bower_components/three.js/build/three";
 import {CMYColorSystem} from "../color-systems/CMYColorSystem";
-
+import {VisualizationControlSelect} from "../controls/VisualizationControlSelect";
+import {UNITS_OPTIONS_DEFAULT} from "../color-systems/ColorSystemUnits";
 
 const CMY_CUBE_SHADER = require("../../shaders/cmy-fragment.glsl");
 
@@ -28,6 +26,9 @@ export class CMYCubeVisualization extends Visualization {
         this.cmy_cube.current_color_sprite.sprite_material.color.setRGB(0, 0, 0);
         this.scene.add(this.cmy_cube);
 
+        /* Initialize color system controls. */
+        this.units_select_control = null;
+
         /* Rotate around center of the cube rather than the origin. */
         this.pivot.position.set(.5, .5, .5);
 
@@ -37,10 +38,15 @@ export class CMYCubeVisualization extends Visualization {
 
     init_advanced_controls() {
         super.init_advanced_controls(this.color_system.get_name());
-        // if ($controls.length == 0) {
-        //     return;
-        // }
-        // TODO: units
+        let $controls = this.$figure.find(".visualization-controls-advanced");
+        if ($controls.length == 0) {
+            return;
+        }
+        this.units_select_control = new VisualizationControlSelect(
+            $controls, UNITS_OPTIONS_DEFAULT, "Units"
+        );
+        this.units_select_control.add_listener((event) =>
+            this.color_system.change_units_to(event.option));
     }
 
     on_color_system_property_change(event) {

@@ -107,10 +107,10 @@ export class Visualization {
      * .visualization-controls.
      */
     init_controls() {
-        let $controls = this.$controls;
-        if ($controls.length == 0) {
+        if (this.$controls.length == 0) {
             return;
         }
+        let $controls = $('<table class="controls-table"></table>').appendTo(this.$controls);
         for (let i = 0; i < this.color_system.properties.length; i++) {
             this.color_system_controls.push(
                 new VisualizationControlSlider(

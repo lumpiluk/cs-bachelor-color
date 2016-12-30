@@ -103,6 +103,9 @@ input[type=range]:focus::-ms-fill-upper {
   overflow: hidden;
   display: block;
 }
+.visualization-control.slider input[type=range] {
+  width: 100%;
+}
 .visualization-control.select {
   width: 100%;
 }
@@ -239,6 +242,20 @@ figure .selected-color {
 .visualization-controls-advanced .visualization-controls-system-header {
   font-size: 1em;
   margin: .5em 0 0 0;
+}
+.visualization-controls table.controls-table,
+.visualization-controls-advanced table.controls-table {
+  width: 100%;
+  border: none;
+  border-collapse: collapse;
+}
+.visualization-controls table.controls-table td.shrink,
+.visualization-controls-advanced table.controls-table td.shrink {
+  white-space: nowrap;
+}
+.visualization-controls table.controls-table td.expand,
+.visualization-controls-advanced table.controls-table td.expand {
+  width: 100%;
 }
 .visualization-controls-advanced-toggle {
   margin: 0;

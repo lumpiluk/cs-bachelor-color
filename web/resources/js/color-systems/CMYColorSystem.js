@@ -5,8 +5,8 @@ import {CMYCubeVisualization} from "../visualizations/CMYCubeVisualization";
 
 
 export class CMYColorSystem extends AbstractColorSystem {
-    constructor() {
-        super();
+    constructor(color_system_units=null) {
+        super(color_system_units);
     }
 
     get_name() {
@@ -21,12 +21,13 @@ export class CMYColorSystem extends AbstractColorSystem {
         return "cmy-cube";
     }
 
-    create_color_system_properties() {
+    create_color_system_properties(color_system_units) {
         super.create_color_system_properties();
         let properties = [];
-        properties.push(new ColorSystemProperty(1, 0, 1, "C", "c"));
-        properties.push(new ColorSystemProperty(1, 0, 1, "M", "m"));
-        properties.push(new ColorSystemProperty(1, 0, 1, "Y", "y"));
+        let u = color_system_units;
+        properties.push(new ColorSystemProperty(1, 0, 1, "C", "c", u.unit_scales[0], u.unit_symbols[0]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "M", "m", u.unit_scales[1], u.unit_symbols[1]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "Y", "y", u.unit_scales[2], u.unit_symbols[2]));
         return properties;
     }
 

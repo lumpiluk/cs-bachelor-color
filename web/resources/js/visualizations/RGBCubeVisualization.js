@@ -5,7 +5,8 @@ import {
     ShaderMaterial,
     Vector3
 } from "../../../bower_components/three.js/build/three";
-
+import {VisualizationControlSelect} from "../controls/VisualizationControlSelect";
+import {UNITS_OPTIONS_DEFAULT} from "../color-systems/ColorSystemUnits";
 
 const RGB_CUBE_SHADER = require("../../shaders/rgb-fragment.glsl");
 
@@ -23,6 +24,9 @@ export class RGBCubeVisualization extends Visualization {
         this.rgb_cube = new DynamicAnnotatedCube(this.rgb_cube_mat, "R", "G", "B", new Vector3(1, 1, 1));
         this.scene.add(this.rgb_cube);
 
+        /* Initialize color system controls. */
+        this.units_select_control = null;
+
         /* Rotate around center of the cube rather than the origin. */
         this.pivot.position.set(.5, .5, .5);
 
@@ -32,10 +36,15 @@ export class RGBCubeVisualization extends Visualization {
 
     init_advanced_controls() {
         super.init_advanced_controls(this.color_system.get_name());
-        // if ($controls.length == 0) {
-        //     return;
-        // }
-        // TODO: units (0..255, [0,1], ...)
+        let $controls = this.$figure.find(".visualization-controls-advanced");
+        if ($controls.length == 0) {
+            return;
+        }
+        this.units_select_control = new VisualizationControlSelect(
+            $controls, UNITS_OPTIONS_DEFAULT, "Units"
+        );
+        this.units_select_control.add_listener((event) =>
+            this.color_system.change_units_to(event.option));
     }
 
     on_color_system_property_change(event) {
