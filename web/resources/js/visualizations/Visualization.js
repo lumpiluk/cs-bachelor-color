@@ -173,7 +173,7 @@ export class Visualization {
     }
 
     on_resize() {
-        /* Preserver aspect ratio. */
+        /* Preserve aspect ratio. */
         this.$container.height(this.$container.width() / this.aspect);
 
         this.renderer.setSize(this.$container.width(), this.$container.height());
@@ -186,7 +186,6 @@ export class Visualization {
         this.drag_start.set(event.pageX, event.pageY);
         this.starting_rotation.copy(this.pivot.rotation);
         this.dragging = true;
-        let that = this;
         document.addEventListener("mousemove", this.mouse_move_handler, false);
         document.addEventListener("mouseup", this.mouse_up_handler, false);
 
@@ -203,6 +202,8 @@ export class Visualization {
         let delta_y = -(event.pageX - this.drag_start.x) / $(window).width() * 2 * Math.PI;
         let delta_x = -(event.pageY - this.drag_start.y) / $(window).height() * 2 * Math.PI;
         this.update_rotation(delta_x, delta_y);
+
+        /* Calling render() is not necessary here, see this.animating and on_mouse_down(). */
     }
 
     on_mouse_up(event) {

@@ -45,9 +45,21 @@
                 <ul>
                     <li>Color matching:</li>
                     <ul>
-                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb']}) }}">RGB</a></li>
-                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsv']}) }}">HSV</a></li>
-                        <li><a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsv', 'hsl', 'rgb']}) }}">HSV, HSL, and RGB</a></li>
+                        <li>
+                            RGB:
+                            <a href="{{ path('exercise', {'exercise_name': 'matching_hints', 'color_systems': ['rgb']}) }}">With hints,</a>
+                            <a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb']}) }}">without hints</a>
+                        </li>
+                        <li>
+                            HSV:
+                            <a href="{{ path('exercise', {'exercise_name': 'matching_hints', 'color_systems': ['hsv']}) }}">With hints,</a>
+                            <a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsv']}) }}">without hints</a>
+                        </li>
+                        <li>
+                            HSV, HSL, and RGB:
+                            <a href="{{ path('exercise', {'exercise_name': 'matching_hints', 'color_systems': ['hsv', 'hsl', 'rgb']}) }}">With hints,</a>
+                            <a href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['hsv', 'hsl', 'rgb']}) }}">without hints</a>
+                        </li>
                     </ul>
                     <li>Color selection:</li>
                     <ul>

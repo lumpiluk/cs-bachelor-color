@@ -38,6 +38,7 @@ export class ColorMatchingTask extends AbstractTask {
         this.is_conversion_task = !actual.show_target_color;
         this.show_target_color = actual.show_target_color;
         this.show_current_color = actual.show_current_color;
+        this.show_hints = actual.show_hints;
 
         this.max_euclidean_distance = actual.max_euclidean_distance;
         this.target_system_name = random_sample(actual.color_systems);
@@ -45,6 +46,8 @@ export class ColorMatchingTask extends AbstractTask {
         this.$target_color = null;
         this.$current_color = null;
         this._sliders = [];
+        this.$exercise_button_bar = null;
+        this.$hint_label = null;
         this.$submit_button = null;
         this.$next_button = null;
         this.$feedback = null;
@@ -119,14 +122,21 @@ export class ColorMatchingTask extends AbstractTask {
         }
 
         /* Attach buttons (right to left). */
-        this.$container.append(
-            '<div class="exercise-button-bar">' +
-                '<button class="exercise-next-task" disabled>Next</button>' +
-                '<button class="exercise-submit">Submit answer</button>' +
-            '</div>'
-        );
-        this.$submit_button = this.$container.find(".exercise-submit");
-        this.$next_button = this.$container.find(".exercise-next-task");
+        this.$exercise_button_bar = $(
+            '<div class="exercise-button-bar"></div>'
+        ).appendTo(this.$container);
+        this.$next_button = $(
+            '<button class="exercise-next-task" disabled>Next</button>'
+        ).appendTo(this.$exercise_button_bar);
+        this.$submit_button = $(
+            '<button class="exercise-submit">Submit answer</button>'
+        ).appendTo(this.$exercise_button_bar);
+        if (this.show_hints) {
+            this.$hint_label = $(
+                '<span class="exercise-hint-label">Not there yet</span>' // TODO: initialize correctly!
+            ).insertBefore($sliders_container);
+        }
+
         this.$submit_button.click(() => this.on_submit_click());
         this.$next_button.click(() => this.on_next_click());
     }
@@ -139,8 +149,18 @@ export class ColorMatchingTask extends AbstractTask {
                 current_rgb.r, current_rgb.g, current_rgb.b));
         }
 
-        // TODO: show hints if necessary
-        // (or just show distance upon submit?)
+        if (this.show_hints && this.$hint_label != null) {
+            let euclidean_distance_rgb = this.target_color.get_euclidean_distance_rgb(this.current_color);
+            if (euclidean_distance_rgb <= this.max_euclidean_distance) {
+                this.$hint_label.text("Close enough");
+            } else if (euclidean_distance_rgb <= this.max_euclidean_distance * 2) {
+                this.$hint_label.text("Almost there!");
+            } else if (euclidean_distance_rgb <= this.max_euclidean_distance * 4) {
+                this.$hint_label.text("You're close!");
+            } else {
+                this.$hint_label.text("Not there yet");
+            }
+        }
     }
 
     on_submit_click() {

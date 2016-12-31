@@ -15,6 +15,7 @@
     - Comparison: Fix NaN.
     - * Scrolling in Firefox, Edge!
     - disable values >max
+- Home page: Large buttons for topics and exercises (use flex layout)
     
    
 

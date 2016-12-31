@@ -403,6 +403,13 @@ input[type=range]:focus::-ms-fill-upper {
 .exercise .color-matching-current {
   border-left-width: 0;
 }
+.exercise .exercise-hint-label {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-weight: bold;
+}
 .exercise .color-selection-patches {
   display: -webkit-flex;
   -webkit-flex-flow: row wrap;

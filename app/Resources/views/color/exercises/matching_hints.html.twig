@@ -1,6 +1,6 @@
 {% extends 'color/exercise_base.html.twig' %}
 
-{% set exercise_title = 'Color Matching Exercise (Without Hints)' %}
+{% set exercise_title = 'Color Matching Exercise (With Hints)' %}
 
 {% block exercise %}
     <div class="exercise"
@@ -17,7 +17,8 @@
                     "max_attempts": 3,
                     "allow_skip_after_first_attempt": true,
                     "show_current_color": true,
-                    "show_target_color": true
+                    "show_target_color": true,
+                    "show_hints": true
                 },
                 "weight": 1
             }

@@ -89,7 +89,13 @@
                             </ul>
                         {% else %}
                             <ul>
-                                <li>{{ _self.menuItem('Color Matching', path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
+                                <li>
+                                    Color Matching
+                                    <ul>
+                                        <li>{{ _self.menuItem('With Hints', path('exercise', {'exercise_name': 'matching_hints', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
+                                        <li>{{ _self.menuItem('Without Hints', path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
+                                    </ul>
+                                </li>
                                 <li>{{ _self.menuItem('Color Selection', path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
                                 <li>{{ _self.menuItem('Color Conversion Selection', path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
                                 <li>{{ _self.menuItem('Color Conversion', path('exercise', {'exercise_name': 'conversion', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
