@@ -1,0 +1,27 @@
+<div class="overview">
+    <a class="overview-item" href="{{ path('color_systems_general') }}">
+        <img src="{{ asset('resources/img/color_systems_thumbnail.png') }}"/>
+        <h2>Color Systems</h2>
+        <p>A short introduction to color systems in general</p>
+    </a>
+    <a class="overview-item" href="{{ path('color_system_page', {'color_system_name': 'rgb'}) }}">
+        <img src="{{ asset('resources/img/rgb_thumbnail.png') }}"/>
+        <h2>RGB</h2>
+        <p>Red, green, and blue</p>
+    </a>
+    <a class="overview-item" href="{{ path('color_system_page', {'color_system_name': 'cmy'}) }}">
+        <img src="{{ asset('resources/img/cmy_thumbnail.png') }}"/>
+        <h2>CMY and CMYK</h2>
+        <p>Cyan, magenta, and yellow (and black)</p>
+    </a>
+    <a class="overview-item" href="{{ path('color_system_page', {'color_system_name': 'hsl'}) }}">
+        <img src="{{ asset('resources/img/hsl_thumbnail.png') }}"/>
+        <h2>HSL</h2>
+        <p>Hue, saturation, and lightness</p>
+    </a>
+    <a class="overview-item" href="{{ path('color_system_page', {'color_system_name': 'hsv'}) }}">
+        <img src="{{ asset('resources/img/hsv_thumbnail.png') }}"/>
+        <h2>HSV</h2>
+        <p>Hue, saturation, and value</p>
+    </a>
+</div>

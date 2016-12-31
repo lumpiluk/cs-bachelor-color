@@ -5,6 +5,12 @@
 {% block body %}
     <h1>Color</h1>
 
+    <p>
+        Welcome!
+        On these pages, you will find learning materials on color theory and assorted color systems.
+        You can use the exercises to practice and to reflect on your progress.
+    </p>
+
     {% if experiment_active %}
         <p>
             Please send me an email if you encounter any bugs!
@@ -58,4 +64,14 @@
             {% endif %}
         </div>
     {% endif %}
+
+    <h2>Color Systems</h2>
+    {% include 'color/color_systems/color_systems_overview.html.twig' %}
+
+    <h2>Exercises</h2>
+    <p>
+        The following exercises may include tasks for any of the supported color systems.
+        For more specific exercises, have a look at the respective color system page.
+    </p>
+    {% include 'color/exercises/exercises_overview.html.twig' %}
 {% endblock %}

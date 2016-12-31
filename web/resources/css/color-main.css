@@ -585,6 +585,35 @@ main section .eqn {
   overflow-x: auto;
   overflow-y: hidden;
 }
+main .overview {
+  display: -webkit-flex;
+  -webkit-flex-flow: row wrap;
+  display: flex;
+  flex-flow: row wrap;
+}
+main .overview a.overview-item {
+  flex-grow: 1;
+  box-shadow: 0.05em 0.05em 0.6em 0 #a6a6a6;
+  width: 20em;
+  margin: .25em;
+  color: black;
+  font-weight: normal;
+  text-decoration: none;
+  transition: box-shadow 0.25s;
+}
+main .overview a.overview-item h2 {
+  margin-top: .5em;
+  font-size: 125%;
+}
+main .overview a.overview-item img {
+  float: left;
+  width: auto;
+  height: 10em;
+  margin-right: .5em;
+}
+main .overview a.overview-item:hover {
+  box-shadow: 0.05em 0.05em 0.6em 0 #404040;
+}
 @media screen and (min-width: 54em) {
   main {
     max-width: 60em;

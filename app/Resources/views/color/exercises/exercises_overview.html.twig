@@ -1,0 +1,32 @@
+<div class="overview">
+    <a class="overview-item" href="{{ path('exercise', {'exercise_name': 'matching_hints', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true}) }}">
+        <img src="{{ asset('resources/img/matching_hints_thumbnail.png') }}"/>
+        <h2>Color Matching (With Hints)</h2>
+        <p>Reproduce a given color. Hints will be given about how close you are.</p>
+    </a>
+    <a class="overview-item" href="{{ path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true}) }}">
+        <img src="{{ asset('resources/img/matching_thumbnail.png') }}"/>
+        <h2>Color Matching (Without Hints)</h2>
+        <p>Reproduce a given color. You have three attempts per color.</p>
+    </a>
+    <a class="overview-item" href="{{ path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true}) }}">
+        <img src="{{ asset('resources/img/color_selection_thumbnail.png') }}"/>
+        <h2>Color Selection</h2>
+        <p>You are given a color in numerical form. Find it among a list of color patches.</p>
+    </a>
+    <a class="overview-item" href="{{ path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true}) }}">
+        <img src="{{ asset('resources/img/conversion_selection_thumbnail.png') }}"/>
+        <h2>Color Conversion Selection</h2>
+        <p>You are given a color in numerical form. Select the correct conversion from a list.</p>
+    </a>
+    <a class="overview-item" href="{{ path('exercise', {'exercise_name': 'conversion', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true}) }}">
+        <img src="{{ asset('resources/img/conversion_thumbnail.png') }}"/>
+        <h2>Color Conversion</h2>
+        <p>Convert a given color.</p>
+    </a>
+    <a class="overview-item" href="{{ path('exercise', {'exercise_name': 'mixed', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv']}) }}">
+        <img src="{{ asset('resources/img/mixed_exercise_thumbnail.png') }}"/>
+        <h2>Mixed Exercise</h2>
+        <p>All of the above</p>
+    </a>
+</div>

@@ -27,7 +27,7 @@ export class ColorMatchingTask extends AbstractTask {
             max_euclidean_distance: get_euclidean_distance_for_error(.05, 3), // 5% error allowed
             show_current_color: true,
             show_target_color: true, // If false, the numerical representation will be shown.
-            show_hints: true, // TODO: implement?
+            show_hints: true,
             max_attempts: 3, // 0 => infinite
             allow_skip_after_first_attempt: true,
         };
