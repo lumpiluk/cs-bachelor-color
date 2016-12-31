@@ -49,18 +49,17 @@ export class VisualizationControlSlider {
 
         /* Attach event handlers. */
         let that = this;
-        this.$slider.on("input", (event) => that.on_slider_change.call(that, event));
-        this.$number.on("change", (event) => that.on_number_change.call(that, event));
+        this.$slider.on("input", (event) => that.on_value_change.call(that, event));
+        this.$number.on("change", (event) => that.on_value_change.call(that, event));
     }
 
-    on_slider_change(event) {
-        this.$number.val(parseFloat(event.target.value).toFixed(this.decimal_points));
-        this.color_system_property.set_value(event.target.value / this.color_system_property.unit_scale);
-    }
-
-    on_number_change(event) {
-        this.$slider.val(event.target.value);
-        this.color_system_property.set_value(event.target.value / this.color_system_property.unit_scale);
+    on_value_change(event) {
+        // TODO: consider CMYK limits depending on K
+        let val = Math.min(this.color_system_property.get_scaled_max(),
+            Math.max(this.color_system_property.get_scaled_min(), event.target.value));
+        this.$number.val(parseFloat(val).toFixed(this.decimal_points));
+        this.$slider.val(val);
+        this.color_system_property.set_value(val / this.color_system_property.unit_scale);
     }
 
     update_slider() {
