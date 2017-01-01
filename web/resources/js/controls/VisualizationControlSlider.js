@@ -7,9 +7,11 @@ export class VisualizationControlSlider {
      *
      * @param $parent
      * @param color_system_property
-     * @param step
+     * @param step TODO: redundant?
+     * @param validity_check A function taking a value between 0 and 1 as parameter and returning true iff that value
+     * is valid.
      */
-    constructor($parent, color_system_property, step) {
+    constructor($parent, color_system_property, step, validity_check=() => true) {
         this.$parent = $parent;
         this.color_system_property = color_system_property;
         this.color_system_property.add_slider(this);
@@ -17,6 +19,9 @@ export class VisualizationControlSlider {
         this.slider_id = "vis-ctrl-" + this.control_id + "-slider";
         this.number_id = "vis-ctrl-" + this.control_id + "-number";
         this.step = step;
+        this.validity_check = validity_check;
+
+        this.previous_value = this.color_system_property.get_value(false); // in [0,1] interval
 
         let ranges = 'min="' + this.color_system_property.get_scaled_min() + '" ' +
             'max="' + this.color_system_property.get_scaled_max() + '" ' +
@@ -59,9 +64,17 @@ export class VisualizationControlSlider {
     }
 
     on_value_change(event) {
-        // TODO: consider CMYK limits depending on K
         let val = Math.min(this.color_system_property.get_scaled_max(),
             Math.max(this.color_system_property.get_scaled_min(), parseFloat(event.target.value)));
+        let unscaled_val = this.color_system_property.unit_inverse_transform_value(val);
+
+        /* Check if val is valid. If not so, do not use the new value. (Useful for CMYK) */
+        if (!this.validity_check(unscaled_val)) {
+            val = this.color_system_property.unit_transform_value(this.previous_value);
+            unscaled_val = this.previous_value;
+        }
+        this.previous_value = unscaled_val;
+
         this.color_system_property.set_value(this.color_system_property.unit_inverse_transform_value(val));
         val = this.color_system_property.get_value(true);
         this.$number.val(val);

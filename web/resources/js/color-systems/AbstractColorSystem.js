@@ -58,6 +58,17 @@ export class AbstractColorSystem {
     }
 
     /**
+     * Validity check intended for use in VisualizationControlSlider.
+     * Useful for CMYK where this function should be overridden.
+     * @param value
+     * @param index
+     * @returns {boolean}
+     */
+    is_valid(value, index) {
+        return value >= this.properties[index].min && value <= this.properties[index].max;
+    }
+
+    /**
      *
      * @param r
      * @param g
