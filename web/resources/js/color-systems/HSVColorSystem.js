@@ -25,9 +25,9 @@ export class HSVColorSystem extends AbstractColorSystem {
         super.create_color_system_properties();
         let properties = [];
         let u = color_system_units;
-        properties.push(new ColorSystemProperty(1, 0, 1, "H", "h", u.unit_scales[0], u.unit_symbols[0]));
-        properties.push(new ColorSystemProperty(1, 0, 1, "S", "s", u.unit_scales[1], u.unit_symbols[1]));
-        properties.push(new ColorSystemProperty(1, 0, 1, "V", "v", u.unit_scales[2], u.unit_symbols[2]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "H", "h", u, 0));
+        properties.push(new ColorSystemProperty(1, 0, 1, "S", "s", u, 1));
+        properties.push(new ColorSystemProperty(1, 0, 1, "V", "v", u, 2));
         return properties;
     }
 

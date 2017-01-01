@@ -3,7 +3,13 @@
  */
 
 export class VisualizationControlSlider {
-    constructor($parent, color_system_property, step, decimal_points=2) {
+    /**
+     *
+     * @param $parent
+     * @param color_system_property
+     * @param step
+     */
+    constructor($parent, color_system_property, step) {
         this.$parent = $parent;
         this.color_system_property = color_system_property;
         this.color_system_property.add_slider(this);
@@ -11,11 +17,10 @@ export class VisualizationControlSlider {
         this.slider_id = "vis-ctrl-" + this.control_id + "-slider";
         this.number_id = "vis-ctrl-" + this.control_id + "-number";
         this.step = step;
-        this.decimal_points = decimal_points;
 
         let ranges = 'min="' + this.color_system_property.get_scaled_min() + '" ' +
             'max="' + this.color_system_property.get_scaled_max() + '" ' +
-            'step="' + (this.step * this.color_system_property.unit_scale).toString() + '" ' +
+            'step="' + this.color_system_property.get_scaled_step().toString() + '" ' + // TODO: scale step, too, but only if rounding is disabled!
             'value="' + this.color_system_property.get_value(true).toString() + '"';
 
         this.$control = $(
@@ -25,7 +30,7 @@ export class VisualizationControlSlider {
         this.$label = $(
             '<td class="shrink">' + // label
                 '<label for="' + this.slider_id + '">' +
-                    this.color_system_property.name + this.color_system_property.unit_symbol +
+                    this.color_system_property.name + this.color_system_property.get_unit_symbol() +
                 ':</label>' +
             '</td>'
         ).appendTo(this.$control);
@@ -56,28 +61,29 @@ export class VisualizationControlSlider {
     on_value_change(event) {
         // TODO: consider CMYK limits depending on K
         let val = Math.min(this.color_system_property.get_scaled_max(),
-            Math.max(this.color_system_property.get_scaled_min(), event.target.value));
-        this.$number.val(parseFloat(val).toFixed(this.decimal_points));
+            Math.max(this.color_system_property.get_scaled_min(), parseFloat(event.target.value)));
+        this.color_system_property.set_value(this.color_system_property.unit_inverse_transform_value(val));
+        val = this.color_system_property.get_value(true);
+        this.$number.val(val);
         this.$slider.val(val);
-        this.color_system_property.set_value(val / this.color_system_property.unit_scale);
     }
 
     update_slider() {
-        this.$number.val(this.color_system_property.get_value(true).toFixed(this.decimal_points));
-        this.$slider.val(this.color_system_property.get_value(true).toFixed(this.decimal_points));
+        this.$number.val(this.color_system_property.get_value(true));
+        this.$slider.val(this.color_system_property.get_value(true));
     }
 
     update_unit_scale() {
         this.$slider.attr("min", this.color_system_property.get_scaled_min());
         this.$slider.attr("max", this.color_system_property.get_scaled_max());
-        this.$slider.attr("step", this.step * this.color_system_property.unit_scale);
+        this.$slider.attr("step", this.color_system_property.get_scaled_step());
         this.$number.attr("min", this.color_system_property.get_scaled_min());
         this.$number.attr("max", this.color_system_property.get_scaled_max());
-        this.$number.attr("step", this.step * this.color_system_property.unit_scale);
+        this.$number.attr("step", this.color_system_property.get_scaled_step());
 
-        this.$label.text(this.color_system_property.name + this.color_system_property.unit_symbol + ":");
+        this.$label.text(this.color_system_property.name + this.color_system_property.get_unit_symbol() + ":");
 
-        this.$slider.val(this.color_system_property.get_value(true).toFixed(this.decimal_points));
-        this.$number.val(this.color_system_property.get_value(true).toFixed(this.decimal_points));
+        this.$slider.val(this.color_system_property.get_value(true));
+        this.$number.val(this.color_system_property.get_value(true));
     }
 }

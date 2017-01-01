@@ -7,7 +7,7 @@
     - 'Restart' button.
     - Easy colors.
     - Let each task type summarize its own results.
-    - option for non-randomized units!!!
+    - option for non-randomized units!!! (email!)
     - Trichromatic color matching!!!
 - Visualizations
     - Option to dynamically load any visualization for comparison.

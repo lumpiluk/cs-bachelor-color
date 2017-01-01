@@ -13,19 +13,19 @@ export class ColorSystemProperty {
      * @param short_name A name that can be used as part of an html id.
      * @param min Minimum value.
      * @param max Maximum value.
-     * @param unit_scale Values will be stored as floating point numbers between 0 and 1.
-     * To use this property as degrees, for example, you can set unit_scale to 360.
-     * You can retrieve the scaled value using get_value().
-     * @param unit_symbol E.g. "°" or "rad".
+     * @param color_system_units
+     * @param index_in_color_system
      */
-    constructor(initial_value, min, max, name, short_name, unit_scale=1, unit_symbol="") {
+    constructor(initial_value, min, max, name, short_name,
+                color_system_units,
+                index_in_color_system) {
         this.value = initial_value;
         this.name = name;
         this.short_name = short_name;
         this.min = min;
         this.max = max;
-        this.unit_scale = unit_scale;
-        this.unit_symbol = unit_symbol;
+        this.color_system_units = color_system_units;
+        this.index_in_color_system = index_in_color_system;
         this.change_listeners = [];
         this.sliders = [];
     }
@@ -37,17 +37,43 @@ export class ColorSystemProperty {
      */
     get_value(scaled=false) {
         if (scaled) {
-            return this.value * this.unit_scale;
+            return this.color_system_units.get_transformed(this.value, this.index_in_color_system);
         }
         return this.value;
     }
 
+    /**
+     * Utility function for unit conversions.
+     * @param value
+     * @returns {*}
+     */
+    unit_transform_value(value) {
+        return this.color_system_units.get_transformed(value, this.index_in_color_system);
+    }
+
+    /**
+     * Utility function for reverse unit conversions.
+     * @param value
+     * @returns {*}
+     */
+    unit_inverse_transform_value(value) {
+        return this.color_system_units.get_inverse_transformed(value, this.index_in_color_system);
+    }
+
+    get_unit_symbol() {
+        return this.color_system_units.unit_symbols[this.index_in_color_system];
+    }
+
     get_scaled_min() {
-        return this.min * this.unit_scale;
+        return this.color_system_units.get_transformed(this.min, this.index_in_color_system);
     }
 
     get_scaled_max() {
-        return this.max * this.unit_scale;
+        return this.color_system_units.get_transformed(this.max, this.index_in_color_system);
+    }
+
+    get_scaled_step() {
+        return this.color_system_units.step_sizes[this.index_in_color_system];
     }
 
     add_listener(callback) {
@@ -62,7 +88,7 @@ export class ColorSystemProperty {
      * @param value The new value (between 0 and 1).
      * @param update_slider (optional) If true, property's slider will be updated. Default is false.
      * Warning: May cause infinite loops if used incorrectly!
-     * @param instigating_color_system The color system that started the event chain.
+     * @param instigating_color_system (optional) The color system that started the event chain.
      * Required to prevent infinite loops if this color system is connected to other systems.
      */
     set_value(value, update_slider, instigating_color_system) {
@@ -79,9 +105,8 @@ export class ColorSystemProperty {
         }
     }
 
-    change_unit_scale_to(value, symbol="") {
-        this.unit_scale = value;
-        this.unit_symbol = symbol;
+    change_units_to(color_system_units) {
+        this.color_system_units = color_system_units;
         for (let slider of this.sliders) {
             slider.update_unit_scale();
         }

@@ -35,10 +35,10 @@ export class CMYKColorSystem extends AbstractColorSystem {
         super.create_color_system_properties();
         let properties = [];
         let u = color_system_units;
-        properties.push(new ColorSystemProperty(1, 0, 1, "C", "c", u.unit_scales[0], u.unit_symbols[0]));
-        properties.push(new ColorSystemProperty(1, 0, 1, "M", "m", u.unit_scales[1], u.unit_symbols[1]));
-        properties.push(new ColorSystemProperty(1, 0, 1, "Y", "y", u.unit_scales[2], u.unit_symbols[2]));
-        properties.push(new ColorSystemProperty(1, 0, 1, "K", "k", u.unit_scales[3], u.unit_symbols[3]));
+        properties.push(new ColorSystemProperty(1, 0, 1, "C", "c", u, 0));
+        properties.push(new ColorSystemProperty(1, 0, 1, "M", "m", u, 1));
+        properties.push(new ColorSystemProperty(1, 0, 1, "Y", "y", u, 2));
+        properties.push(new ColorSystemProperty(1, 0, 1, "K", "k", u, 3));
         return properties;
     }
 

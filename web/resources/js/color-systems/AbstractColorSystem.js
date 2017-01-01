@@ -28,11 +28,12 @@ export class AbstractColorSystem {
     change_units_to(color_system_units) {
         let u = color_system_units;
         if (this.properties.length > u.unit_scales.length ||
-                this.properties.length > u.unit_symbols.length) {
+                this.properties.length > u.unit_symbols.length ||
+                this.properties.length > u.step_sizes.length) {
             throw "Insufficient unit parameters for color system properties.";
         }
         for (let i = 0; i < this.properties.length; i++) {
-            this.properties[i].change_unit_scale_to(u.unit_scales[i], u.unit_symbols[i]);
+            this.properties[i].change_units_to(u);
         }
     }
 
@@ -79,9 +80,9 @@ export class AbstractColorSystem {
     get_tex(scaled=true, with_units=true) {
         let s = "(";
         for (let i = 0; i < this.properties.length; i++) {
-            s += this.properties[i].get_value(scaled).toFixed(3);
+            s += this.properties[i].get_value(scaled);
             if (with_units) {
-                s += "\\text{" + this.properties[i].unit_symbol + "}";
+                s += "\\text{" + this.properties[i].get_unit_symbol() + "}";
             }
             if (i != this.properties.length - 1) {
                 s += ",";
