@@ -73,7 +73,8 @@ export class CMYKColorSystem extends AbstractColorSystem {
         let m = index == 1 ? value : this.properties[1].get_value(false);
         let y = index == 2 ? value : this.properties[2].get_value(false);
         let k = index == 3 ? value : this.properties[3].get_value(false);
-        return c + k <= this.properties[0].max &&
+        return Math.min(c, m, y) == 0 &&
+                c + k <= this.properties[0].max &&
                 m + k <= this.properties[1].max &&
                 y + k <= this.properties[2].max;
     }

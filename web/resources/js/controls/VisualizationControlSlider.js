@@ -64,11 +64,10 @@ export class VisualizationControlSlider {
     }
 
     on_value_change(event) {
-        let val = Math.min(this.color_system_property.get_scaled_max(),
-            Math.max(this.color_system_property.get_scaled_min(), parseFloat(event.target.value)));
+        let val = parseFloat(event.target.value);
         let unscaled_val = this.color_system_property.unit_inverse_transform_value(val);
 
-        /* Check if val is valid. If not so, do not use the new value. (Useful for CMYK) */
+        /* Check if val is valid. If not so, do not use the new value. (Useful especially for CMYK) */
         if (!this.validity_check(unscaled_val)) {
             val = this.color_system_property.unit_transform_value(this.previous_value);
             unscaled_val = this.previous_value;
