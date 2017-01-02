@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% set page_title = 'Exercises' %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block body %}
+    <h1>{{ page_title }}</h1>
+
+    <p>
+        You may use these to practice and to reflect on your progress.
+    </p>
+    <p>
+        The following exercises may include tasks for any of the supported color systems.
+        For more specific exercises, have a look at the respective color system page.
+    </p>
+    {% include 'color/exercises/exercises_overview.html.twig' %}
+{% endblock %}

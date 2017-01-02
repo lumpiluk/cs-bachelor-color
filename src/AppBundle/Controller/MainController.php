@@ -46,6 +46,15 @@ class MainController extends Controller
     }
 
     /**
+     * @Route("/exercises", name="exercises_general")
+     * @return Response
+     */
+    public function exercisesGeneralAction()
+    {
+        return $this->render('color/exercises/exercises_page.html.twig');
+    }
+
+    /**
      * @Route("/exercises/{exercise_name}", name="exercise")
      * @param Request $request
      * @param $exercise_name

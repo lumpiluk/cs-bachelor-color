@@ -1,10 +1,12 @@
 {% extends 'color/exercise_base.html.twig' %}
 
-{% set exercise_title = 'Color Matching Exercise (Without Hints)' %}
+{% set exercise_title = 'Color Matching Exercise' %}
 
 {% block exercise %}
     <div class="exercise"
          data-num-rounds="10"
+         data-allow-random-units="true"
+         data-random-units="false"
          data-task-types='[
             {
                 "name": "ColorMatching",
@@ -18,7 +20,7 @@
                     "allow_skip_after_first_attempt": true,
                     "show_current_color": true,
                     "show_target_color": true,
-                    "show_hints": false
+                    "show_hints": true
                 },
                 "weight": 1
             }

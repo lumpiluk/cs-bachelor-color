@@ -5,6 +5,8 @@
 {% block exercise %}
     <div class="exercise"
          data-num-rounds="15"
+         data-allow-random-units="true"
+         data-random-units="false"
          data-task-types='[
             {
                 "name": "ColorSelection",
@@ -31,7 +33,8 @@
                     "max_attempts": 3,
                     "allow_skip_after_first_attempt": true,
                     "show_current_color": true,
-                    "show_target_color": true
+                    "show_target_color": true,
+                    "show_hints": false
                 },
                 "weight": 1
             },
@@ -65,7 +68,9 @@
                     "max_attempts": 3,
                     "allow_skip_after_first_attempt": true,
                     "show_current_color": false,
-                    "show_target_color": false
+                    "show_target_color": false,
+                    "show_hints": false,
+                    "easy_hsl_hsv_colors": true
                 },
                 "weight": 1
             }

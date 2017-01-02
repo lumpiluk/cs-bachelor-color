@@ -1,9 +1,11 @@
 <div class="overview">
-    <a class="overview-item" href="{{ path('color_systems_general') }}">
-        <img src="{{ asset('resources/img/color_systems_thumbnail.png') }}"/>
-        <h2>Color Systems</h2>
-        <p>A short introduction to color systems in general</p>
-    </a>
+    {% if not exclude_color_systems_page is defined or (exclude_color_systems_page is defined and not exclude_color_systems_page) %}
+        <a class="overview-item" href="{{ path('color_systems_general') }}">
+            <img src="{{ asset('resources/img/color_systems_thumbnail.png') }}"/>
+            <h2>Color Systems</h2>
+            <p>A short introduction to color systems in general</p>
+        </a>
+    {% endif %}
     <a class="overview-item" href="{{ path('color_system_page', {'color_system_name': 'rgb'}) }}">
         <img src="{{ asset('resources/img/rgb_thumbnail.png') }}"/>
         <h2>RGB</h2>

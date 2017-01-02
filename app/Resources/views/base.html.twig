@@ -16,7 +16,16 @@
             <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/normalize-css/normalize.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/color-main.css') }}">
         {% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        {# <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" /> #}
+
+        {# Favicons generated using http://realfavicongenerator.net/ #}
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+        <link rel="icon" type="image/png" href="{{ asset('favicon-32x32.png') }}" sizes="32x32">
+        <link rel="icon" type="image/png" href="{{ asset('favicon-16x16.png') }}" sizes="16x16">
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
+        <link rel="mask-icon" href="{{ asset('safari-pinned-tab.svg') }}" color="#5bbad5">
+        <meta name="theme-color" content="#ffffff">
+
         {% block javascripts_head %}
             <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
 
@@ -70,7 +79,7 @@
                         </ul>
                     </li>
                     <li>
-                        Exercises for All Available Color Systems
+                        {{ _self.menuItem('Exercises', path('exercises_general')) }} {# (for all available color systems) #}
                         {% if group_b %}
                             <ul>
                                 <li>{{ _self.menuItem('Color Matching', path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
@@ -89,13 +98,7 @@
                             </ul>
                         {% else %}
                             <ul>
-                                <li>
-                                    Color Matching
-                                    <ul>
-                                        <li>{{ _self.menuItem('With Hints', path('exercise', {'exercise_name': 'matching_hints', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
-                                        <li>{{ _self.menuItem('Without Hints', path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
-                                    </ul>
-                                </li>
+                                <li>{{ _self.menuItem('Color Matching', path('exercise', {'exercise_name': 'matching', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }}</li>
                                 <li>{{ _self.menuItem('Color Selection', path('exercise', {'exercise_name': 'selection', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
                                 <li>{{ _self.menuItem('Color Conversion Selection', path('exercise', {'exercise_name': 'conversion_selection', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>
                                 <li>{{ _self.menuItem('Color Conversion', path('exercise', {'exercise_name': 'conversion', 'color_systems': ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'], 'all_available_ex': true})) }} </li>

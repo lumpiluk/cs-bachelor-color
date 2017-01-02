@@ -5,6 +5,8 @@
 {% block exercise %}
     <div class="exercise"
          data-num-rounds="10"
+         data-allow-random-units="true"
+         data-random-units="false"
          data-task-types='[
             {
                 "name": "ColorConversion",
@@ -20,7 +22,8 @@
                     "allow_skip_after_first_attempt": true,
                     "show_current_color": false,
                     "show_target_color": false,
-                    "show_hints": false
+                    "show_hints": false,
+                    "easy_hsl_hsv_colors": true
                 },
                 "weight": 1
             }
