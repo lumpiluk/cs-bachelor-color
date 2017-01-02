@@ -13,6 +13,7 @@ export class AbstractTask {
     constructor(exercise, task_num, options) {
         let defaults = {
             show_visualization: true,
+            random_units: false, // If true, color system units will be chosen at random instead of using the default.
             visualization_options: {},
         };
         let actual = $.extend({}, defaults, options || {});
@@ -20,6 +21,7 @@ export class AbstractTask {
         this.$container = exercise.$container;
         this.task_num = task_num;
         this.show_visualization = actual.show_visualization;
+        this.random_units = actual.random_units;
         this.visualization_options = actual.visualization_options;
         this.visualization = null;
         this.$task_title = null;

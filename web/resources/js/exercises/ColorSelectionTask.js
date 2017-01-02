@@ -10,7 +10,7 @@ export class ColorSelectionTask extends AbstractTask {
             color_systems: ["rgb", "hsl", "hsv", "cmy", "cmyk"],
             max_attempts: 3, // 0 => infinite
             allow_skip_after_first_attempt: true,
-            num_options: 8, // i.e. number of color patches, including the correct one
+            num_options: 8 // i.e. number of color patches, including the correct one
         };
         let actual = $.extend({}, defaults, options || {});
 
@@ -19,7 +19,7 @@ export class ColorSelectionTask extends AbstractTask {
         this.allow_skip_after_first_attempt = actual.allow_skip_after_first_attempt;
         this.num_options = actual.num_options;
         this.color_system_name = random_sample(actual.color_systems);
-        this.target_color = get_color_system_by_name(this.color_system_name);
+        this.target_color = get_color_system_by_name(this.color_system_name, false);
         this.distractor_colors = [];
 
         this.$patches_container = null;
@@ -122,4 +122,25 @@ export class ColorSelectionTask extends AbstractTask {
     on_next_click() {
         this.exercise.on_task_finished(this);
     }
+}
+
+export function show_conlor_selection_options(task_type, default_task_type, $options_table) {
+    $options_table.append('<th colspan="2">Color Selection Options</th>');
+
+    let options = task_type.options;
+    let default_options = default_task_type.options;
+
+    // Number of conversion options
+    let $num_options_input = $(
+        '<tr>' +
+            '<td class="shrink">Number of color options:</td>' +
+            '<td class="expand">' +
+                '<input type="number" min="2" max="25" step="1" value="' +
+                    (default_options.num_options != null ? default_options.num_options : 8).toString() +
+                '" />' +
+            '</td>' +
+        '</tr>'
+    ).appendTo($options_table).find('input');
+    $num_options_input.on("change", (event) => options.num_options = parseInt(event.target.value));
+    options.num_options = default_options.num_options; // necessary for reset
 }

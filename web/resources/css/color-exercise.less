@@ -8,8 +8,47 @@
 @color_selection_patch_width: 5em;
 @color_selection_patch_height: 5em;
 
+@table_expand_screen_min_width: 30em;
+
 .exercise {
   .figure;
+
+  h2, h3 {
+    margin: .5em @figure_title_padding_left .75em @figure_title_padding_left; // top right bottom left
+  }
+
+  table.exercise-results,
+  table.options-table {
+    margin: @figure_title_padding;
+
+    th {
+      text-align: left;
+      padding-top: .5em;
+    }
+
+    td:first-child {
+      padding-right: 1em;
+    }
+
+    td:last-child {
+      padding-right: 0; // Spanning table cells are both first and last child.
+    }
+
+    @media (min-width: @table_expand_screen_min_width) { // Do not disallow wrapping on small screens.
+      td.shrink {
+        white-space: nowrap;
+      }
+
+      td.expand {
+        width: 100%;
+      }
+    }
+
+    .option-explanation {
+      color: rgb(20%, 20%, 20%);
+      font-size: 80%;
+    }
+  }
 
   .exercise-button-bar {
     padding: @figure_title_padding;

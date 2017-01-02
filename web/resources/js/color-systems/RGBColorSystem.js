@@ -44,4 +44,25 @@ export class RGBColorSystem extends AbstractColorSystem {
         this.properties[1].set_value(g, update_sliders, instigating_color_system);
         this.properties[2].set_value(b, update_sliders, instigating_color_system);
     }
+
+    /* (override) */
+    randomize(easy) {
+        if (easy == null || !easy) {
+            super.randomize(easy);
+            return;
+        }
+        // let r = Math.random();
+        // if (r < 1 / 2) {
+            /* Choose one of the cube's vertices. */
+            for (let i = 0; i < this.properties.length; i++) {
+                this.properties[i].set_value(Math.random() < .5 ? 0 : 1);
+            }
+        // } else {
+        //     /* Choose a shade of grey. */
+        //     let v = Math.random();
+        //     for (let i = 0; i < this.properties.length; i++) {
+        //         this.properties[i].set_value(v);
+        //     }
+        // }
+    }
 }

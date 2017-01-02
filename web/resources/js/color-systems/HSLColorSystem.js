@@ -53,12 +53,10 @@ export class HSLColorSystem extends AbstractColorSystem {
         this.properties[2].set_value(hsl.l, update_sliders, instigating_color_system);
     }
 
+    /* (override) */
     randomize(easy) {
         super.randomize(easy);
-        if (easy == null) {
-            return;
-        }
-        if (easy) {
+        if (easy != null && easy) {
             this.properties[0].set_value(random_sample(EASY_HUES));
         }
     }

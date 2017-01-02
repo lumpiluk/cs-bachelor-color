@@ -10,13 +10,6 @@ import {VisualizationControlSlider} from "../controls/VisualizationControlSlider
 import {get_color_system_by_name} from "../color-systems/color-systems";
 
 
-export function get_color_matching_results_rows(conversion_tasks_only, matching_tasks_only) {
-    let header = conversion_tasks_only ? "Color Conversion" : "Color Matching";
-    let html = '<th><td>' + header + ' </td></th>';
-    html += "";
-}
-
-
 export class ColorMatchingTask extends AbstractTask {
     constructor(exercise, task_num, options) {
         super(exercise, task_num, options);
@@ -30,6 +23,7 @@ export class ColorMatchingTask extends AbstractTask {
             show_hints: true,
             max_attempts: 3, // 0 => infinite
             allow_skip_after_first_attempt: true,
+            easy_hsl_hsv_colors: false
         };
         let actual = $.extend({}, defaults, options || {});
 
@@ -42,7 +36,14 @@ export class ColorMatchingTask extends AbstractTask {
 
         this.max_euclidean_distance = actual.max_euclidean_distance;
         this.target_system_name = random_sample(actual.color_systems);
-        this.target_color = get_color_system_by_name(this.target_system_name);
+
+        /* For if this is a conversion task: */
+        let remaining_color_systems = actual.color_systems.slice(); // (copy array)
+        remove_from_array(remaining_color_systems, this.target_system_name);
+        let conversion_system_name = random_sample(remaining_color_systems);
+
+        this.target_color = get_color_system_by_name(this.target_system_name,
+            this.is_conversion_task && this.random_units);
         this.$target_color = null;
         this.$current_color = null;
         this._sliders = [];
@@ -54,20 +55,24 @@ export class ColorMatchingTask extends AbstractTask {
         this.max_attempts = actual.max_attempts;
         this.current_attempt = 0;
         this.allow_skip_after_first_attempt = actual.allow_skip_after_first_attempt;
+        this.easy_hsl_hsv_colors = actual.easy_hsl_hsv_colors;
 
         /* Randomize and, if necessary, convert target color. */
-        this.target_color.randomize();
+        this.target_color.randomize(
+            this.easy_hsl_hsv_colors && (
+                this.target_system_name == "hsl" || this.target_system_name == "hsv" ||
+                conversion_system_name == "hsl" || conversion_system_name == "hsv"
+            )
+        ); // easy iff easy_hsl_hsv_colors and target or current is hsl or hsv
         this.converted_target_color = null;
         if (this.is_conversion_task) {
-            let remaining_color_systems = actual.color_systems.slice(); // (copy array)
-            remove_from_array(remaining_color_systems, this.target_system_name);
-            let conversion_system_name = random_sample(remaining_color_systems);
-            this.converted_target_color = get_color_system_by_name(conversion_system_name);
+            this.converted_target_color = get_color_system_by_name(conversion_system_name, this.random_units);
             let target_rgb = this.target_color.get_rgb();
             this.converted_target_color.set_from_rgb(target_rgb.r, target_rgb.g, target_rgb.b);
-            this.current_color = get_color_system_by_name(conversion_system_name);
+            this.current_color = get_color_system_by_name(conversion_system_name, false);
+            this.current_color.change_units_to(this.converted_target_color.properties[0].color_system_units);
         } else {
-            this.current_color = get_color_system_by_name(this.target_system_name);
+            this.current_color = get_color_system_by_name(this.target_system_name, false);
         }
         /* Also randomize current color (for the sliders). */
         this.current_color.randomize();
@@ -237,4 +242,89 @@ export class ColorMatchingTask extends AbstractTask {
     on_next_click() {
         this.exercise.on_task_finished(this);
     }
+}
+
+export function get_color_matching_results_rows(conversion_tasks_only, matching_tasks_only) {
+    let header = conversion_tasks_only ? "Color Conversion" : "Color Matching";
+    let html = '<th><td>' + header + ' </td></th>';
+    html += "";
+    // TODO
+}
+
+export function show_color_matching_options(task_type, default_task_type, $options_table,
+        conversion_task=false) {
+    if (!conversion_task) {
+        $options_table.append('<th colspan="2">Color Matching Options</th>');
+    } else {
+        $options_table.append('<th colspan="2">Color Conversion Options</th>');
+    }
+
+    let options = task_type.options;
+    let default_options = default_task_type.options;
+
+    if (!conversion_task) {
+        // Show visualization
+        let $show_visualization_input = $(
+            '<tr>' +
+                '<td class="shrink">Show visualizations:</td>' +
+                '<td class="expand">' +
+                    '<input type="checkbox" name="Show visualizations" value="Show" ' +
+                        (default_options.show_visualization != null && default_options.show_visualization ?
+                            'checked' : '') +
+                    ' />' +
+                '</td>' +
+            '</tr>'
+        ).appendTo($options_table).find('input');
+        $show_visualization_input.change(() =>
+            options.show_visualization = $show_visualization_input[0].checked);
+        options.show_visualization = default_options.show_visualization; // necessary for reset
+    }
+
+    // Show hints
+    let $show_hints_input = $(
+        '<tr>' +
+            '<td class="shrink">Show hints:</td>' +
+            '<td class="expand">' +
+                '<input type="checkbox" name="Show visualizations" value="Show" ' +
+                    (default_options.show_hints != null && default_options.show_hints ?
+                        'checked' : '') +
+                ' />' +
+            '</td>' +
+        '</tr>'
+    ).appendTo($options_table).find('input');
+    $show_hints_input.change(() => {
+        let show_hints = $show_hints_input[0].checked;
+        options.show_hints = show_hints;
+        options.max_attempts = show_hints ? 1 : 3;
+    });
+    options.show_hints = default_options.show_hints; // necessary for reset
+    options.max_attempts = default_options.show_hints ? 1 : 3;
+}
+
+export function show_color_conversion_options(task_type, default_task_type, $options_table) {
+    show_color_matching_options(task_type, default_task_type, $options_table, true);
+
+    let options = task_type.options;
+    let default_options = default_task_type.options;
+
+    // easy colors
+    let $easy_colors_input = $(
+        '<tr>' +
+            '<td class="shrink">Easy colors:</td>' +
+            '<td class="expand">' +
+                '<input type="checkbox" name="Show visualizations" value="Show" ' +
+                    (default_options.easy_hsl_hsv_colors != null && default_options.easy_hsl_hsv_colors ?
+                        'checked' : '') +
+                ' />' +
+            '</td>' +
+        '</tr>' +
+        '<tr>' +
+            '<td colspan="2" class="option-explanation">' +
+                'If checked, the colors to convert will be simpler if HSL or HSV are involved.' +
+            '</td>' +
+        '</tr>'
+    ).appendTo($options_table).find('input');
+    $easy_colors_input.change(() =>
+        options.easy_hsl_hsv_colors = $easy_colors_input[0].checked);
+    options.easy_hsl_hsv_colors = default_options.easy_hsl_hsv_colors; // necessary for reset
 }

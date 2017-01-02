@@ -23,7 +23,7 @@ export class ColorConversionSelectionTask extends AbstractTask {
         this.allow_skip_after_first_attempt = actual.allow_skip_after_first_attempt;
         this.num_options = actual.num_options;
         this.target_system_name = random_sample(actual.color_systems);
-        this.target_color = get_color_system_by_name(this.target_system_name);
+        this.target_color = get_color_system_by_name(this.target_system_name, this.random_units);
         this.distractor_colors = [];
         this.$options_container = null;
 
@@ -35,7 +35,7 @@ export class ColorConversionSelectionTask extends AbstractTask {
         let remaining_color_systems = actual.color_systems.slice(); // (copy array)
         remove_from_array(remaining_color_systems, this.target_system_name);
         let conversion_system_name = random_sample(remaining_color_systems);
-        this.converted_target_color = get_color_system_by_name(conversion_system_name);
+        this.converted_target_color = get_color_system_by_name(conversion_system_name, this.random_units);
         let target_rgb = this.target_color.get_rgb();
         this.converted_target_color.set_from_rgb(target_rgb.r, target_rgb.g, target_rgb.b);
 
@@ -44,7 +44,7 @@ export class ColorConversionSelectionTask extends AbstractTask {
             if (this.mixed_conversion_systems) {
                 conversion_system_name = random_sample(remaining_color_systems);
             }
-            let c = get_color_system_by_name(conversion_system_name);
+            let c = get_color_system_by_name(conversion_system_name, this.random_units);
             c.randomize();
             this.distractor_colors.push(c);
         }
@@ -155,4 +155,25 @@ export class ColorConversionSelectionTask extends AbstractTask {
             $option.css("background", rgb_to_css(rgb.r, rgb.g, rgb.b));
         }
     }
+}
+
+export function show_conversion_selection_options(task_type, default_task_type, $options_table) {
+    $options_table.append('<th colspan="2">Color Conversion Selection Options</th>');
+
+    let options = task_type.options;
+    let default_options = default_task_type.options;
+
+    // Number of conversion options
+    let $num_options_input = $(
+        '<tr>' +
+            '<td class="shrink">Number of conversion options:</td>' +
+                '<td class="expand">' +
+                    '<input type="number" min="2" max="25" step="1" value="' +
+                        (default_options.num_options != null ? default_options.num_options : 8).toString() +
+                    '" />' +
+            '</td>' +
+        '</tr>'
+    ).appendTo($options_table).find('input');
+    $num_options_input.on("change", (event) => options.num_options = parseInt(event.target.value));
+    options.num_options = default_options.num_options; // necessary for reset
 }

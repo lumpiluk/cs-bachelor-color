@@ -1,6 +1,12 @@
 import {ColorMatchingTask} from "./ColorMatchingTask";
 import {ColorSelectionTask} from "./ColorSelectionTask";
 import {ColorConversionSelectionTask} from "./ColorConversionSelectionTask";
+import {
+    show_color_matching_options,
+    show_color_conversion_options
+} from "./ColorMatchingTask";
+import {show_conlor_selection_options} from "./ColorSelectionTask";
+import {show_conversion_selection_options} from "./ColorConversionSelectionTask";
 
 /**
  * Creates an exercise in a given container.
@@ -22,7 +28,10 @@ export class Exercise {
         let defaults = {
             task_types: [], // length 0 => let the user choose. Every task can be for different color systems.
             num_rounds: 10,
-            post_to: null // URL to which to post results on completion.
+            post_to: null, // URL to which to post results on completion.
+            allow_random_units: false, // Whether or not to show the option (provided show_options_on_startup is true).
+            random_units: false, // If true, color system units will be chosen at random instead of using the default.
+            show_options_on_startup: true
         };
         let container_options = this.read_options_from_container();
         /*
@@ -33,6 +42,9 @@ export class Exercise {
         this.num_rounds = actual.num_rounds;
         this.post_to = actual.post_to;
         this.task_types = actual.task_types;
+        this.allow_random_units = actual.allow_random_units;
+        this.random_units = actual.random_units;
+
         /**
          * Weights can be specified in the data-taskTypes attribute in HTML.
          * For example, if one task is listed in three different variants (or for three different color systems)
@@ -53,8 +65,14 @@ export class Exercise {
 
         this._remaining_tasks = []; // (Underscore to prevent WebStorm warning about "not exported" element.)
         this.current_task = null;
-        this.initialize_tasks();
-        this.next_task();
+
+        if (actual.show_options_on_startup) {
+            this.show_options($.extend(true, {}, actual)); // pass deep copy of actual as defaults
+        } else {
+            /* Start immediately. */
+            this.initialize_tasks();
+            this.next_task();
+        }
     }
 
     read_options_from_container() {
@@ -67,6 +85,10 @@ export class Exercise {
             options.task_types = $c.data("task-types"); // JSON.parse() not necessary thanks to JQuery!
         if ($c.data("post-to") != null)
             options.post_to = $c.data("post-to");
+        if ($c.data("allow-random-units") != null)
+            options.allow_random_units = $c.data("allow-random-units");
+        if ($c.data("random-units") != null)
+            options.random_units = $c.data("random-units");
         return options;
     }
 
@@ -84,11 +106,94 @@ export class Exercise {
         return null; // Should never happen.
     }
 
+    show_options(defaults) {
+        this.$container.empty();
+        this.$container.append('<h2>Exercise Options</h2>');
+        let $options_table = $(
+            '<table class="options-table"></table>'
+        ).appendTo(this.$container);
+        let $button_bar = $(
+            '<div class="exercise-button-bar"></div>'
+        ).appendTo(this.$container);
+        let $start_button = $(
+            '<button>Start exercise</button>'
+        ).appendTo($button_bar); // (Buttons will appear right to left.)
+        let $reset_button = $(
+            '<button>Reset to defaults</button>'
+        ).appendTo($button_bar);
+
+        $start_button.click(() => {
+            this.initialize_tasks();
+            this.next_task();
+        });
+        $reset_button.click(() => {
+            this.show_options(defaults); // Will replace current options menu.
+        });
+
+        /* General exercise options: */
+
+        // Number of rounds
+        let $num_rounds_input = $(
+            '<tr>' +
+                '<td class="shrink">Number of rounds:</td>' +
+                '<td class="expand">' +
+                    '<input type="number" min="3" max="100" step="1" value="' +
+                        defaults.num_rounds.toString() +
+                    '" />' +
+                '</td>' +
+            '</tr>'
+        ).appendTo($options_table).find('input');
+        $num_rounds_input.on("change", (event) => this.num_rounds = parseInt(event.target.value));
+        this.num_rounds = defaults.num_rounds; // necessary for reset
+
+        if (this.allow_random_units) {
+            // Default or random units
+            let $random_units_input = $(
+                '<tr>' +
+                    '<td class="shrink">Random units:</td>' +
+                    '<td class="expand">' +
+                        '<input type="checkbox" name="Show visualizations" value="Show" ' +
+                            (this.random_units ?
+                                'checked' : '') +
+                        ' />' +
+                    '</td>' +
+                '</tr>' +
+                '<tr>' +
+                    '<td colspan="2" class="option-explanation">' +
+                        'If checked, random units will be used instead of always the default units.' +
+                    '</td>' +
+                '</tr>'
+            ).appendTo($options_table).find('input');
+            $random_units_input.change((event) => this.random_units = $random_units_input[0].checked);
+            this.random_units = defaults.random_units; // necessary for reset
+        }
+
+        /* Task-specific options: */
+        for (let i = 0; i < defaults.task_types.length; i++) {
+            switch(defaults.task_types[i].name) {
+                case "ColorMatching":
+                    show_color_matching_options(this.task_types[i], defaults.task_types[i], $options_table);
+                    break;
+                case "ColorSelection":
+                    show_conlor_selection_options(this.task_types[i], defaults.task_types[i], $options_table);
+                    break;
+                case "ColorConversionSelection":
+                    show_conversion_selection_options(this.task_types[i], defaults.task_types[i], $options_table);
+                    break;
+                case "ColorConversion":
+                    show_color_conversion_options(this.task_types[i], defaults.task_types[i], $options_table);
+                    break;
+                // TODO: If you create a new task type, include it here!
+            }
+        }
+    }
+
     initialize_tasks() {
         this._remaining_tasks = [];
         for (let i = 0; i < this.num_rounds; i++) {
             let new_task = null;
             let new_task_type = this.get_random_task_type();
+            new_task_type.options.random_units = this.random_units; // default or random color system units?
             switch(new_task_type.name) {
                 case "ColorMatching":
                     new_task = new ColorMatchingTask(this, this.num_rounds - i, new_task_type.options);
@@ -171,7 +276,7 @@ export class Exercise {
         this.$container.empty();
         this.$container.append(
             '<h3>Exercise complete!</h3>' +
-            '<table>' +
+            '<table class="exercise-results">' +
                 '<tr>' +
                     '<td>Correct answers:</td>' +
                     '<td>' + this.num_correct_answers + '/' + this.num_rounds + '</td>' +

@@ -22,10 +22,28 @@ export class CMYKColorSystem extends AbstractColorSystem {
     }
 
     /* (override) */
-    randomize() {
-        for (let i = 0; i < 3; i++) {
-            this.properties[i].set_to_random();
+    randomize(easy) {
+        if (easy == null || !easy) {
+            for (let i = 0; i < 3; i++) {
+                this.properties[i].set_to_random();
+            }
+        } else {
+            /* Same as for CMY and RGB: */
+            // let r = Math.random();
+            // if (r < 1 / 2) {
+                /* Choose one of the cube's vertices. */
+                for (let i = 0; i < 3; i++) {
+                    this.properties[i].set_value(Math.random() < .5 ? 0 : 1);
+                }
+            // } else {
+            //     /* Choose a shade of grey. */
+            //     let v = Math.random();
+            //     for (let i = 0; i < 3; i++) {
+            //         this.properties[i].set_value(v);
+            //     }
+            // }
         }
+
         let cmyk = cmy_to_cmyk(this.properties[0].value, this.properties[1].value, this.properties[2].value);
         this.properties[0].set_value(cmyk.c);
         this.properties[1].set_value(cmyk.m);
