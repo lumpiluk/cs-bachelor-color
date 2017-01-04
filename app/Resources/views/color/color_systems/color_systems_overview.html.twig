@@ -6,6 +6,13 @@
             <p>A short introduction to color systems in general</p>
         </a>
     {% endif %}
+    {#
+    <a class="overview-item" href="{{ path('color_system_page', {'color_system_name': 'xyz'}) }}">
+        <img src="{{ asset('resources/img/color_systems_thumbnail.png') }}"/>
+        <h2>XYZ and xy</h2>
+        <p>On Gamuts and the color spaces CIE 1931 XYZ and xy</p>
+    </a>
+    #}
     <a class="overview-item" href="{{ path('color_system_page', {'color_system_name': 'rgb'}) }}">
         <img src="{{ asset('resources/img/rgb_thumbnail.png') }}"/>
         <h2>RGB</h2>

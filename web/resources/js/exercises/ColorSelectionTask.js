@@ -19,7 +19,7 @@ export class ColorSelectionTask extends AbstractTask {
         this.allow_skip_after_first_attempt = actual.allow_skip_after_first_attempt;
         this.num_options = actual.num_options;
         this.color_system_name = random_sample(actual.color_systems);
-        this.target_color = get_color_system_by_name(this.color_system_name, false);
+        this.target_color = get_color_system_by_name(this.color_system_name, this.random_units);
         this.distractor_colors = [];
 
         this.$patches_container = null;

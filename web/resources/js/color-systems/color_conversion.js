@@ -138,3 +138,49 @@ export function rgb_to_cmyk(r, g, b) {
     let cmy = rgb_to_cmy(r, g, b);
     return cmy_to_cmyk(cmy.c, cmy.m, cmy.y);
 }
+
+function linearize_color_component(c) {
+    return c <= 0.040449936 ? c / 12.92 : Math.pow(c + 0.055 / 1.055, 2.4);
+}
+
+/**
+ * Convert sRGB colors to CIE 1931 XYZ for the standard observer and standard illuminant D65.
+ * @param r
+ * @param g
+ * @param b
+ */
+export function srgb_to_xyz(r, g, b) {
+    let r_lin = linearize_color_component(r);
+    let g_lin = linearize_color_component(g);
+    let b_lin = linearize_color_component(b);
+    return {
+        x: .4124 * r_lin + .3576 * g_lin + .1805 * b_lin,
+        y: .2126 * r_lin + .7152 * g_lin + .0722 * b_lin,
+        z: .0193 * b_lin + .1192 * g_lin + .9505 * b_lin
+    };
+}
+
+export const D65 = {x: 0.9502, y: 1.0, z: 1.0884}; // normalized to Y=1 (different sources, different rounding errors?)
+
+const CT1 = 0.008856;
+
+const f_lab = (c) => c > CT1 ? Math.pow(c, 1 / 3) : 7.787 * c + 16 / 116;
+
+/**
+ * Convert CIE 1931 XYZ colors to CIELAB using the D65 standard illuminant.
+ * @param x
+ * @param y
+ * @param z
+ */
+export function xyz_to_lab(x, y, z) {
+    return {
+        l: 117 * f_lab(y / D65.y) - 16,
+        a: 500 * (f_lab(x / D65.x) - f_lab(y / D65.y)),
+        b: 200 * (f_lab(y / D65.y) - f_lab(z / D65.z))
+    };
+}
+
+export function srgb_to_lab(r, g, b) {
+    let xyz = srgb_to_xyz(r, g, b);
+    return xyz_to_lab(xyz.x, xyz.y, xyz.z);
+}

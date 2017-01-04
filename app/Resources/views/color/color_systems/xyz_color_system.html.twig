@@ -1,0 +1,84 @@
+{% extends 'color/colorsystempage.html.twig' %}
+
+{% set page_title = 'Gamuts, CIE 1931 XYZ, and CIE 1931 xy' %}
+
+{% block color_system_content %}
+
+    <section>
+        <p>
+            To compare different color spaces, it is useful to look at their respective gamuts.
+            The gamut of a color space is the set of colors it can represent \cite[p.~102]{burger2009principlesalgorithms}.
+            Gamuts are often visualized using so-called horseshoe or chromaticity diagrams as shown in
+            <span class="figref" data-fig-id="fig-gamut-examples">the figure</span>, which are a projection of the
+            gamut onto the International Commission on Illumination's (Commission Internationale de l'Eclairage, CIE)
+            \(x, y\) coordinate system. The curved line around the horseshoe represents all monochromatic (spectral)
+            colors visible to the human eye.
+            Every other visible color is a combination of at least two different wavelengths and lies within the
+            enclosed shape.
+        </p>
+
+        <div class="figure" id="fig-gamut-examples">
+            <div class="side-by-side">
+                <div class="img-container">
+                    <img src="{{ asset('resources/img/ciexy_rgb_argb_srgb_cropped.svg') }}"
+                         alt="CIE 1931 xz chromaticity diagram showing different gamuts."
+                         style="max-height: 100%;"
+                    />
+                </div>
+            </div>
+            <div class="figure-title">
+                Gamut comparison of the CIE RGB, sRGB, and Adobe RGB (1998) color spaces in a CIE \(x, y\)
+                chromaticity diagram.
+                Numbers around the curved line denote wavelengths of light in nm.
+                Please note that the colors in this diagram cannot be accurate and are for orientation purposes only.
+                Generated using the Python module <em>colour</em> \cite{mansencal2016pycolour}.
+            </div>
+        </div>
+
+        <p>
+            In order to understand this projection, it is necessary to consider the higher-dimensional XYZ color space,
+            which is based on color matching experiments published independently by William D. Wright
+            and John Guild in 1929 and 1931.
+            Subjects were asked to recreate colors of the spectrum by adjusting the intensities of three primary colors
+            \cite[pp.~142,~148]{wright1929redetermination}\cite[p.~156]{guild1932colorimetric}.
+            Wright and Guild first mapped the data obtained from these experiments using coordinate systems each
+            axis of which corresponded to the intensity of one of the primary colors
+            \cite[p.~151]{wright1929redetermination}\cite[p.~164]{guild1932colorimetric}.
+            However, because no three primaries in combination alone can ever represent all colors of the spectrum,
+            and because the colorimeters allowed for compensation if this was the case
+            \cite[p.~152]{guild1932colorimetric},
+            negative values were possible.
+        </p>
+
+        <p>
+            The CIE XYZ color space is a transformation of a three-dimensional coordinate system based on standardized
+            primary colors in such a way as to guarantee the following properties
+            \cite[pp.~98f.]{burger2009principlesalgorithms}:
+
+            <ul>
+                <li>For every color \((X,Y,Z)^\mathsf{T}\) visible to human beings, \(X\), \(Y\), and \(Z\) are positive.</li>
+                <li>\(Y\) aligns with the perceived brightness of a color.</li>
+            </ul>
+
+            On the basis of this XYZ space, one can arrive at an \(x, y\) chromaticity diagram as mentioned above
+            via the CIE's definition of the \(x, y, z\) coordinates for a point
+            \(P=(x',y',z')_\text{XYZ}=(x',y',z')^\mathsf{T}\) in the XYZ space \cite[p.~89]{smith1931cie}:
+            \begin{equation}\label{eq:xyz-def}
+                \frac{x}{x'} = \frac{y}{y'} = \frac{z}{z'} = \frac{1}{x'+y'+z'}
+            \end{equation}
+            Therefore:
+            \begin{equation}\label{eq:xyz-def-unpacked}
+                x = \frac{x'}{x'+y'+z'},\quad y = \frac{y'}{x'+y'+z'},\quad z = \frac{z'}{x'+y'+z'}
+            \end{equation}
+
+            Any such point \(P\) can be described as a line \(l = 0 + \lambda \cdot P\) through the origin and \(P\).
+            From equations \ref{eq:xyz-def-unpacked} it follows that \(x+y+z=1\) and that every \(P\) is scaled by
+            \(\lambda = \frac{1}{x'+y'+z'}\).
+            Therefore, equation \ref{eq:xyz-def} describes a projection through the origin onto the plane
+            \(\tilde{x}+\tilde{y}+\tilde{z}=1\) for XYZ points \((\tilde{x},\tilde{y},\tilde{z})^\mathsf{T}\).
+            The CIE \(x,y\) coordinate system can then be attained simply by ignoring the \(z\) component
+            \cite[pp.~99ff.]{burger2009principlesalgorithms}.
+        </p>
+    </section>
+
+{% endblock %}

@@ -1,4 +1,5 @@
 import {DEFAULT_COLOR_SYSTEM_UNITS} from "./ColorSystemUnits";
+import {srgb_to_lab} from "./color_conversion";
 
 class ColorSystemChangeEvent {
     constructor(system, property) {
@@ -109,6 +110,16 @@ export class AbstractColorSystem {
         return Math.sqrt(Math.pow(this_rgb.r - other_rgb.r, 2) +
             Math.pow(this_rgb.g - other_rgb.g, 2) +
             Math.pow(this_rgb.b - other_rgb.b, 2));
+    }
+
+    get_lab_color_difference(other_color_system) {
+        let other_rgb = other_color_system.get_rgb();
+        let this_rgb = this.get_rgb();
+        let other_lab = srgb_to_lab(other_rgb.r, other_rgb.g, other_rgb.b);
+        let this_lab = srgb_to_lab(this_rgb.r, this_rgb.g, this_rgb.b);
+        return Math.sqrt(Math.pow(this_lab.l - other_lab.l, 2) +
+            Math.pow(this_lab.a - other_lab.a, 2) +
+            Math.pow(this_lab.b - other_lab.b, 2));
     }
 
     on_property_changed(event) {

@@ -8,6 +8,7 @@ import {
 } from "../util";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 import {get_color_system_by_name} from "../color-systems/color-systems";
+import {VisualizationControlSelect} from "../controls/VisualizationControlSelect";
 
 
 export class ColorMatchingTask extends AbstractTask {
@@ -158,10 +159,10 @@ export class ColorMatchingTask extends AbstractTask {
         if (this.show_hints && this.$hint_label != null) {
             let euclidean_distance_rgb = this.target_color.get_euclidean_distance_rgb(this.current_color);
             if (euclidean_distance_rgb <= this.max_euclidean_distance) {
-                this.$hint_label.text("Close enough");
-            } else if (euclidean_distance_rgb <= this.max_euclidean_distance * 2) {
+                this.$hint_label.text("Close enough"); // "... How close can you get?"
+            } else if (euclidean_distance_rgb <= this.max_euclidean_distance * 1.5) {
                 this.$hint_label.text("Almost there!");
-            } else if (euclidean_distance_rgb <= this.max_euclidean_distance * 4) {
+            } else if (euclidean_distance_rgb <= this.max_euclidean_distance * 2) {
                 this.$hint_label.text("You're close!");
             } else {
                 this.$hint_label.text("Not there yet");
@@ -299,6 +300,38 @@ export function show_color_matching_options(task_type, default_task_type, $optio
     });
     options.show_hints = default_options.show_hints; // necessary for reset
     options.max_attempts = default_options.show_hints ? 1 : 3;
+
+    // Distance measure
+    /*let distance_measure_options = [
+        "Euclidean distance in RGB",
+        "CIE 1976 (L*a*b*) color difference"
+    ];
+    let distance_measure_select = new VisualizationControlSelect(
+        $(
+            '<tr>' +
+                '<td class="shrink">Distance measure:</td>' +
+                '<td class="expand"></td>' +
+            '</tr>' +
+            '<tr>' +
+                '<td colspan="2" class="option-explanation">' +
+                    'Different distance measures aren\'t implemented yet. This option does not do anything.' +
+                '</td>' +
+            '</tr>'
+        ).appendTo($options_table).find('.expand'),
+        distance_measure_options,
+        null // no additional label necessary
+    );
+    distance_measure_select.add_listener((select_change_event) => {
+        let i = parseInt(select_change_event.option_index);
+        switch(i) {
+            case 0: // RGB
+                console.log("RGB");
+                break;
+            case 1: // Lab
+                console.log("CIELAB");
+                break;
+        }
+    });*/
 }
 
 export function show_color_conversion_options(task_type, default_task_type, $options_table) {

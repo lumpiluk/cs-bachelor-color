@@ -160,7 +160,7 @@ export class Exercise {
                 '</tr>' +
                 '<tr>' +
                     '<td colspan="2" class="option-explanation">' +
-                        'If checked, random units will be used instead of always the default units.' +
+                        'If checked, random units will be used instead of default units only.' +
                     '</td>' +
                 '</tr>'
             ).appendTo($options_table).find('input');

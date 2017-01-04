@@ -116,7 +116,8 @@ export class Visualization {
                 new VisualizationControlSlider(
                     $controls,
                     this.color_system.properties[i],
-                    0.001
+                    0.001,
+                    (value) => this.color_system.is_valid(value, i)
                 ) // (Automatically adds itself to that property's sliders.)
             );
         }
