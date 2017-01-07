@@ -1,6 +1,10 @@
 import {Vector2, Euler, Matrix4, PerspectiveCamera, Object3D, WebGLRenderer, Scene}
     from "../../../bower_components/three.js/build/three";
-import {rgb_to_css} from "../util";
+import {
+    rgb_to_css,
+    toggle_full_screen,
+    is_fullscreen
+} from "../util";
 import {VisualizationControlCheck} from "../controls/VisualizationControlCheck";
 import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
 
@@ -42,7 +46,8 @@ export class Visualization {
         this.zoom_sensitivity = 0.25; // For mouse wheels. Lower => more sensitive.
         // this.aspect = $container.width() / $container.height(); // should be ~3/2
         this.aspect = 3 / 2; // 3 / 2;
-        this.$container.height(this.$container.width() / this.aspect); // Apply aspect ratio (for camera and renderer).
+        this.keep_aspect = false; // Used to be true by default. Will be automatically set to false when toggling full screen
+        //this.$container.height(this.$container.width() / this.aspect); // Apply aspect ratio (for camera and renderer).
         this.near = 0.1;
         this.far = 10000;
 
@@ -85,6 +90,7 @@ export class Visualization {
         this.$container.on("touchend", (event) => that.on_touch_end.call(that, event));
 
         this.show_only_color_solid_control = null;
+        this.$fullscreen_button = null;
 
         /* Initialize color system controls. */
         this.color_system_controls = [];
@@ -121,6 +127,35 @@ export class Visualization {
                 ) // (Automatically adds itself to that property's sliders.)
             );
         }
+
+        // fullscreen button
+        if (!this.$figure.find('.fullscreen-button').length) {
+            // if no fullscreen button exists yet (can happen in comparisons), create one
+            this.$fullscreen_button = $(
+                '<span class="fullscreen-button">Fullscreen</span>'
+            ).prependTo(this.$figure.find('.figure-title'));
+            this.$fullscreen_button.click(() => {
+                toggle_full_screen(this.$figure[0]);
+                /*
+                 * Other changes will be done in the fullscreenchange event listener below.
+                 * This is necessary for other visualizations to keep working as well in case
+                 * this figure is inside a visualization comparison.
+                 */
+            });
+        }
+        $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", () => {
+            this.$container.find("canvas").removeAttr("style"); // otherwise, the figure will keep the previously calculated size
+            if (is_fullscreen()) { // just changed to fullscreen
+                //this.keep_aspect = false; // will be re-set to true on fullscreenchange (see below)
+                console.log("entered fullscreen");
+                this.$fullscreen_button.text("Exit fullscreen");
+            } else { // just exited fullscreen
+                //this.keep_aspect = true;
+                console.log("exited fullscreen");
+                this.$fullscreen_button.text("Fullscreen");
+            }
+            this.on_resize();
+        });
     }
 
     /**
@@ -175,7 +210,9 @@ export class Visualization {
 
     on_resize() {
         /* Preserve aspect ratio. */
-        this.$container.height(this.$container.width() / this.aspect);
+        if (this.keep_aspect) {
+            this.$container.height(this.$container.width() / this.aspect);
+        }
 
         this.renderer.setSize(this.$container.width(), this.$container.height());
         this.camera.aspect = this.$container.width() / this.$container.height();

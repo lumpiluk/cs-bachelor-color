@@ -12,7 +12,9 @@
     - HSL, HSV: Option to not slice the cylinders/cones.
     - Comparison: Fix NaN.
     - * Scrolling in Firefox, Edge!
-    - disable values >max (still not entirely fixed! anymore?)
+    - optimize initial camera position and rotation
+    - adjust size and zoom of vis. comparisons esp. on mobile
+    - make elements resizable in fullscreen (see http://codepen.io/pprice/pen/splkc/)
 - Home page: Large buttons for topics and exercises (use flex layout)
     
    

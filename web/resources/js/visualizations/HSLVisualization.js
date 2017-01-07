@@ -29,9 +29,9 @@ export class HSLVisualization extends Visualization {
         super($container, new HSLColorSystem(UNITS_DEG_UNIT_UNIT));
 
         /* Color system. */
-        this.color_system.properties[0].set_value(1);
-        this.color_system.properties[1].set_value(0);
-        this.color_system.properties[2].set_value(1);
+        this.color_system.properties[0].set_value(1, true);
+        this.color_system.properties[1].set_value(0, true);
+        this.color_system.properties[2].set_value(1, true);
 
         /* Initialize color system controls. */
         this.representation_select_control = null;

@@ -24,7 +24,6 @@ export class RGBColorSystem extends AbstractColorSystem {
         super.create_color_system_properties();
         let properties = [];
         let u = color_system_units;
-        console.log(u);
         properties.push(new ColorSystemProperty(1, 0, 1, "R", "r", u, 0));
         properties.push(new ColorSystemProperty(1, 0, 1, "G", "g", u, 1));
         properties.push(new ColorSystemProperty(1, 0, 1, "B", "b", u, 2));

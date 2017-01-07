@@ -18,7 +18,7 @@ export class ColorMatchingTask extends AbstractTask {
             color_systems: ["rgb", "hsl", "hsv", "cmy"], // cmyk not included for now because k depends on cmy...
             show_target_visualization: false, // TODO: implement
             show_conversion_visualization: false, // TODO: implement
-            max_euclidean_distance: get_euclidean_distance_for_error(.05, 3), // 5% error allowed
+            max_euclidean_distance: get_euclidean_distance_for_error(.05, 3), // 5% error allowed in each channel
             show_current_color: true,
             show_target_color: true, // If false, the numerical representation will be shown.
             show_hints: true,

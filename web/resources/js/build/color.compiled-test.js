@@ -3457,6 +3457,7 @@ var ColorSystemProperty = exports.ColorSystemProperty = function () {
                 }
             }
 
+            console.log("updated color system property value");
             if (update_slider) {
                 var _iteratorNormalCompletion2 = true;
                 var _didIteratorError2 = false;
@@ -3482,6 +3483,8 @@ var ColorSystemProperty = exports.ColorSystemProperty = function () {
                         }
                     }
                 }
+
+                console.log("updated sliders");
             }
         }
     }, {
@@ -4042,6 +4045,7 @@ var RGBColorSystem = exports.RGBColorSystem = function (_AbstractColorSystem) {
             _get(RGBColorSystem.prototype.__proto__ || Object.getPrototypeOf(RGBColorSystem.prototype), "create_color_system_properties", this).call(this);
             var properties = [];
             var u = color_system_units;
+            console.log(u);
             properties.push(new _ColorSystemProperty.ColorSystemProperty(1, 0, 1, "R", "r", u, 0));
             properties.push(new _ColorSystemProperty.ColorSystemProperty(1, 0, 1, "G", "g", u, 1));
             properties.push(new _ColorSystemProperty.ColorSystemProperty(1, 0, 1, "B", "b", u, 2));
@@ -6668,8 +6672,6 @@ exports.get_euclidean_distance_for_error = get_euclidean_distance_for_error;
 exports.update_mathjax = update_mathjax;
 exports.shuffle = shuffle;
 exports.remove_from_array = remove_from_array;
-exports.is_fullscreen = is_fullscreen;
-exports.toggle_full_screen = toggle_full_screen;
 function lerp(a, b, alpha) {
     var m = b - a; // (end-start)/1
     return m * alpha + a;
@@ -6729,40 +6731,6 @@ function shuffle(array) {
 function remove_from_array(array, element) {
     array.splice($.inArray(element, array), 1);
     return array;
-}
-
-function is_fullscreen() {
-    return document.fullscreenElement || // alternative standard method
-    document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
-}
-
-/**
- * Toogle fullscreen.
- * Copied from http://stackoverflow.com/questions/13303151/getting-fullscreen-mode-to-my-browser-using-jquery
- */
-function toggle_full_screen(element) {
-    if (!is_fullscreen()) {
-        // current working methods
-        if (element.requestFullscreen) {
-            element.requestFullscreen();
-        } else if (element.msRequestFullscreen) {
-            element.msRequestFullscreen();
-        } else if (element.mozRequestFullScreen) {
-            element.mozRequestFullScreen();
-        } else if (element.webkitRequestFullscreen) {
-            element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-        }
-    } else {
-        if (document.exitFullscreen) {
-            document.exitFullscreen();
-        } else if (document.msExitFullscreen) {
-            document.msExitFullscreen();
-        } else if (document.mozCancelFullScreen) {
-            document.mozCancelFullScreen();
-        } else if (document.webkitExitFullscreen) {
-            document.webkitExitFullscreen();
-        }
-    }
 }
 
 },{}],29:[function(require,module,exports){
@@ -6946,6 +6914,7 @@ var HSLVisualization = exports.HSLVisualization = function (_Visualization) {
         /* Color system. */
         var _this = _possibleConstructorReturn(this, (HSLVisualization.__proto__ || Object.getPrototypeOf(HSLVisualization)).call(this, $container, new _HSLColorSystem.HSLColorSystem(_ColorSystemUnits.UNITS_DEG_UNIT_UNIT)));
 
+        console.log("Updating HSL slider values...");
         _this.color_system.properties[0].set_value(1, true);
         _this.color_system.properties[1].set_value(0, true);
         _this.color_system.properties[2].set_value(1, true);
@@ -7731,8 +7700,7 @@ var Visualization = exports.Visualization = function () {
         this.zoom_sensitivity = 0.25; // For mouse wheels. Lower => more sensitive.
         // this.aspect = $container.width() / $container.height(); // should be ~3/2
         this.aspect = 3 / 2; // 3 / 2;
-        this.keep_aspect = false; // Used to be true by default. Will be automatically set to false when toggling full screen
-        //this.$container.height(this.$container.width() / this.aspect); // Apply aspect ratio (for camera and renderer).
+        this.$container.height(this.$container.width() / this.aspect); // Apply aspect ratio (for camera and renderer).
         this.near = 0.1;
         this.far = 10000;
 
@@ -7791,7 +7759,6 @@ var Visualization = exports.Visualization = function () {
         });
 
         this.show_only_color_solid_control = null;
-        this.$fullscreen_button = null;
 
         /* Initialize color system controls. */
         this.color_system_controls = [];
@@ -7836,35 +7803,6 @@ var Visualization = exports.Visualization = function () {
             for (var i = 0; i < this.color_system.properties.length; i++) {
                 _loop(i);
             }
-
-            // fullscreen button
-            if (!this.$figure.find('.fullscreen-button').length) {
-                // if no fullscreen button exists yet (can happen in comparisons), create one
-                this.$fullscreen_button = $('<span class="fullscreen-button">Fullscreen</span>').prependTo(this.$figure.find('.figure-title'));
-                this.$fullscreen_button.click(function () {
-                    (0, _util.toggle_full_screen)(_this.$figure[0]);
-                    /*
-                     * Other changes will be done in the fullscreenchange event listener below.
-                     * This is necessary for other visualizations to keep working as well in case
-                     * this figure is inside a visualization comparison.
-                     */
-                });
-            }
-            $(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange", function () {
-                _this.$container.find("canvas").removeAttr("style"); // otherwise, the figure will keep the previously calculated size
-                if ((0, _util.is_fullscreen)()) {
-                    // just changed to fullscreen
-                    //this.keep_aspect = false; // will be re-set to true on fullscreenchange (see below)
-                    console.log("entered fullscreen");
-                    _this.$fullscreen_button.text("Exit fullscreen");
-                } else {
-                    // just exited fullscreen
-                    //this.keep_aspect = true;
-                    console.log("exited fullscreen");
-                    _this.$fullscreen_button.text("Fullscreen");
-                }
-                _this.on_resize();
-            });
         }
 
         /**
@@ -7918,9 +7856,7 @@ var Visualization = exports.Visualization = function () {
         key: "on_resize",
         value: function on_resize() {
             /* Preserve aspect ratio. */
-            if (this.keep_aspect) {
-                this.$container.height(this.$container.width() / this.aspect);
-            }
+            this.$container.height(this.$container.width() / this.aspect);
 
             this.renderer.setSize(this.$container.width(), this.$container.height());
             this.camera.aspect = this.$container.width() / this.$container.height();

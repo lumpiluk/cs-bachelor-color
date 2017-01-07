@@ -62,11 +62,7 @@ figure {
     height: @visualization_height;
     flex-grow: 1;
     width: 100%;
-
-    canvas {
-      width: 100%;
-      height: 100%;
-    }
+    overflow: hidden;
   }
 
   .selected-color {
@@ -78,32 +74,92 @@ figure {
   }
 }
 
-.figure.maximized,
-figure.maximized {
-  position: fixed;
+/* To be included */
+.fullscreen-figure {
+  // position: fixed;
   margin: 0;
-  top: 0;
-  left: 0;
+  // top: 0;
+  // left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
   max-width: 100%;
-  // TODO: continue and make things work
-  // TODO: transition
+  background-color: white;
+
+  display: -webkit-flex;
+  display: flex;
+
+  @media (orientation: landscape) {
+    -webkit-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+  }
+
+  @media (orientation: portrait) {
+    -webkit-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+  }
+
+  .figure-details {
+    background-color: white;
+    overflow: auto;
+    //height: 25%;
+    height: auto;
+    max-width: 50em;
+    //position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 .05em .15em 0 rgb(50%, 50%, 50%);
+  }
 
   .visualization {
     width: 100%;
+    //height: 75%;
     height: 100%;
+    flex-grow: 1;
+  }
 
-    canvas {
-      width: 100%;
-      height: 100%;
+  .visualizations {
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+
+    .visualization {
+      height: 100%; // override 75% height for indiv. visualizations in comparisons
     }
   }
 
   .figure-title {
     // TODO: swap with visualization in js
   }
+}
+
+.fullscreen-button {
+  text-decoration: underline;
+  float: right;
+  cursor: hand;
+  cursor: pointer;
+}
+
+.figure:fullscreen {
+  .fullscreen-figure;
+}
+
+.figure:-webkit-full-screen {
+  .fullscreen-figure;
+}
+
+.figure:-moz-full-screen {
+  .fullscreen-figure;
+}
+
+.figure:-ms-fullscreen {
+  .fullscreen-figure;
+}
+
+figure:fullscreen,
+figure:-webkit-full-screen,
+figure:-moz-full-screen,
+figure:-ms-fullscreen {
+  .fullscreen-figure; // why does above comma-separation not work w/ this selector?
 }
 
 .visualization-controls,

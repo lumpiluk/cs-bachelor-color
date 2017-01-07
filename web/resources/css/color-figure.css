@@ -212,11 +212,7 @@ figure .visualization {
   height: 26.67em;
   flex-grow: 1;
   width: 100%;
-}
-.figure .visualization canvas,
-figure .visualization canvas {
-  width: 100%;
-  height: 100%;
+  overflow: hidden;
 }
 .figure .selected-color,
 figure .selected-color {
@@ -226,25 +222,290 @@ figure .selected-color {
   background-color: white;
   border: .1em solid black;
 }
-.figure.maximized,
-figure.maximized {
-  position: fixed;
+/* To be included */
+.fullscreen-figure {
   margin: 0;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  z-index: 10;
   max-width: 100%;
+  background-color: white;
+  display: -webkit-flex;
+  display: flex;
 }
-.figure.maximized .visualization,
-figure.maximized .visualization {
+@media (orientation: landscape) {
+  .fullscreen-figure {
+    -webkit-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+  }
+}
+@media (orientation: portrait) {
+  .fullscreen-figure {
+    -webkit-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+  }
+}
+.fullscreen-figure .figure-details {
+  background-color: white;
+  overflow: auto;
+  height: auto;
+  max-width: 50em;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0.05em 0.15em 0 #808080;
+}
+.fullscreen-figure .visualization {
   width: 100%;
   height: 100%;
+  flex-grow: 1;
 }
-.figure.maximized .visualization canvas,
-figure.maximized .visualization canvas {
+.fullscreen-figure .visualizations {
   width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+.fullscreen-figure .visualizations .visualization {
+  height: 100%;
+}
+.fullscreen-button {
+  text-decoration: underline;
+  float: right;
+  cursor: hand;
+  cursor: pointer;
+}
+.figure:fullscreen {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  background-color: white;
+  display: -webkit-flex;
+  display: flex;
+}
+@media (orientation: landscape) {
+  .figure:fullscreen {
+    -webkit-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+  }
+}
+@media (orientation: portrait) {
+  .figure:fullscreen {
+    -webkit-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+  }
+}
+.figure:fullscreen .figure-details {
+  background-color: white;
+  overflow: auto;
+  height: auto;
+  max-width: 50em;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0.05em 0.15em 0 #808080;
+}
+.figure:fullscreen .visualization {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+.figure:fullscreen .visualizations {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+.figure:fullscreen .visualizations .visualization {
+  height: 100%;
+}
+.figure:-webkit-full-screen {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  background-color: white;
+  display: -webkit-flex;
+  display: flex;
+}
+@media (orientation: landscape) {
+  .figure:-webkit-full-screen {
+    -webkit-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+  }
+}
+@media (orientation: portrait) {
+  .figure:-webkit-full-screen {
+    -webkit-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+  }
+}
+.figure:-webkit-full-screen .figure-details {
+  background-color: white;
+  overflow: auto;
+  height: auto;
+  max-width: 50em;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0.05em 0.15em 0 #808080;
+}
+.figure:-webkit-full-screen .visualization {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+.figure:-webkit-full-screen .visualizations {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+.figure:-webkit-full-screen .visualizations .visualization {
+  height: 100%;
+}
+.figure:-moz-full-screen {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  background-color: white;
+  display: -webkit-flex;
+  display: flex;
+}
+@media (orientation: landscape) {
+  .figure:-moz-full-screen {
+    -webkit-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+  }
+}
+@media (orientation: portrait) {
+  .figure:-moz-full-screen {
+    -webkit-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+  }
+}
+.figure:-moz-full-screen .figure-details {
+  background-color: white;
+  overflow: auto;
+  height: auto;
+  max-width: 50em;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0.05em 0.15em 0 #808080;
+}
+.figure:-moz-full-screen .visualization {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+.figure:-moz-full-screen .visualizations {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+.figure:-moz-full-screen .visualizations .visualization {
+  height: 100%;
+}
+.figure:-ms-fullscreen {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  background-color: white;
+  display: -webkit-flex;
+  display: flex;
+}
+@media (orientation: landscape) {
+  .figure:-ms-fullscreen {
+    -webkit-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+  }
+}
+@media (orientation: portrait) {
+  .figure:-ms-fullscreen {
+    -webkit-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+  }
+}
+.figure:-ms-fullscreen .figure-details {
+  background-color: white;
+  overflow: auto;
+  height: auto;
+  max-width: 50em;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0.05em 0.15em 0 #808080;
+}
+.figure:-ms-fullscreen .visualization {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+.figure:-ms-fullscreen .visualizations {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+.figure:-ms-fullscreen .visualizations .visualization {
+  height: 100%;
+}
+figure:fullscreen,
+figure:-webkit-full-screen,
+figure:-moz-full-screen,
+figure:-ms-fullscreen {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  background-color: white;
+  display: -webkit-flex;
+  display: flex;
+}
+@media (orientation: landscape) {
+  figure:fullscreen,
+  figure:-webkit-full-screen,
+  figure:-moz-full-screen,
+  figure:-ms-fullscreen {
+    -webkit-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+  }
+}
+@media (orientation: portrait) {
+  figure:fullscreen,
+  figure:-webkit-full-screen,
+  figure:-moz-full-screen,
+  figure:-ms-fullscreen {
+    -webkit-flex-flow: column nowrap;
+    flex-flow: column nowrap;
+  }
+}
+figure:fullscreen .figure-details,
+figure:-webkit-full-screen .figure-details,
+figure:-moz-full-screen .figure-details,
+figure:-ms-fullscreen .figure-details {
+  background-color: white;
+  overflow: auto;
+  height: auto;
+  max-width: 50em;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0.05em 0.15em 0 #808080;
+}
+figure:fullscreen .visualization,
+figure:-webkit-full-screen .visualization,
+figure:-moz-full-screen .visualization,
+figure:-ms-fullscreen .visualization {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+figure:fullscreen .visualizations,
+figure:-webkit-full-screen .visualizations,
+figure:-moz-full-screen .visualizations,
+figure:-ms-fullscreen .visualizations {
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+}
+figure:fullscreen .visualizations .visualization,
+figure:-webkit-full-screen .visualizations .visualization,
+figure:-moz-full-screen .visualizations .visualization,
+figure:-ms-fullscreen .visualizations .visualization {
   height: 100%;
 }
 .visualization-controls,

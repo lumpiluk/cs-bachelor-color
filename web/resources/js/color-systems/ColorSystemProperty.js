@@ -113,6 +113,7 @@ export class ColorSystemProperty {
     }
 
     set_to_random() {
+        // TODO: use rounding of current unit
         this.value = Math.random() * Math.abs(this.max - this.min) + this.min;
     }
 }

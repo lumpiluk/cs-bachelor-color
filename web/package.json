@@ -15,7 +15,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-debug": "browserify --debug -t [browserify-shader --parameterize=true] -t [babelify --presets es2015] resources/js/color.js -o resources/js/build/color.compiled.js",
-    "build": "browserify -t [browserify-shader --parameterize=true] -t [babelify --presets es2015] resources/js/color.js -o resources/js/build/color.compiled-test.js",
+    "build": "browserify -t [browserify-shader --parameterize=true] -t [babelify --presets es2015] resources/js/color.js -o resources/js/build/color.compiled.js",
     "minify": "uglifyjs resources/js/build/color.compiled.js -o resources/js/build/color.compiled.min.js",
     "loc": "sloc -e build resources/js"
   },

@@ -1,5 +1,5 @@
 export function lerp(a, b, alpha) {
-    let m = b - a; // (e-s)/1
+    let m = b - a; // (end-start)/1
     return m * alpha + a;
 }
 
@@ -60,4 +60,39 @@ export function shuffle(array) {
 export function remove_from_array(array, element) {
     array.splice($.inArray(element, array), 1);
     return array;
+}
+
+export function is_fullscreen() {
+    return document.fullscreenElement ||    // alternative standard method
+        document.mozFullScreenElement ||
+        document.webkitFullscreenElement ||
+        document.msFullscreenElement
+}
+
+/**
+ * Toogle fullscreen.
+ * Copied from http://stackoverflow.com/questions/13303151/getting-fullscreen-mode-to-my-browser-using-jquery
+ */
+export function toggle_full_screen(element) {
+    if (!is_fullscreen()) {  // current working methods
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        } else if (element.msRequestFullscreen) {
+            element.msRequestFullscreen();
+        } else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        } else if (element.webkitRequestFullscreen) {
+            element.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+        }
+    }
 }

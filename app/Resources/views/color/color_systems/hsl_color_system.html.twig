@@ -29,17 +29,19 @@
         <div class="figure" id="fig-hslspace">
             {% if group_b or full_access %}
                 <div class="hsl visualization"></div>
-                <div class="selected-color"></div>
-                <div class="figure-title">
-                    The HSL color space.<br/>
-                    <span class="visualization-instructions">
-                        Click and drag to rotate, scroll to zoom.
-                        On a touch screen, drag to rotate around the y-axis and use two fingers to zoom
-                        or to rotate around the x-axis.
-                    </span>
+                <div class="figure-details">
+                    <div class="selected-color"></div>
+                    <div class="figure-title">
+                        The HSL color space.<br/>
+                        <span class="visualization-instructions">
+                            Click and drag to rotate, scroll to zoom.
+                            On a touch screen, drag to rotate around the y-axis and use two fingers to zoom
+                            or to rotate around the x-axis.
+                        </span>
+                    </div>
+                    <div class="visualization-controls"></div>
+                    <div class="visualization-controls-advanced"></div>
                 </div>
-                <div class="visualization-controls"></div>
-                <div class="visualization-controls-advanced"></div>
             {% else %}
                 <div class="side-by-side">
                     <div class="img-container">
@@ -122,10 +124,12 @@
                     <div class="rgb-cube visualization"></div>
                     <div class="hsl visualization"></div>
                 </div>
-                <div class="selected-color"></div>
-                <div class="figure-title">Comparison of the RGB and HSL color spaces.</div>
-                <div class="visualization-controls"></div>
-                <div class="visualization-controls-advanced"></div>
+                <div class="figure-details">
+                    <div class="selected-color"></div>
+                    <div class="figure-title">Comparison of the RGB and HSL color spaces.</div>
+                    <div class="visualization-controls"></div>
+                    <div class="visualization-controls-advanced"></div>
+                </div>
             {% else %}
                 <div class="side-by-side">
                     <div class="img-container">
