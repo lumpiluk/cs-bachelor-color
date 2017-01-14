@@ -49,6 +49,10 @@ export function shuffle(array) {
     return array;
 }
 
+export function deep_copy(object) {
+    return $.extend(true, {}, object);
+}
+
 /**
  * Remove element from array.
  * http://stackoverflow.com/questions/3596089/how-to-remove-specifc-value-from-array-using-jquery

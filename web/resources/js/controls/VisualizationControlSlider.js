@@ -99,3 +99,24 @@ export class VisualizationControlSlider {
         this.$number.val(this.color_system_property.get_value(true));
     }
 }
+
+/**
+ * @param color_system
+ * @param $container
+ * @returns {Array} Array containing the constructed instances of VisualizationControlSlider.
+ */
+export function make_sliders_for_color_system(color_system, $container) {
+    let sliders = [];
+    let $sliders_container = $(
+        '<table class="controls-table"></table>'
+    ).appendTo($container);
+    for (let i = 0; i < color_system.properties.length; i++) {
+        sliders.push(new VisualizationControlSlider(
+            $sliders_container,
+            color_system.properties[i],
+            0.001,
+            (value) => color_system.is_valid(value, i)
+        ))
+    }
+    return sliders;
+}

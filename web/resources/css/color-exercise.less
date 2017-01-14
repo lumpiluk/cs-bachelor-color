@@ -87,12 +87,20 @@
   .color-matching-current {
     border-left-width: 0;
   }
-  .exercise-hint-label {
+  .exercise-hints-label {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin: .5em auto .5em auto; // top right bottom left
     text-align: center;
     font-weight: bold;
+    color: #878787;
+
+    .hint {
+      padding: 0 1em;
+    }
+
+    .hint.active {
+      color: black;
+    }
   }
 
   /* ColorSelectionTask. */

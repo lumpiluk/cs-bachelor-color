@@ -3,16 +3,17 @@ import {random_sample, update_mathjax, shuffle, rgb_to_css} from "../util";
 import {get_color_system_by_name} from "../color-systems/color-systems";
 import {RGBColorSystem} from "../color-systems/RGBColorSystem";
 
+export const DEFAULT_COLOR_SELECTION_OPTIONS = {
+    color_systems: ["rgb", "hsl", "hsv", "cmy", "cmyk"],
+    max_attempts: 3, // 0 => infinite
+    allow_skip_after_first_attempt: true,
+    num_options: 8 // i.e. number of color patches, including the correct one
+};
+
 export class ColorSelectionTask extends AbstractTask {
     constructor(exercise, task_num, options) {
         super(exercise, task_num, options);
-        let defaults = {
-            color_systems: ["rgb", "hsl", "hsv", "cmy", "cmyk"],
-            max_attempts: 3, // 0 => infinite
-            allow_skip_after_first_attempt: true,
-            num_options: 8 // i.e. number of color patches, including the correct one
-        };
-        let actual = $.extend({}, defaults, options || {});
+        let actual = $.extend({}, DEFAULT_COLOR_SELECTION_OPTIONS, options || {});
 
         this.max_attempts = actual.max_attempts;
         this.current_attempt = 0;

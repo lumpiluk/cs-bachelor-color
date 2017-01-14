@@ -37,6 +37,10 @@ export class HSLVisualization extends Visualization {
         this.representation_select_control = null;
         this.units_select_control = null;
 
+        /* Set initial rotation and zoom: */
+        this.pivot.rotation.set(-0.3522609611576656, 0.7174084716406542, 0, "YXZ"); // YXZ
+        // this.camera.setFocalLength(1);
+
         this.radius = .5;
         this.height = 1;
         this.circle_segments = 30;

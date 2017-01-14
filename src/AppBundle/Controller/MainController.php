@@ -20,6 +20,7 @@ class MainController extends Controller
 {
     /**
      * @Route("/", name="homepage")
+     * @return Response
      */
     public function homeAction()
     {
@@ -27,7 +28,16 @@ class MainController extends Controller
     }
 
     /**
-     * @Route("/color-systems", name="color_systems_general")
+     * @Route("/about.html", name="about")
+     * @return Response
+     */
+    public function aboutAction()
+    {
+        return $this->render('color/about.html.twig');
+    }
+
+    /**
+     * @Route("/color-systems.html", name="color_systems_general")
      * @return Response
      */
     public function colorSystemsGeneralAction()
@@ -36,7 +46,7 @@ class MainController extends Controller
     }
 
     /**
-     * @Route("/color-systems/{color_system_name}", name="color_system_page")
+     * @Route("/color-systems/{color_system_name}.html", name="color_system_page")
      * @param $color_system_name
      * @return Response
      */
@@ -46,7 +56,7 @@ class MainController extends Controller
     }
 
     /**
-     * @Route("/exercises", name="exercises_general")
+     * @Route("/exercises.html", name="exercises_general")
      * @return Response
      */
     public function exercisesGeneralAction()
@@ -55,7 +65,7 @@ class MainController extends Controller
     }
 
     /**
-     * @Route("/exercises/{exercise_name}", name="exercise")
+     * @Route("/exercises/{exercise_name}.html", name="exercise")
      * @param Request $request
      * @param $exercise_name
      * @return Response

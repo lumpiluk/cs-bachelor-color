@@ -30,7 +30,8 @@ function initialize_visualizations() {
 
     /* Enumerate figures. */ // TODO: do in other function!
     $(".figure-title").each(function(index) {
-        let fig_id = $(this).parent().attr("id");
+        //let fig_id = $(this).parent().attr("id");
+        let fig_id = $(this).closest(".figure").attr("id");
         figures[fig_id] = index + 1;
         $(this).prepend('<b>Figure ' + (index + 1).toString() + ':</b> ');
     });

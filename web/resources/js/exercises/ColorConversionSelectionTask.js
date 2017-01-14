@@ -2,20 +2,20 @@ import {AbstractTask} from "./AbstractTask";
 import {random_sample, update_mathjax, shuffle, rgb_to_css, remove_from_array} from "../util";
 import {get_color_system_by_name} from "../color-systems/color-systems";
 
+export const DEFAULT_COLOR_CONVERSION_SELECTION_OPTIONS = {
+    color_systems: ["rgb", "hsl", "hsv", "cmy", "cmyk"], // TODO: pairs of arrays of allowed from-to
+    mixed_conversion_systems: true, // If true, not all options will be in the same color system.
+    show_target_visualization: false,
+    show_conversion_visualization: false,
+    max_attempts: 3, // 0 => infinite
+    allow_skip_after_first_attempt: true,
+    num_options: 8, // including the correct option
+};
 
 export class ColorConversionSelectionTask extends AbstractTask {
     constructor(exercise, task_num, options) {
         super(exercise, task_num, options);
-        let defaults = {
-            color_systems: ["rgb", "hsl", "hsv", "cmy", "cmyk"], // TODO: pairs of arrays of allowed from-to
-            mixed_conversion_systems: true, // If true, not all options will be in the same color system.
-            show_target_visualization: false,
-            show_conversion_visualization: false,
-            max_attempts: 3, // 0 => infinite
-            allow_skip_after_first_attempt: true,
-            num_options: 8, // including the correct option
-        };
-        let actual = $.extend({}, defaults, options || {});
+        let actual = $.extend({}, DEFAULT_COLOR_CONVERSION_SELECTION_OPTIONS, options || {});
 
         this.mixed_conversion_systems = actual.mixed_conversion_systems;
         this.max_attempts = actual.max_attempts;

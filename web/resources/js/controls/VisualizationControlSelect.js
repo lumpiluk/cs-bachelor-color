@@ -20,7 +20,7 @@ export class VisualizationControlSelect {
             options_html += '<option value="' + i.toString() + '">' + options[i].toString() + '</option>';
         }
 
-        this.$parent.append(
+        this.$select = $(
             '<div class="visualization-control select">' +
                 (this.label != null ? '<label for="' + this.select_id + '">' + this.label + ':</label>' : '') +
                 '<span class="select-container">' +
@@ -29,12 +29,15 @@ export class VisualizationControlSelect {
                     '</select>' +
                 '</span>' +
             '</div>'
-        );
+        ).appendTo(this.$parent).find("select");
 
         /* Attach event listener. */
         let that = this;
-        this.$select = this.$parent.find("#" + this.select_id);
         this.$select.on("change", (event) => that._on_change.call(that, event));
+    }
+
+    get_selected_text() {
+        return this.$select.find(":selected").text();
     }
 
     add_listener(callback) {

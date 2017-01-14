@@ -191,6 +191,7 @@ figure .side-by-side {
   overflow: hidden;
   align-items: center;
   justify-content: center;
+  height: 26.67em;
 }
 .figure .visualizations .img-container,
 figure .visualizations .img-container,
@@ -213,6 +214,7 @@ figure .visualization {
   flex-grow: 1;
   width: 100%;
   overflow: hidden;
+  background-color: #505050;
 }
 .figure .selected-color,
 figure .selected-color {
@@ -519,6 +521,10 @@ figure:-ms-fullscreen .visualizations .visualization {
 .visualization-controls .visualization-controls-group,
 .visualization-controls-advanced .visualization-controls-group {
   margin-bottom: 1em;
+}
+.visualization-controls .visualization-controls-group:last-child,
+.visualization-controls-advanced .visualization-controls-group:last-child {
+  margin-bottom: 0;
 }
 .visualization-controls .visualization-controls-system-header,
 .visualization-controls-advanced .visualization-controls-system-header {

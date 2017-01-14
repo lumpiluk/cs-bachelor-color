@@ -31,6 +31,9 @@ export class CMYCubeVisualization extends Visualization {
 
         /* Rotate around center of the cube rather than the origin. */
         this.pivot.position.set(.5, .5, .5);
+        /* Set initial rotation and zoom: */
+        this.pivot.rotation.set(-Math.PI / 6, Math.PI / 5, 0, "YXZ"); // YXZ
+        // this.camera.setFocalLength(1);
 
         /* Attach event handlers. */
         this.color_system.add_listener((event) => this.on_color_system_property_change(event));

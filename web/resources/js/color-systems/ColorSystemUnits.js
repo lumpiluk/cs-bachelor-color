@@ -130,3 +130,19 @@ export const UNITS_OPTIONS_DEFAULT = [
     UNITS_BYTES,
     UNITS_PERCENT
 ];
+
+const UNITS_FOR_NAMES = {
+    "[0, 1]": DEFAULT_COLOR_SYSTEM_UNITS,
+    "0..255": UNITS_BYTES,
+    "Percent": UNITS_PERCENT,
+    "Degrees, [0, 1], [0, 1]": UNITS_DEG_UNIT_UNIT,
+    "Degrees, 0..255, 0..255": UNITS_DEG_B_B,
+    "Degrees, Percent, Percent": UNITS_DEG_PERCENT_PERCENT,
+    "Radians, [0, 1], [0, 1]": UNITS_RAD_UNIT_UNIT,
+    "Radians, 0..255, 0..255": UNITS_RAD_B_B,
+    "Radians, Percent, Percent": UNITS_RAD_PERCENT_PERCENT
+};
+
+export function get_color_system_units_by_name(name) {
+    return UNITS_FOR_NAMES[name];
+}

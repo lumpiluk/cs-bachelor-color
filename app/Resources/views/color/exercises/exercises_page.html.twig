@@ -15,4 +15,10 @@
         For more specific exercises, have a look at the respective color system page.
     </p>
     {% include 'color/exercises/exercises_overview.html.twig' %}
+
+    <p>
+        <a href="{{ path('exercise', {'exercise_name': 'advanced_config', 'color_systems': []}) }}">
+            Advanced exercise configurator (for presentations)
+        </a>
+    </p>
 {% endblock %}

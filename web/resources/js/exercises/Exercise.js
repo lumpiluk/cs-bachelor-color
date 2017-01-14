@@ -1,12 +1,12 @@
-import {ColorMatchingTask} from "./ColorMatchingTask";
-import {ColorSelectionTask} from "./ColorSelectionTask";
-import {ColorConversionSelectionTask} from "./ColorConversionSelectionTask";
+import {VisualizationControlSelect} from "../controls/VisualizationControlSelect";
 import {
-    show_color_matching_options,
-    show_color_conversion_options
-} from "./ColorMatchingTask";
-import {show_conlor_selection_options} from "./ColorSelectionTask";
-import {show_conversion_selection_options} from "./ColorConversionSelectionTask";
+    TASK_TYPES_WITHOUT_MIXED,
+    show_task_specific_options_by_name,
+    construct_task_from_task_type
+} from "./exercises";
+import {construct_task_type_by_name} from "./exercises";
+import {deep_copy} from "../util";
+import {saveAs} from "../../../bower_components/file-saver/FileSaver";
 
 /**
  * Creates an exercise in a given container.
@@ -31,7 +31,8 @@ export class Exercise {
             post_to: null, // URL to which to post results on completion.
             allow_random_units: false, // Whether or not to show the option (provided show_options_on_startup is true).
             random_units: false, // If true, color system units will be chosen at random instead of using the default.
-            show_options_on_startup: true
+            show_options_on_startup: true,
+            advanced_config: false // If true, will show advanced exercise configurator for presentations.
         };
         let container_options = this.read_options_from_container();
         /*
@@ -41,9 +42,17 @@ export class Exercise {
         let actual = $.extend({}, defaults, container_options || {}, options || {});
         this.num_rounds = actual.num_rounds;
         this.post_to = actual.post_to;
+
+        /*
+         * In regular exercise mode, this array will store names and options of possible tasks in this exericse.
+         * If this exercise uses the advanced configurator for presentations,
+         * this array will serve as a list of all tasks in the exercise.
+         */
         this.task_types = actual.task_types;
+
         this.allow_random_units = actual.allow_random_units;
         this.random_units = actual.random_units;
+        this.advanced_config = actual.advanced_config;
 
         /**
          * Weights can be specified in the data-taskTypes attribute in HTML.
@@ -66,8 +75,8 @@ export class Exercise {
         this._remaining_tasks = []; // (Underscore to prevent WebStorm warning about "not exported" element.)
         this.current_task = null;
 
-        if (actual.show_options_on_startup) {
-            this.show_options($.extend(true, {}, actual)); // pass deep copy of actual as defaults
+        if (actual.show_options_on_startup || this.advanced_config) {
+            this.show_options(deep_copy(actual));
         } else {
             /* Start immediately. */
             this.initialize_tasks();
@@ -89,6 +98,10 @@ export class Exercise {
             options.allow_random_units = $c.data("allow-random-units");
         if ($c.data("random-units") != null)
             options.random_units = $c.data("random-units");
+        if ($c.data("show-options-on-startup") != null)
+            options.show_options_on_startup = $c.data("show-options-on-startup");
+        if ($c.data("advanced-config") != null)
+            options.advanced_config = $c.data("advanced-config");
         return options;
     }
 
@@ -107,11 +120,15 @@ export class Exercise {
     }
 
     show_options(defaults) {
+        this._remaining_tasks = []; // needs to be cleared here for reset to work with configurator
         this.$container.empty();
-        this.$container.append('<h2>Exercise Options</h2>');
+        this.$container.append((this.advanced_config ?
+            '<h2>Exercise Configuration</h2>' : '<h2>Exercise Options</h2>'));
         let $options_table = $(
             '<table class="options-table"></table>'
         ).appendTo(this.$container);
+
+        /* Button bar, reset button, and start button: */
         let $button_bar = $(
             '<div class="exercise-button-bar"></div>'
         ).appendTo(this.$container);
@@ -119,7 +136,7 @@ export class Exercise {
             '<button>Start exercise</button>'
         ).appendTo($button_bar); // (Buttons will appear right to left.)
         let $reset_button = $(
-            '<button>Reset to defaults</button>'
+            (this.advanced_config ? '<button>Clear</button>' : '<button>Reset to defaults</button>')
         ).appendTo($button_bar);
 
         $start_button.click(() => {
@@ -127,98 +144,131 @@ export class Exercise {
             this.next_task();
         });
         $reset_button.click(() => {
+            if (!this.advanced_config || !confirm("Your current exercise configuration will be cleared!")) {
+                return;
+            }
             this.show_options(defaults); // Will replace current options menu.
         });
 
-        /* General exercise options: */
-
-        // Number of rounds
-        let $num_rounds_input = $(
-            '<tr>' +
-                '<td class="shrink">Number of rounds:</td>' +
-                '<td class="expand">' +
-                    '<input type="number" min="3" max="100" step="1" value="' +
-                        defaults.num_rounds.toString() +
-                    '" />' +
-                '</td>' +
-            '</tr>'
-        ).appendTo($options_table).find('input');
-        $num_rounds_input.on("change", (event) => this.num_rounds = parseInt(event.target.value));
-        this.num_rounds = defaults.num_rounds; // necessary for reset
-
-        if (this.allow_random_units) {
-            // Default or random units
-            let $random_units_input = $(
+        if (!this.advanced_config) {
+            /* General exercise options: */
+            // Number of rounds
+            let $num_rounds_input = $(
                 '<tr>' +
-                    '<td class="shrink">Random units:</td>' +
+                    '<td class="shrink">Number of rounds:</td>' +
                     '<td class="expand">' +
-                        '<input type="checkbox" name="Show visualizations" value="Show" ' +
-                            (this.random_units ?
-                                'checked' : '') +
-                        ' />' +
-                    '</td>' +
-                '</tr>' +
-                '<tr>' +
-                    '<td colspan="2" class="option-explanation">' +
-                        'If checked, random units will be used instead of default units only.' +
+                        '<input type="number" min="3" max="100" step="1" value="' +
+                            defaults.num_rounds.toString() +
+                        '" />' +
                     '</td>' +
                 '</tr>'
             ).appendTo($options_table).find('input');
-            $random_units_input.change((event) => this.random_units = $random_units_input[0].checked);
-            this.random_units = defaults.random_units; // necessary for reset
-        }
+            $num_rounds_input.on("change", (event) => this.num_rounds = parseInt(event.target.value));
+            this.num_rounds = defaults.num_rounds; // necessary for reset
 
-        /* Task-specific options: */
-        for (let i = 0; i < defaults.task_types.length; i++) {
-            switch(defaults.task_types[i].name) {
-                case "ColorMatching":
-                    show_color_matching_options(this.task_types[i], defaults.task_types[i], $options_table);
-                    break;
-                case "ColorSelection":
-                    show_conlor_selection_options(this.task_types[i], defaults.task_types[i], $options_table);
-                    break;
-                case "ColorConversionSelection":
-                    show_conversion_selection_options(this.task_types[i], defaults.task_types[i], $options_table);
-                    break;
-                case "ColorConversion":
-                    show_color_conversion_options(this.task_types[i], defaults.task_types[i], $options_table);
-                    break;
-                // TODO: If you create a new task type, include it here!
+            if (this.allow_random_units) {
+                // Default or random units
+                let $random_units_input = $(
+                    '<tr>' +
+                        '<td class="shrink">Random units:</td>' +
+                        '<td class="expand">' +
+                            '<input type="checkbox" name="Show visualizations" value="Show" ' +
+                                (this.random_units ?
+                                    'checked' : '') +
+                            ' />' +
+                        '</td>' +
+                    '</tr>' +
+                    '<tr>' +
+                        '<td colspan="2" class="option-explanation">' +
+                            'If checked, random units will be used instead of default units only.' +
+                        '</td>' +
+                    '</tr>'
+                ).appendTo($options_table).find('input');
+                $random_units_input.change((event) => this.random_units = $random_units_input[0].checked);
+                this.random_units = defaults.random_units; // necessary for reset
             }
+
+            /* Task-specific options: */
+            for (let i = 0; i < defaults.task_types.length; i++) {
+                show_task_specific_options_by_name(
+                    defaults.task_types[i].name,
+                    this.task_types[i], defaults.task_types[i], $options_table
+                )
+            }
+        } else { // if this.advanced_config
+            /* Initialize advanced exercise configurator for presentations: */
+            let $advanced_config_toolbar = $(
+                '<div class="exercise=button-bar left-to-right"></div>'
+            ).insertBefore($options_table);
+            let $save_config_btn = $(
+                '<button>Save to file...</button>'
+            ).appendTo($advanced_config_toolbar);
+            $save_config_btn.on("click", () => {
+                console.log(this.task_types);
+                let blob = new Blob([JSON.stringify(this.task_types)], {type: "text/plain;charset=utf-8"});
+                saveAs(blob, "color-exercise.json");
+            });
+            let $load_config_btn = $(
+                '<button>Load from file...</button>'
+            ).appendTo($advanced_config_toolbar);
+            let $load_config_file_input = $(
+                '<input type="file" accept="text/*" style="display: none;"/>'
+            ); // This element will be hidden because it's ugly. Functionality will be called w/ the other button.
+            $load_config_btn.on("click", () => {
+                // TODO
+            });
+
+
+            let $task_add_controls = $(
+                '<table class="add-task-controls"><tr></tr></table>'
+            ).insertAfter($options_table).find("tr");
+            let task_to_add_type_select = new VisualizationControlSelect(
+                $('<td class="expand"></td>').appendTo($task_add_controls),
+                TASK_TYPES_WITHOUT_MIXED,
+                null // no label necessary
+            );
+            let $task_add_button = $(
+                '<td class="shrink"><button>Add task</button></td>'
+            ).appendTo($task_add_controls);
+            $task_add_button.on("click", () => {
+                let new_task_type = construct_task_type_by_name(task_to_add_type_select.get_selected_text());
+                this.task_types.unshift(new_task_type); // unshift: add to beginning of array
+                $options_table.append(
+                    '<tr><td colspan="2" class="exercise-configurator-task-item-header">' +
+                        (this.task_types.length - 1).toString() + '. ' +
+                        task_to_add_type_select.get_selected_text() +
+                    '</td></tr>'
+                );
+                show_task_specific_options_by_name(
+                    new_task_type.name,
+                    new_task_type,
+                    new_task_type, // no need for a different default in this case (reset to global default anyway)
+                    $options_table,
+                    true // is_configurator => make this function show sliders to pre-configure colors
+                );
+                $options_table.append(
+                    '<tr><td colspan="2" class="exercise-configurator-task-item-footer"></td></tr>'
+                );
+            });
         }
     }
 
     initialize_tasks() {
         this._remaining_tasks = [];
+        if (this.advanced_config) {
+            this.num_rounds = this.task_types.length; // see comment on this.task_types
+        }
         for (let i = 0; i < this.num_rounds; i++) {
-            let new_task = null;
-            let new_task_type = this.get_random_task_type();
+            let new_task_type = this.advanced_config ? this.task_types[i] : this.get_random_task_type();
             new_task_type.options.random_units = this.random_units; // default or random color system units?
-            switch(new_task_type.name) {
-                case "ColorMatching":
-                    new_task = new ColorMatchingTask(this, this.num_rounds - i, new_task_type.options);
-                    break;
-                case "ColorSelection":
-                    new_task = new ColorSelectionTask(this, this.num_rounds - i, new_task_type.options);
-                    break;
-                case "ColorConversionSelection":
-                    new_task = new ColorConversionSelectionTask(this, this.num_rounds - i, new_task_type.options);
-                    break;
-                case "ColorConversion":
-                    /* ColorMatchingTask handles this case as well. */
-                    new_task = new ColorMatchingTask(this, this.num_rounds - i, new_task_type.options);
-                    break;
-                case "RGBModification": // TODO: Combine with other types?
-
-                    break;
-                // TODO: Other task types!
-                default:
-                    this.$container.append(
-                        '<p style="color:red;">' +
-                            'Exercise initialization error: Task "' + new_task_type.name +
-                            '" does not exist.' +
-                        '</p>'
-                    );
+            let new_task = construct_task_from_task_type(new_task_type, this, this.num_rounds - i);
+            if (new_task == null) {
+                this.$container.append(
+                    '<p style="color:red;">' +
+                        'Exercise initialization error: Task "' + new_task_type.name +
+                        '" does not exist.' +
+                    '</p>'
+                );
             }
             this._remaining_tasks.push(new_task);
         }

@@ -6,7 +6,7 @@ import {
     is_fullscreen
 } from "../util";
 import {VisualizationControlCheck} from "../controls/VisualizationControlCheck";
-import {VisualizationControlSlider} from "../controls/VisualizationControlSlider";
+import {make_sliders_for_color_system} from "../controls/VisualizationControlSlider";
 
 
 /* Load .glsl shader file via browserify plugin browserify-shader. */
@@ -116,17 +116,7 @@ export class Visualization {
         if (this.$controls.length == 0) {
             return;
         }
-        let $controls = $('<table class="controls-table"></table>').appendTo(this.$controls);
-        for (let i = 0; i < this.color_system.properties.length; i++) {
-            this.color_system_controls.push(
-                new VisualizationControlSlider(
-                    $controls,
-                    this.color_system.properties[i],
-                    0.001,
-                    (value) => this.color_system.is_valid(value, i)
-                ) // (Automatically adds itself to that property's sliders.)
-            );
-        }
+        this.color_system_controls = make_sliders_for_color_system(this.color_system, this.$controls);
 
         // fullscreen button
         if (!this.$figure.find('.fullscreen-button').length) {
@@ -201,11 +191,15 @@ export class Visualization {
         this.current_rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2,
             (this.starting_rotation.x + delta_x) % (2 * Math.PI)));
         this.pivot.rotation.copy(this.current_rotation);
+
+        // console.log(this.pivot.rotation);
     }
 
     update_scale(focal_length_delta) {
         this.camera.setFocalLength(Math.max(this.min_focal_length, Math.min(this.max_focal_length,
             this.starting_focal_length + focal_length_delta)));
+
+        // console.log(this.camera.getFocalLength());
     }
 
     on_resize() {

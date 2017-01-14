@@ -11,10 +11,12 @@ import {
 } from "./ColorSystemUnits";
 import {random_sample} from "../util";
 
-
+export const COLOR_SYSTEM_NAMES = [
+    "rgb", "cmy", "cmyk", "hsl", "hsv"
+];
 
 export function get_color_system_by_name(color_system_name, random_units=true) {
-    switch (color_system_name) {
+    switch(color_system_name) {
         case "rgb":
             let rgb_units = random_units ? random_sample(UNITS_OPTIONS_DEFAULT) : DEFAULT_COLOR_SYSTEM_UNITS;
             return new RGBColorSystem(rgb_units);
@@ -32,4 +34,16 @@ export function get_color_system_by_name(color_system_name, random_units=true) {
             return new HSVColorSystem(hsv_units);
     }
     return null;
+}
+
+export function get_list_of_default_units_by_color_system_name(name) {
+    switch(name) {
+        case "rgb":
+        case "cmy":
+        case "cmyk":
+            return UNITS_OPTIONS_DEFAULT;
+        case "hsl":
+        case "hsv":
+            return UNITS_OPTIONS_HSL_HSV;
+    }
 }

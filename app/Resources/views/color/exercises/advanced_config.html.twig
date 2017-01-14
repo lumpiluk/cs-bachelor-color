@@ -1,0 +1,21 @@
+{% extends 'color/exercise_base.html.twig' %}
+
+{% set exercise_title = 'Advanced Exercise Configurator (For Presentations)' %}
+
+{% block exercise %}
+    <section>
+        <p>
+            So far, full configuration of tasks is only supported for color matching.
+        </p>
+    </section>
+
+    <div class="exercise"
+         data-num-rounds="0"
+         data-allow-random-units="false"
+         data-random-units="false"
+         data-task-types='[]'
+         data-show-options-on-startup="true"
+         data-advanced-config="true"
+    >
+    </div>
+{% endblock %}

@@ -184,7 +184,15 @@
                     \label{eq:rgbtohue}
                 \end{equation}
             </div>
-            For fully saturated red, green, and blue, this results in hue values of
+            Because \(r,g,b \in [0,1]\), \(r', g', \text{ and } b'\) are all contained within the interval \([0,1]\).
+            Without loss of generality, this can be seen if \(\max\lbrace r,g,b \rbrace\) is assumed to be \(r\).
+            In that case, \(r'\) is equal to 0 and
+            \(g'=\frac{r-g}{r-\min\lbrace r,g,b \rbrace},\ b'=\frac{r-b}{r-\min\lbrace r,g,b \rbrace} \in [0, 1]\),
+            since the numerator can only be less than or equal to the denominator.
+            Therefore, each of the sums in the calculation of \(h'\) must be in the interval \([-1,1]\).
+            Consequently, \(h' \in [-1,5]\) and \(h \in [0,1]\).
+
+            In the special cases of saturated red, green, and blue, this results in hue values of
             \(0\), \(\frac{2}{6}\), and \(\frac{4}{6}\), respectively.
             The other non-gray vertices of the RGB cube yellow, cyan, and magenta are assigned the hues
             \(\frac{1}{6}\), \(\frac{3}{6}\), and \(\frac{5}{6}\).
@@ -206,7 +214,7 @@
                     \end{cases}
                 \end{equation}
             </div>
-            Equation <span class="eqref">\ref{eq:rgbtohueintermediate}</span> partitioned the circle of hues
+            Equation <span class="eqref">\ref{eq:rgbtohueintermediate}</span> partitions the circle of hues
             into three times two sectors,
             depending on which component in the original RGB color was larger than the others.
             In order to reverse this and to obtain the RGB color,
@@ -228,6 +236,12 @@
                 \end{array}
             </div>
             Here, \(c_1\) is an index for the hue's sector and \(c_2\) the position in that sector.
+            As \(s_\text{HSL}\) models a radius between 0 and 1,
+            \(d\) can be understood as the radius adjusted for the biconal representation of the HSL color space.
+            It is guaranteed to be within the interval \([0,0.5]\).
+            Therefore, \(u_1\) will always be the maximum component in the new RGB color,
+        and \(u_2\) will be the minimum.
+            \(u_3\) and \(u_4\) interpolate between the maximum and minimum with varying hues in different directions.
             From these intermediate values above, the final RGB values can be assembled:
             <div class="eqn">
                 \begin{equation}
