@@ -298,9 +298,9 @@ export function get_color_matching_results_rows(conversion_tasks_only, matching_
  */
 export function show_color_matching_options(task_type, default_task_type, $options_table,
         is_configurator=false, conversion_task=false) {
-    if (!conversion_task) {
+    if (!is_configurator && !conversion_task) {
         $options_table.append('<th colspan="2">Color Matching Options</th>');
-    } else {
+    } else if (!is_configurator) {
         $options_table.append('<th colspan="2">Color Conversion Options</th>');
     }
 
@@ -319,18 +319,29 @@ export function show_color_matching_options(task_type, default_task_type, $optio
             COLOR_SYSTEM_NAMES,
             null // no additional label necessary
         );
+        if (default_options.color_systems != null && default_options.color_systems.length > 0) {
+            target_system_select.set_selected_text(default_options.color_systems[0]);
+        }
 
         // Selector for target color to match
         let target_color = null;
+        let target_units_select = null;
         let $target_color_config_sliders_container = $(
             '<tr><td colspan="2" class="expand"></td></tr>'
         ).appendTo($options_table).find("td");
         let $target_units_select_container = $('<tr></tr>').appendTo($options_table);
-        let reset_target_color_config_sliders = () => { // wil be called on initialization and in event listener
+        let reset_target_color_config_sliders = (is_initial_call=false) => {
+            // will be called on initialization and in event listener
+
             $target_color_config_sliders_container.empty();
             options.color_systems = [target_system_select.get_selected_text()];
             target_color = get_color_system_by_name(target_system_select.get_selected_text(), false);
-            options.target_color_rgb = target_color.get_rgb();
+            if (is_initial_call && default_options.target_color_rgb != null) {
+                let rgb = default_options.target_color_rgb;
+                target_color.set_from_rgb(rgb.r, rgb.g, rgb.b);
+            } else {
+                options.target_color_rgb = target_color.get_rgb();
+            }
             target_color.add_listener(() => { options.target_color_rgb = target_color.get_rgb(); });
             make_sliders_for_color_system(
                 target_color,
@@ -339,7 +350,7 @@ export function show_color_matching_options(task_type, default_task_type, $optio
 
             // Select target units (needs to be updated on target system change for list of valid units)
             $target_units_select_container.empty();
-            let target_units_select = new VisualizationControlSelect(
+            target_units_select = new VisualizationControlSelect(
                 $(
                     '<td class="shrink">Target color units:</td>' +
                     '<td class="expand"></td>'
@@ -347,13 +358,16 @@ export function show_color_matching_options(task_type, default_task_type, $optio
                 get_list_of_default_units_by_color_system_name(target_system_select.get_selected_text()),
                 null // no additional label necessary
             );
+            if (is_initial_call && default_options.target_units != null) {
+                target_units_select.set_selected_text(default_options.target_units);
+            }
             options.target_units = target_units_select.get_selected_text();
             target_units_select.add_listener((select_change_event) => {
                 target_color.change_units_to(select_change_event.option);
                 options.target_units = target_units_select.get_selected_text();
             });
         };
-        reset_target_color_config_sliders();
+        reset_target_color_config_sliders(true);
 
         target_system_select.add_listener(reset_target_color_config_sliders);
     }

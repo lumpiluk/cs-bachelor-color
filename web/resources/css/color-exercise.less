@@ -18,7 +18,8 @@
   }
 
   table.exercise-results,
-  table.options-table {
+  table.options-table,
+  table.add-task-controls {
     margin: @figure_title_padding;
 
     th {
@@ -48,6 +49,14 @@
       color: rgb(20%, 20%, 20%);
       font-size: 80%;
     }
+
+    .controls-table { // inner table for sliders e.g. in exercise configurator
+      width: 100%;
+
+      td:first-child {
+        padding-right: 0;
+      }
+    }
   }
 
   .exercise-button-bar {
@@ -58,6 +67,16 @@
     button {
       float: right;
       margin-left: .5em;
+    }
+  }
+
+  .exercise-button-bar.left-to-right {
+    button {
+      float: left;
+    }
+
+    button:first-child {
+      margin-left: 0;
     }
   }
 
@@ -147,5 +166,17 @@
         margin-bottom: -.3em;
       }
     }
+  }
+
+  .exercise-configurator-task-item-header {
+    font-weight: bold;
+    font-size: 120%;
+    padding-top: .5em;
+    padding-bottom: .5em;
+  }
+
+  .exercise-configurator-task-item-footer {
+    border-bottom: .15em solid #bcbcbc;
+    padding-bottom: .5em;
   }
 }

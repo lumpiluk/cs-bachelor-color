@@ -144,7 +144,7 @@ export class Exercise {
             this.next_task();
         });
         $reset_button.click(() => {
-            if (!this.advanced_config || !confirm("Your current exercise configuration will be cleared!")) {
+            if (this.advanced_config && !confirm("Your current exercise configuration will be cleared!")) {
                 return;
             }
             this.show_options(defaults); // Will replace current options menu.
@@ -198,7 +198,7 @@ export class Exercise {
         } else { // if this.advanced_config
             /* Initialize advanced exercise configurator for presentations: */
             let $advanced_config_toolbar = $(
-                '<div class="exercise=button-bar left-to-right"></div>'
+                '<div class="exercise-button-bar left-to-right"></div>'
             ).insertBefore($options_table);
             let $save_config_btn = $(
                 '<button>Save to file...</button>'
@@ -208,17 +208,17 @@ export class Exercise {
                 let blob = new Blob([JSON.stringify(this.task_types)], {type: "text/plain;charset=utf-8"});
                 saveAs(blob, "color-exercise.json");
             });
+
+            // Loading configuration from file:
             let $load_config_btn = $(
                 '<button>Load from file...</button>'
             ).appendTo($advanced_config_toolbar);
             let $load_config_file_input = $(
                 '<input type="file" accept="text/*" style="display: none;"/>'
             ); // This element will be hidden because it's ugly. Functionality will be called w/ the other button.
-            $load_config_btn.on("click", () => {
-                // TODO
-            });
+            // continued below
 
-
+            // Adding a task:
             let $task_add_controls = $(
                 '<table class="add-task-controls"><tr></tr></table>'
             ).insertAfter($options_table).find("tr");
@@ -230,12 +230,10 @@ export class Exercise {
             let $task_add_button = $(
                 '<td class="shrink"><button>Add task</button></td>'
             ).appendTo($task_add_controls);
-            $task_add_button.on("click", () => {
-                let new_task_type = construct_task_type_by_name(task_to_add_type_select.get_selected_text());
-                this.task_types.unshift(new_task_type); // unshift: add to beginning of array
+            let add_configuration_elements = (new_task_type, index) => {
                 $options_table.append(
                     '<tr><td colspan="2" class="exercise-configurator-task-item-header">' +
-                        (this.task_types.length - 1).toString() + '. ' +
+                        (index + 1).toString() + '. ' +
                         task_to_add_type_select.get_selected_text() +
                     '</td></tr>'
                 );
@@ -249,6 +247,39 @@ export class Exercise {
                 $options_table.append(
                     '<tr><td colspan="2" class="exercise-configurator-task-item-footer"></td></tr>'
                 );
+            };
+            $task_add_button.on("click", () => {
+                let new_task_type = construct_task_type_by_name(task_to_add_type_select.get_selected_text());
+                this.task_types.unshift(new_task_type); // unshift: add to beginning of array (for fifo order)
+                add_configuration_elements(new_task_type, this.task_types.length - 1);
+            });
+
+            // Loading configuration from file (continued):
+            $load_config_btn.on("click", () => {
+                /*if (this.task_types.length > 0 && !confirm("Your current exercise configuration will be cleared!")) {
+                    return;
+                }
+                this.task_types = [];
+                $options_table.empty();*/
+
+                $load_config_file_input[0].click();
+            });
+            $load_config_file_input.on("change", () => {
+                // console.log($load_config_file_input[0].files[0]);
+                let f = $load_config_file_input[0].files[0];
+                if (!f) {
+                    alert("Failed to load file.");
+                    return;
+                }
+                let file_reader = new FileReader();
+                file_reader.onload = (e) => {
+                    this.task_types = JSON.parse(e.target.result);
+                    console.log("Loaded " + this.task_types.length.toString() + " tasks");
+                    for (let i = 0; i < this.task_types.length; i++) {
+                        add_configuration_elements(this.task_types[i], i);
+                    }
+                };
+                file_reader.readAsText($load_config_file_input[0].files[0]);
             });
         }
     }

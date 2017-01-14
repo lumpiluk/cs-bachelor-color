@@ -579,7 +579,6 @@ input[type=range]:focus::-ms-fill-upper {
   float: left;
   text-align: left;
   padding: 0 0.5em 0 0;
-  width: 2.5em;
 }
 .visualization-control.slider input[type=number] {
   float: right;
@@ -663,36 +662,53 @@ input[type=range]:focus::-ms-fill-upper {
   margin: 0.5em 0.5em 0.75em 0.5em;
 }
 .exercise table.exercise-results,
-.exercise table.options-table {
+.exercise table.options-table,
+.exercise table.add-task-controls {
   margin: 0.45em 0.5em 0.45em 0.5em;
 }
 .exercise table.exercise-results th,
-.exercise table.options-table th {
+.exercise table.options-table th,
+.exercise table.add-task-controls th {
   text-align: left;
   padding-top: .5em;
 }
 .exercise table.exercise-results td:first-child,
-.exercise table.options-table td:first-child {
+.exercise table.options-table td:first-child,
+.exercise table.add-task-controls td:first-child {
   padding-right: 1em;
 }
 .exercise table.exercise-results td:last-child,
-.exercise table.options-table td:last-child {
+.exercise table.options-table td:last-child,
+.exercise table.add-task-controls td:last-child {
   padding-right: 0;
 }
 @media (min-width: 30em) {
   .exercise table.exercise-results td.shrink,
-  .exercise table.options-table td.shrink {
+  .exercise table.options-table td.shrink,
+  .exercise table.add-task-controls td.shrink {
     white-space: nowrap;
   }
   .exercise table.exercise-results td.expand,
-  .exercise table.options-table td.expand {
+  .exercise table.options-table td.expand,
+  .exercise table.add-task-controls td.expand {
     width: 100%;
   }
 }
 .exercise table.exercise-results .option-explanation,
-.exercise table.options-table .option-explanation {
+.exercise table.options-table .option-explanation,
+.exercise table.add-task-controls .option-explanation {
   color: #333333;
   font-size: 80%;
+}
+.exercise table.exercise-results .controls-table,
+.exercise table.options-table .controls-table,
+.exercise table.add-task-controls .controls-table {
+  width: 100%;
+}
+.exercise table.exercise-results .controls-table td:first-child,
+.exercise table.options-table .controls-table td:first-child,
+.exercise table.add-task-controls .controls-table td:first-child {
+  padding-right: 0;
 }
 .exercise .exercise-button-bar {
   padding: 0.45em 0.5em 0.45em 0.5em;
@@ -702,6 +718,12 @@ input[type=range]:focus::-ms-fill-upper {
 .exercise .exercise-button-bar button {
   float: right;
   margin-left: .5em;
+}
+.exercise .exercise-button-bar.left-to-right button {
+  float: left;
+}
+.exercise .exercise-button-bar.left-to-right button:first-child {
+  margin-left: 0;
 }
 .exercise .exercise-feedback {
   padding: 0.45em 0.5em 0.45em 0.5em;
@@ -777,4 +799,14 @@ input[type=range]:focus::-ms-fill-upper {
   border: .1em solid black;
   margin-right: .5em;
   margin-bottom: -0.3em;
+}
+.exercise .exercise-configurator-task-item-header {
+  font-weight: bold;
+  font-size: 120%;
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
+.exercise .exercise-configurator-task-item-footer {
+  border-bottom: .15em solid #bcbcbc;
+  padding-bottom: .5em;
 }

@@ -157,8 +157,10 @@ export class ColorConversionSelectionTask extends AbstractTask {
     }
 }
 
-export function show_conversion_selection_options(task_type, default_task_type, $options_table) {
-    $options_table.append('<th colspan="2">Color Conversion Selection Options</th>');
+export function show_conversion_selection_options(task_type, default_task_type, $options_table, is_configurator=false) {
+    if (!is_configurator) {
+        $options_table.append('<th colspan="2">Color Conversion Selection Options</th>');
+    }
 
     let options = task_type.options;
     let default_options = default_task_type.options;

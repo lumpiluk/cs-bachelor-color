@@ -15,8 +15,10 @@ export class VisualizationControlSelect {
         this.select_id = "vis-ctrl-" + this.control_id + "-select";
         this.label = label;
 
+        this._indeces_for_texts = {}; // needed for set_selected_text()
         let options_html = '';
         for (let i = 0; i < options.length; i++) {
+            this._indeces_for_texts[options[i].toString()] = i.toString();
             options_html += '<option value="' + i.toString() + '">' + options[i].toString() + '</option>';
         }
 
@@ -34,6 +36,10 @@ export class VisualizationControlSelect {
         /* Attach event listener. */
         let that = this;
         this.$select.on("change", (event) => that._on_change.call(that, event));
+    }
+
+    set_selected_text(value) {
+        this.$select.val(this._indeces_for_texts[value]).change();
     }
 
     get_selected_text() {

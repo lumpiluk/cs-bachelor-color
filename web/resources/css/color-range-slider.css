@@ -92,7 +92,6 @@ input[type=range]:focus::-ms-fill-upper {
   float: left;
   text-align: left;
   padding: 0 0.5em 0 0;
-  width: 2.5em;
 }
 .visualization-control.slider input[type=number] {
   float: right;

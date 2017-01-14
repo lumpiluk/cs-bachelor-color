@@ -15,6 +15,7 @@
     - * Scrolling in Firefox, Edge!
     - adjust size and zoom of vis. comparisons esp. on mobile
     - make elements resizable in fullscreen (see http://codepen.io/pprice/pen/splkc/)
+- revise validity check for CMYK for (1,1,1,1)_CMYK!!!
     
    
 
