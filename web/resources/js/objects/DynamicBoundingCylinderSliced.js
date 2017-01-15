@@ -5,7 +5,7 @@ import {
     BufferAttribute,
     LineBasicMaterial,
     LineSegments
-} from "../../../bower_components/three.js/build/three";
+} from "../../../node_modules/three/build/three";
 
 
 function get_current_angle(i, num_segments, theta_length) {

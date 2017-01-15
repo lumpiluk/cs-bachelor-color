@@ -800,13 +800,22 @@ input[type=range]:focus::-ms-fill-upper {
   margin-right: .5em;
   margin-bottom: -0.3em;
 }
-.exercise .exercise-configurator-task-item-header {
+.exercise tbody.sub-table {
+  box-shadow: 0 0.05em 0.15em 0.05em #bfbfbf;
+}
+.exercise tbody.sub-table .exercise-configurator-task-item-header {
   font-weight: bold;
   font-size: 120%;
   padding-top: .5em;
   padding-bottom: .5em;
 }
-.exercise .exercise-configurator-task-item-footer {
-  border-bottom: .15em solid #bcbcbc;
+.exercise tbody.sub-table .exercise-configurator-task-item-footer {
   padding-bottom: .5em;
+}
+.exercise .separator {
+  min-height: .5em;
+  height: .5em;
+}
+.exercise tbody:last-child .separator {
+  min-height: 0;
 }

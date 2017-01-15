@@ -4,7 +4,7 @@ import {RGBColorSystem} from "../color-systems/RGBColorSystem";
 import {
     ShaderMaterial,
     Vector3
-} from "../../../bower_components/three.js/build/three";
+} from "../../../node_modules/three/build/three";
 import {VisualizationControlSelect} from "../controls/VisualizationControlSelect";
 import {UNITS_OPTIONS_DEFAULT} from "../color-systems/ColorSystemUnits";
 

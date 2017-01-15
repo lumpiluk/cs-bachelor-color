@@ -1,4 +1,4 @@
-import {BufferGeometry, BufferAttribute, Vector3} from "../../../bower_components/three.js/build/three";
+import {BufferGeometry, BufferAttribute, Vector3} from "../../../node_modules/three/build/three";
 
 const BOTTOM_CENTER_VERTEX_ID = 0;
 const TOP_CENTER_VERTEX_ID = 1;

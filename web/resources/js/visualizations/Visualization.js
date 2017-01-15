@@ -1,5 +1,5 @@
 import {Vector2, Euler, Matrix4, PerspectiveCamera, Object3D, WebGLRenderer, Scene}
-    from "../../../bower_components/three.js/build/three";
+    from "../../../node_modules/three/build/three";
 import {
     rgb_to_css,
     toggle_full_screen,

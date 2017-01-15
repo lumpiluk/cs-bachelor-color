@@ -7,7 +7,7 @@ import {
     BoxHelper,
     Vector3,
     ArrowHelper
-} from "../../../bower_components/three.js/build/three";
+} from "../../../node_modules/three/build/three";
 
 export class DynamicAnnotatedCube extends Object3D {
     /**

@@ -7,7 +7,8 @@
     - 'Restart' button.
     - Let each task type summarize its own results.
     - explain trichromatic color matching
-    - presentation mode
+    - finish presentation mode for tasks other than matching
+    - matching: show result also in visualizations; show correct results on failure
 - Visualizations
     - Option to dynamically load any visualization for comparison.
     - HSL, HSV: Option to not slice the cylinders/cones.
@@ -15,8 +16,3 @@
     - * Scrolling in Firefox, Edge!
     - adjust size and zoom of vis. comparisons esp. on mobile
     - make elements resizable in fullscreen (see http://codepen.io/pprice/pen/splkc/)
-- revise validity check for CMYK for (1,1,1,1)_CMYK!!!
-    
-   
-
-

@@ -13,7 +13,7 @@
 
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
-            <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/normalize-css/normalize.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('node_modules/normalize-css/normalize.css') }}">
             <link rel="stylesheet" type="text/css" href="{{ asset('resources/css/color-main.css') }}">
         {% endblock %}
         {# <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" /> #}
@@ -27,7 +27,7 @@
         <meta name="theme-color" content="#ffffff">
 
         {% block javascripts_head %}
-            <script src="{{ asset('bower_components/jquery/dist/jquery.min.js') }}"></script>
+            <script src="{{ asset('node_modules/jquery/dist/jquery.min.js') }}"></script>
 
             <script>
                 /* Show and hide the main menu. */
@@ -45,7 +45,7 @@
                   TeX: { equationNumbers: { autoNumber: "AMS" } }
                 });
             </script>
-            <script async src="{{ asset('bower_components/MathJax/MathJax.js?config=TeX-MML-AM_CHTML') }}"></script>
+            <script async src="{{ asset('node_modules/mathjax/MathJax.js?config=TeX-MML-AM_CHTML') }}"></script>
             <script src="{{ asset('resources/js/build/color.compiled.min.js') }}"></script>
         {% endblock %}
     </head>

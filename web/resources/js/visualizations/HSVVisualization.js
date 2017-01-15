@@ -9,14 +9,13 @@ import {VisualizationControlSelect} from "../controls/VisualizationControlSelect
 import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
 import {HSVColorSystem} from "../color-systems/HSVColorSystem";
 import {UNITS_DEG_UNIT_UNIT, UNITS_OPTIONS_HSL_HSV} from "../color-systems/ColorSystemUnits";
-
 import {
     ShaderMaterial,
     Vector3,
     ArrowHelper,
     Mesh,
     Object3D
-} from "../../../bower_components/three.js/build/three";
+} from "../../../node_modules/three/build/three";
 import {DynamicBoundingCylinderSliced} from "../objects/DynamicBoundingCylinderSliced";
 
 

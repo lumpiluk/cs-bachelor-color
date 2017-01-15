@@ -3,7 +3,7 @@ import {DynamicAnnotatedCube} from "../objects/DynamicAnnotatedCube";
 import {
     ShaderMaterial,
     Vector3
-} from "../../../bower_components/three.js/build/three";
+} from "../../../node_modules/three/build/three";
 import {CMYColorSystem} from "../color-systems/CMYColorSystem";
 import {VisualizationControlSelect} from "../controls/VisualizationControlSelect";
 import {UNITS_OPTIONS_DEFAULT} from "../color-systems/ColorSystemUnits";

@@ -4,7 +4,12 @@
   "description": "An exercise in color theory.",
   "main": "index.html",
   "dependencies": {
-    "browserify-shader": "^0.1.2"
+    "browserify-shader": "^0.1.2",
+    "file-saver": "^1.3.3",
+    "jquery": "^3.1.1",
+    "mathjax": "^2.7.0",
+    "normalize-css": "^2.3.1",
+    "three": "^0.83.0"
   },
   "devDependencies": {
     "babel": "^6.5.2",

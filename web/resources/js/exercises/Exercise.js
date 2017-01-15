@@ -6,7 +6,7 @@ import {
 } from "./exercises";
 import {construct_task_type_by_name} from "./exercises";
 import {deep_copy} from "../util";
-import {saveAs} from "../../../bower_components/file-saver/FileSaver";
+import {saveAs} from "../../../node_modules/file-saver/FileSaver";
 
 /**
  * Creates an exercise in a given container.
@@ -173,7 +173,7 @@ export class Exercise {
                         '<td class="shrink">Random units:</td>' +
                         '<td class="expand">' +
                             '<input type="checkbox" name="Show visualizations" value="Show" ' +
-                                (this.random_units ?
+                                (defaults.random_units ?
                                     'checked' : '') +
                             ' />' +
                         '</td>' +
@@ -231,7 +231,11 @@ export class Exercise {
                 '<td class="shrink"><button>Add task</button></td>'
             ).appendTo($task_add_controls);
             let add_configuration_elements = (new_task_type, index) => {
-                $options_table.append(
+                let $sub_table = $(
+                    '<tbody class="sub-table"></tbody>' +
+                    '<tr class="separator"></tr>'
+                ).appendTo($options_table).closest(".sub-table");
+                $sub_table.append(
                     '<tr><td colspan="2" class="exercise-configurator-task-item-header">' +
                         (index + 1).toString() + '. ' +
                         task_to_add_type_select.get_selected_text() +
@@ -241,10 +245,10 @@ export class Exercise {
                     new_task_type.name,
                     new_task_type,
                     new_task_type, // no need for a different default in this case (reset to global default anyway)
-                    $options_table,
+                    $sub_table,
                     true // is_configurator => make this function show sliders to pre-configure colors
                 );
-                $options_table.append(
+                $sub_table.append(
                     '<tr><td colspan="2" class="exercise-configurator-task-item-footer"></td></tr>'
                 );
             };
