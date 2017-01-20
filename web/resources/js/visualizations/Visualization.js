@@ -66,7 +66,7 @@ export class Visualization {
         this.scene.add(this.pivot);
         // this.scene.add(this.axis_helper);
         this.renderer.setClearColor(0x505050, 1);
-        this.renderer.setSize(this.$container.width(), this.$container.height());
+        this.renderer.setSize(this.$container.width(), this.$container.innerHeight());
         this.$container.append(this.renderer.domElement);
 
         $(window).resize(() => that.on_resize.call(that));
@@ -208,8 +208,8 @@ export class Visualization {
             this.$container.height(this.$container.width() / this.aspect);
         }
 
-        this.renderer.setSize(this.$container.width(), this.$container.height());
-        this.camera.aspect = this.$container.width() / this.$container.height();
+        this.renderer.setSize(this.$container.width(), this.$container.innerHeight());
+        this.camera.aspect = this.$container.width() / (this.$container.innerHeight());
         this.camera.updateProjectionMatrix();
         this.render();
     }

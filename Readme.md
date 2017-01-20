@@ -44,7 +44,7 @@ Important folders and files (with relevance to this project) are written in **bo
 2. Make sure PHP is installed. (Tested with PHP 7.0. On Debian-based systems, run `sudo apt install php7.0` to install.)
 3. Install the XML extension for PHP (e.g. `sudo apt install php7.0-xml`)
 4. Install dependencies for the Symfony framework via `php composer.phar install`.
-  If you are deploying a published version, use the following command instead: `./symfony_deploy`. You may need to replace the call to `php` with `php[x]-cli`, where `[x]` is the PHP version number.
+  If you are deploying a published version, use the following command instead: `./symfony_deploy.sh`. You may need to replace the call to `php` with `php[x]-cli`, where `[x]` is the PHP version number.
   You will be prompted to enter the database host.
   If you are installing on a local machine, the default 127.0.0.1 is fine.
   The same goes for the other settings, which can still be changed later by editing the file `app/config/parameters.yml`. 
@@ -89,10 +89,11 @@ This project uses Symfony and, for templating, Symfony's Twig. knpuniversity's v
 ### Symfony
 
 Useful resources:
+
 - Registration form: http://symfony.com/doc/current/doctrine/registration_form.html
 - Login form:
-  - http://symfony.com/doc/current/security/form_login_setup.html
-  - http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+    - http://symfony.com/doc/current/security/form_login_setup.html
+    - http://symfony.com/doc/current/cookbook/security/form_login_setup.html
 - Load users from DB: http://symfony.com/doc/current/security/entity_provider.html
 - Access control, ROLEs: http://symfony.com/doc/current/security.html
 

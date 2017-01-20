@@ -42,7 +42,7 @@ figure {
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    height: @visualization_height;
+    //height: @visualization_height;
 
     .img-container {
       flex-grow: 1;
@@ -60,11 +60,23 @@ figure {
   }
 
   .visualization {
-    height: @visualization_height;
+    //height: @visualization_height;
     flex-grow: 1;
     width: 100%;
     overflow: hidden;
     background-color: #505050;
+
+    // keep 4:3 aspect ratio, see http://www.w3schools.com/howto/howto_css_aspect_ratio.asp
+    position: relative;
+    padding-top: 75%;
+
+    canvas {
+      position: absolute; // necessary for maintaining aspect ratio
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
   }
 
   .selected-color {
@@ -115,7 +127,7 @@ figure {
   .visualization {
     width: 100%;
     //height: 75%;
-    height: 100%;
+    //height: 100%;
     flex-grow: 1;
   }
 
