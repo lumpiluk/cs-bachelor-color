@@ -44,9 +44,8 @@ export class Visualization {
         this.max_focal_length = 400; // for zooming
         this.zoom_steps = 20; // (if available)
         this.zoom_sensitivity = 0.25; // For mouse wheels. Lower => more sensitive.
-        // this.aspect = $container.width() / $container.height(); // should be ~3/2
-        this.aspect = 3 / 2; // 3 / 2;
-        this.keep_aspect = false; // Used to be true by default. Will be automatically set to false when toggling full screen
+        this.aspect = this.$container.width() / this.$container.innerHeight(); // should be 3 / 2;
+        this.keep_aspect = false; // Used to be true by default before handling this in CSS only. Will be automatically set to false when toggling full screen
         //this.$container.height(this.$container.width() / this.aspect); // Apply aspect ratio (for camera and renderer).
         this.near = 0.1;
         this.far = 10000;
@@ -203,7 +202,7 @@ export class Visualization {
     }
 
     on_resize() {
-        /* Preserve aspect ratio. */
+        /* Preserve aspect ratio without the help of CSS. */
         if (this.keep_aspect) {
             this.$container.height(this.$container.width() / this.aspect);
         }

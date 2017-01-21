@@ -55,6 +55,11 @@
 
       td:first-child {
         padding-right: 0;
+        padding-left: 0; // override setting of .sub-table
+      }
+
+      td:last-child {
+        padding-right: 0; // override setting of .sub-table
       }
     }
   }
@@ -68,6 +73,10 @@
       float: right;
       margin-left: .5em;
     }
+  }
+
+  .exercise-button-bar:not(:last-child) {
+    box-shadow: 0 .05em .15em .05em rgb(75%, 75%, 75%); // h v blur spread color
   }
 
   .exercise-button-bar.left-to-right {
@@ -169,7 +178,7 @@
   }
 
   tbody.sub-table {
-    box-shadow: 0 0.05em .15em .05em rgb(75%, 75%, 75%); // h v blur spread color
+    box-shadow: 0 .05em .15em .05em rgb(75%, 75%, 75%); // h v blur spread color
 
     .exercise-configurator-task-item-header {
       font-weight: bold;
@@ -181,6 +190,14 @@
     .exercise-configurator-task-item-footer {
       //border-bottom: .15em solid #bcbcbc;
       padding-bottom: .5em;
+    }
+
+    td:first-child {
+      padding-left: .25em;
+    }
+
+    td:last-child {
+      padding-right: .25em;
     }
   }
 

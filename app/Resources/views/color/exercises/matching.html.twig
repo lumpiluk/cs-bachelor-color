@@ -30,4 +30,34 @@
          {% endif %}
     >
     </div>
+
+    {% if color_systems|length == 1 and 'rgb' in color_systems %}
+        <section id="grassmann-color-matching">
+            <h2>Trichromatic Color Matching</h2>
+
+            This exercise bears similarity to experiments performed since the beginning of the 20th century.
+            With the aim of quantifying the human perception of colors they resulted in the development of
+            the CIE 1931 XYZ color space [SG31, pp. 74ff.], which is still used today in the field of colorimetry.
+            The experiments in turn make use of theoretical foundations developed by Hermann G. Grassmann
+            in the 19th century,
+            who among other things described how colors can be expressed as the sum of three components
+            [Co01, pp. 36f., p. 122, p. 156].
+        </section>
+
+        <section id="literature">
+            <h2>Literature</h2>
+            <dl>
+                <dt>[SG31]</dt>
+                <dd>
+                    Smith, Thomas and Guild, John. "The CIE colorimetric standards
+                    and their use." In: <i>Transactions of the Optical Society 33.3</i> (1931),
+                    p. 73.
+                </dd>
+                <dt>[Co01]</dt>
+                <dd>
+                    Cohen, Jozef B. <i>The Fundamental Color Space.</i> University of Illinois Press, 2001.
+                </dd>
+            </dl>
+        </section>
+    {% endif %}
 {% endblock %}

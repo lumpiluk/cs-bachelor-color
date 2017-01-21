@@ -213,7 +213,7 @@ figure .visualization {
   overflow: hidden;
   background-color: #505050;
   position: relative;
-  padding-top: 75%;
+  padding-top: 66.66%;
 }
 .figure .visualization canvas,
 figure .visualization canvas {
@@ -263,12 +263,16 @@ figure .selected-color {
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
 .fullscreen-figure .visualization {
+  position: static;
+  padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
+.fullscreen-figure .visualization canvas {
+  position: static;
+}
 .fullscreen-figure .visualizations {
   width: 100%;
-  height: 100%;
   flex-grow: 1;
 }
 .fullscreen-figure .visualizations .visualization {
@@ -311,12 +315,16 @@ figure .selected-color {
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
 .figure:fullscreen .visualization {
+  position: static;
+  padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
+.figure:fullscreen .visualization canvas {
+  position: static;
+}
 .figure:fullscreen .visualizations {
   width: 100%;
-  height: 100%;
   flex-grow: 1;
 }
 .figure:fullscreen .visualizations .visualization {
@@ -353,12 +361,16 @@ figure .selected-color {
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
 .figure:-webkit-full-screen .visualization {
+  position: static;
+  padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
+.figure:-webkit-full-screen .visualization canvas {
+  position: static;
+}
 .figure:-webkit-full-screen .visualizations {
   width: 100%;
-  height: 100%;
   flex-grow: 1;
 }
 .figure:-webkit-full-screen .visualizations .visualization {
@@ -395,12 +407,16 @@ figure .selected-color {
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
 .figure:-moz-full-screen .visualization {
+  position: static;
+  padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
+.figure:-moz-full-screen .visualization canvas {
+  position: static;
+}
 .figure:-moz-full-screen .visualizations {
   width: 100%;
-  height: 100%;
   flex-grow: 1;
 }
 .figure:-moz-full-screen .visualizations .visualization {
@@ -437,12 +453,16 @@ figure .selected-color {
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
 .figure:-ms-fullscreen .visualization {
+  position: static;
+  padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
+.figure:-ms-fullscreen .visualization canvas {
+  position: static;
+}
 .figure:-ms-fullscreen .visualizations {
   width: 100%;
-  height: 100%;
   flex-grow: 1;
 }
 .figure:-ms-fullscreen .visualizations .visualization {
@@ -494,15 +514,22 @@ figure:fullscreen .visualization,
 figure:-webkit-full-screen .visualization,
 figure:-moz-full-screen .visualization,
 figure:-ms-fullscreen .visualization {
+  position: static;
+  padding-top: 0;
   width: 100%;
   flex-grow: 1;
+}
+figure:fullscreen .visualization canvas,
+figure:-webkit-full-screen .visualization canvas,
+figure:-moz-full-screen .visualization canvas,
+figure:-ms-fullscreen .visualization canvas {
+  position: static;
 }
 figure:fullscreen .visualizations,
 figure:-webkit-full-screen .visualizations,
 figure:-moz-full-screen .visualizations,
 figure:-ms-fullscreen .visualizations {
   width: 100%;
-  height: 100%;
   flex-grow: 1;
 }
 figure:fullscreen .visualizations .visualization,

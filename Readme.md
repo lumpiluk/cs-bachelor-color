@@ -50,8 +50,8 @@ Important folders and files (with relevance to this project) are written in **bo
   The same goes for the other settings, which can still be changed later by editing the file `app/config/parameters.yml`. 
   Providing the database settings is necessary if you plan to run the experiment again (disabled by default).  
 5. For the Javascript and other dependencies we need the Node Package Manager (npm): `sudo apt install npm`.
-6. If you also want to build the sources, run `install_dev_dependencies.sh` and refer to the section List of Dependencies below for installing all modules that are assumed to be installed globally.
-  Otherwise, run `./install_production_dependencies_only.sh`.
+6. Run `./install_production_dependencies_only.sh`.
+If you also want to build the sources, run `install_dev_dependencies.sh` instead and refer to the section List of Dependencies below for installing all modules that are assumed to be installed globally.
 7. Now you can execute `./run_local_php_server.sh` and visit the given address (typically `http://localhost:8000`) in your browser.
 
 ### List of Dependencies
