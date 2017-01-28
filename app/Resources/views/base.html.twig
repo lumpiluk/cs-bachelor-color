@@ -11,6 +11,9 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+        <meta name="author" content="Lukas Stratmann">
+        <meta name="description" content="On these pages, you will find learning materials on color theory and assorted color systems. You can use the exercises to practice and to reflect on your progress." />
+
         <title>{% block title %}Welcome!{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet" type="text/css" href="{{ asset('node_modules/normalize-css/normalize.css') }}">
@@ -127,7 +130,26 @@
             <main>
                 {% block body %}{% endblock %}
             </main>
+            <footer>
+                {% block footer %}
+                    {% set license_name = 'Creative Commons Attribution-ShareAlike 4.0 International license' %}
+                    &copy; {{ ""|date("Y") }} Lukas Stratmann
+                    <span class="separator">|</span>
+                    <a rel="license"
+                       href="http://creativecommons.org/licenses/by-sa/4.0/"
+                       title="{{ license_name }}"
+                       class="license">
+                        {# icons from https://creativecommons.org/about/downloads/ #}
+                        <img alt="CC" src="{{ asset('resources/img/creative-commons/cc.svg') }}" />
+                        <img alt="BY" src="{{ asset('resources/img/creative-commons/by.svg') }}" />
+                        <img alt="SA" src="{{ asset('resources/img/creative-commons/sa.svg') }}" />
+                    </a>
+                    <span class="separator">|</span>
+                    <a class="email" data-email='["info", "lukas-stratmann", "com"]'></a>
+                {% endblock %}
+            </footer>
         </div>
+
         {% block javascripts %}{% endblock %}
     </body>
 </html>

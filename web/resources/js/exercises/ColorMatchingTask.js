@@ -61,7 +61,7 @@ export class ColorMatchingTask extends AbstractTask {
 
         this.is_pre_configured_task = actual.target_color_rgb != null;
         this.target_color = get_color_system_by_name(this.target_system_name,
-            this.is_conversion_task && this.random_units);
+            this.random_units);
         if (this.is_pre_configured_task) {
             let rgb = actual.target_color_rgb;
             this.target_color.set_from_rgb(rgb.r, rgb.g, rgb.b);
@@ -104,9 +104,7 @@ export class ColorMatchingTask extends AbstractTask {
             this.current_color.change_units_to(this.converted_target_color.properties[0].color_system_units);
         } else {
             this.current_color = get_color_system_by_name(this.target_system_name, false);
-            if (this.is_pre_configured_task) {
-                this.current_color.change_units_to(this.target_color.properties[0].color_system_units);
-            }
+            this.current_color.change_units_to(this.target_color.properties[0].color_system_units);
         }
         /* Also randomize current color (for the sliders). */
         this.current_color.randomize();

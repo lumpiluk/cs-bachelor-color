@@ -13,19 +13,19 @@ input[type=range] {
 }
 input[type=range]::-webkit-slider-runnable-track {
   width: 98%;
-  height: 0.5em;
+  height: 0.75rem;
   background: #818181;
   border: none;
-  border-radius: 3px;
+  border-radius: 0.3rem;
 }
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   border: 0.1em solid black;
-  height: 1em;
-  width: 1em;
+  height: 1rem;
+  width: 1rem;
   border-radius: 50%;
   background: #e6e6e6;
-  margin-top: -0.25em;
+  margin-top: -0.16666667rem;
 }
 input[type=range]:focus {
   outline: none;
@@ -35,15 +35,15 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 }
 input[type=range]::-moz-range-track {
   width: 98%;
-  height: 0.5em;
+  height: 0.75rem;
   background: #818181;
   border: none;
-  border-radius: 3px;
+  border-radius: 0.3rem;
 }
 input[type=range]::-moz-range-thumb {
   border: 0.1em solid black;
-  height: 1em;
-  width: 1em;
+  height: 1rem;
+  width: 1rem;
   border-radius: 50%;
   background: #e6e6e6;
 }
@@ -54,7 +54,7 @@ input[type=range]:-moz-focusring {
 }
 input[type=range]::-ms-track {
   width: 98%;
-  height: 0.5em;
+  height: 0.75rem;
   /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
   background: transparent;
   /*leave room for the larger thumb to overflow with a transparent border */
@@ -73,8 +73,8 @@ input[type=range]::-ms-fill-upper {
 }
 input[type=range]::-ms-thumb {
   border: 0.1em solid black;
-  height: 1em;
-  width: 1em;
+  height: 1rem;
+  width: 1rem;
   border-radius: 50%;
   background: #e6e6e6;
 }

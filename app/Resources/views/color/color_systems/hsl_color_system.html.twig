@@ -28,7 +28,9 @@
         </p>
         <div class="figure" id="fig-hslspace">
             {% if group_b or full_access %}
-                <div class="hsl visualization"></div>
+                <div class="hsl visualization aspect-ratio-preserver">
+                    <img class="aspect-ratio" src="{{ asset('resources/img/3by2aspect.png') }}" />
+                </div>
                 <div class="figure-details">
                     <div class="selected-color"></div>
                     <div class="figure-title">
@@ -120,9 +122,12 @@
 
         <div class="figure" id="fig-rgbhsl">
             {% if group_b or full_access %}
-                <div class="visualizations">
-                    <div class="rgb-cube visualization"></div>
-                    <div class="hsl visualization"></div>
+                <div class="aspect-ratio-preserver">
+                    <img class="aspect-ratio" src="{{ asset('resources/img/3by2aspect.png') }}" />
+                    <div class="visualizations aspect-ratio-preservee">
+                        <div class="rgb-cube visualization"></div>
+                        <div class="hsl visualization"></div>
+                    </div>
                 </div>
                 <div class="figure-details">
                     <div class="selected-color"></div>

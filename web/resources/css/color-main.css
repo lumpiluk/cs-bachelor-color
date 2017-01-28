@@ -13,19 +13,19 @@ input[type=range] {
 }
 input[type=range]::-webkit-slider-runnable-track {
   width: 98%;
-  height: 0.5em;
+  height: 0.75rem;
   background: #818181;
   border: none;
-  border-radius: 3px;
+  border-radius: 0.3rem;
 }
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
   border: 0.1em solid black;
-  height: 1em;
-  width: 1em;
+  height: 1rem;
+  width: 1rem;
   border-radius: 50%;
   background: #e6e6e6;
-  margin-top: -0.25em;
+  margin-top: -0.16666667rem;
 }
 input[type=range]:focus {
   outline: none;
@@ -35,15 +35,15 @@ input[type=range]:focus::-webkit-slider-runnable-track {
 }
 input[type=range]::-moz-range-track {
   width: 98%;
-  height: 0.5em;
+  height: 0.75rem;
   background: #818181;
   border: none;
-  border-radius: 3px;
+  border-radius: 0.3rem;
 }
 input[type=range]::-moz-range-thumb {
   border: 0.1em solid black;
-  height: 1em;
-  width: 1em;
+  height: 1rem;
+  width: 1rem;
   border-radius: 50%;
   background: #e6e6e6;
 }
@@ -54,7 +54,7 @@ input[type=range]:-moz-focusring {
 }
 input[type=range]::-ms-track {
   width: 98%;
-  height: 0.5em;
+  height: 0.75rem;
   /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
   background: transparent;
   /*leave room for the larger thumb to overflow with a transparent border */
@@ -73,8 +73,8 @@ input[type=range]::-ms-fill-upper {
 }
 input[type=range]::-ms-thumb {
   border: 0.1em solid black;
-  height: 1em;
-  width: 1em;
+  height: 1rem;
+  width: 1rem;
   border-radius: 50%;
   background: #e6e6e6;
 }
@@ -183,8 +183,6 @@ figure .visualizations,
 .figure .side-by-side,
 figure .side-by-side {
   width: 100%;
-  display: -webkit-flex;
-  -webkit-flex-flow: row nowrap;
   display: flex;
   flex-flow: row nowrap;
   overflow: hidden;
@@ -198,8 +196,6 @@ figure .side-by-side .img-container {
   flex-grow: 1;
   width: 100%;
   /* Center image (if single image, typically). */
-  display: -webkit-flex;
-  -webkit-flex-flow: row nowrap;
   display: flex;
   flex-flow: row nowrap;
   overflow: hidden;
@@ -210,18 +206,13 @@ figure .side-by-side .img-container {
 figure .visualization {
   flex-grow: 1;
   width: 100%;
+  height: 100%;
   overflow: hidden;
   background-color: #505050;
-  position: relative;
-  padding-top: 66.66%;
 }
 .figure .visualization canvas,
 figure .visualization canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  height: 100%;
 }
 .figure .selected-color,
 figure .selected-color {
@@ -231,6 +222,26 @@ figure .selected-color {
   background-color: white;
   border: .1em solid black;
 }
+.figure .aspect-ratio-preserver,
+figure .aspect-ratio-preserver {
+  position: relative;
+}
+.figure .aspect-ratio-preserver img.aspect-ratio,
+figure .aspect-ratio-preserver img.aspect-ratio {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.figure .aspect-ratio-preserver .aspect-ratio-preservee,
+figure .aspect-ratio-preserver .aspect-ratio-preservee,
+.figure .aspect-ratio-preserver > canvas,
+figure .aspect-ratio-preserver > canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 /* To be included */
 .fullscreen-figure {
   margin: 0;
@@ -238,18 +249,29 @@ figure .selected-color {
   height: 100%;
   max-width: 100%;
   background-color: white;
-  display: -webkit-flex;
   display: flex;
+  /*.visualizations {
+    width: 100%;
+    //height: 100%;
+    flex-grow: 1;
+
+    .visualization {
+      height: 100%; // override 75% height for indiv. visualizations in comparisons
+    }
+  }*/
+}
+.fullscreen-figure img.aspect-ratio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
 }
 @media (orientation: landscape) {
   .fullscreen-figure {
-    -webkit-flex-flow: row nowrap;
     flex-flow: row nowrap;
   }
 }
 @media (orientation: portrait) {
   .fullscreen-figure {
-    -webkit-flex-flow: column nowrap;
     flex-flow: column nowrap;
   }
 }
@@ -262,20 +284,15 @@ figure .selected-color {
   margin-right: auto;
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
-.fullscreen-figure .visualization {
+.fullscreen-figure .aspect-ratio-preserver {
   position: static;
   padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
-.fullscreen-figure .visualization canvas {
+.fullscreen-figure .aspect-ratio-preserver > .aspect-ratio-preservee,
+.fullscreen-figure .aspect-ratio-preserver > canvas {
   position: static;
-}
-.fullscreen-figure .visualizations {
-  width: 100%;
-  flex-grow: 1;
-}
-.fullscreen-figure .visualizations .visualization {
   height: 100%;
 }
 .fullscreen-button {
@@ -290,18 +307,29 @@ figure .selected-color {
   height: 100%;
   max-width: 100%;
   background-color: white;
-  display: -webkit-flex;
   display: flex;
+  /*.visualizations {
+    width: 100%;
+    //height: 100%;
+    flex-grow: 1;
+
+    .visualization {
+      height: 100%; // override 75% height for indiv. visualizations in comparisons
+    }
+  }*/
+}
+.figure:fullscreen img.aspect-ratio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
 }
 @media (orientation: landscape) {
   .figure:fullscreen {
-    -webkit-flex-flow: row nowrap;
     flex-flow: row nowrap;
   }
 }
 @media (orientation: portrait) {
   .figure:fullscreen {
-    -webkit-flex-flow: column nowrap;
     flex-flow: column nowrap;
   }
 }
@@ -314,20 +342,15 @@ figure .selected-color {
   margin-right: auto;
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
-.figure:fullscreen .visualization {
+.figure:fullscreen .aspect-ratio-preserver {
   position: static;
   padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
-.figure:fullscreen .visualization canvas {
+.figure:fullscreen .aspect-ratio-preserver > .aspect-ratio-preservee,
+.figure:fullscreen .aspect-ratio-preserver > canvas {
   position: static;
-}
-.figure:fullscreen .visualizations {
-  width: 100%;
-  flex-grow: 1;
-}
-.figure:fullscreen .visualizations .visualization {
   height: 100%;
 }
 .figure:-webkit-full-screen {
@@ -336,18 +359,29 @@ figure .selected-color {
   height: 100%;
   max-width: 100%;
   background-color: white;
-  display: -webkit-flex;
   display: flex;
+  /*.visualizations {
+    width: 100%;
+    //height: 100%;
+    flex-grow: 1;
+
+    .visualization {
+      height: 100%; // override 75% height for indiv. visualizations in comparisons
+    }
+  }*/
+}
+.figure:-webkit-full-screen img.aspect-ratio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
 }
 @media (orientation: landscape) {
   .figure:-webkit-full-screen {
-    -webkit-flex-flow: row nowrap;
     flex-flow: row nowrap;
   }
 }
 @media (orientation: portrait) {
   .figure:-webkit-full-screen {
-    -webkit-flex-flow: column nowrap;
     flex-flow: column nowrap;
   }
 }
@@ -360,20 +394,15 @@ figure .selected-color {
   margin-right: auto;
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
-.figure:-webkit-full-screen .visualization {
+.figure:-webkit-full-screen .aspect-ratio-preserver {
   position: static;
   padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
-.figure:-webkit-full-screen .visualization canvas {
+.figure:-webkit-full-screen .aspect-ratio-preserver > .aspect-ratio-preservee,
+.figure:-webkit-full-screen .aspect-ratio-preserver > canvas {
   position: static;
-}
-.figure:-webkit-full-screen .visualizations {
-  width: 100%;
-  flex-grow: 1;
-}
-.figure:-webkit-full-screen .visualizations .visualization {
   height: 100%;
 }
 .figure:-moz-full-screen {
@@ -382,18 +411,29 @@ figure .selected-color {
   height: 100%;
   max-width: 100%;
   background-color: white;
-  display: -webkit-flex;
   display: flex;
+  /*.visualizations {
+    width: 100%;
+    //height: 100%;
+    flex-grow: 1;
+
+    .visualization {
+      height: 100%; // override 75% height for indiv. visualizations in comparisons
+    }
+  }*/
+}
+.figure:-moz-full-screen img.aspect-ratio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
 }
 @media (orientation: landscape) {
   .figure:-moz-full-screen {
-    -webkit-flex-flow: row nowrap;
     flex-flow: row nowrap;
   }
 }
 @media (orientation: portrait) {
   .figure:-moz-full-screen {
-    -webkit-flex-flow: column nowrap;
     flex-flow: column nowrap;
   }
 }
@@ -406,20 +446,15 @@ figure .selected-color {
   margin-right: auto;
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
-.figure:-moz-full-screen .visualization {
+.figure:-moz-full-screen .aspect-ratio-preserver {
   position: static;
   padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
-.figure:-moz-full-screen .visualization canvas {
+.figure:-moz-full-screen .aspect-ratio-preserver > .aspect-ratio-preservee,
+.figure:-moz-full-screen .aspect-ratio-preserver > canvas {
   position: static;
-}
-.figure:-moz-full-screen .visualizations {
-  width: 100%;
-  flex-grow: 1;
-}
-.figure:-moz-full-screen .visualizations .visualization {
   height: 100%;
 }
 .figure:-ms-fullscreen {
@@ -428,18 +463,29 @@ figure .selected-color {
   height: 100%;
   max-width: 100%;
   background-color: white;
-  display: -webkit-flex;
   display: flex;
+  /*.visualizations {
+    width: 100%;
+    //height: 100%;
+    flex-grow: 1;
+
+    .visualization {
+      height: 100%; // override 75% height for indiv. visualizations in comparisons
+    }
+  }*/
+}
+.figure:-ms-fullscreen img.aspect-ratio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
 }
 @media (orientation: landscape) {
   .figure:-ms-fullscreen {
-    -webkit-flex-flow: row nowrap;
     flex-flow: row nowrap;
   }
 }
 @media (orientation: portrait) {
   .figure:-ms-fullscreen {
-    -webkit-flex-flow: column nowrap;
     flex-flow: column nowrap;
   }
 }
@@ -452,20 +498,15 @@ figure .selected-color {
   margin-right: auto;
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
-.figure:-ms-fullscreen .visualization {
+.figure:-ms-fullscreen .aspect-ratio-preserver {
   position: static;
   padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
-.figure:-ms-fullscreen .visualization canvas {
+.figure:-ms-fullscreen .aspect-ratio-preserver > .aspect-ratio-preservee,
+.figure:-ms-fullscreen .aspect-ratio-preserver > canvas {
   position: static;
-}
-.figure:-ms-fullscreen .visualizations {
-  width: 100%;
-  flex-grow: 1;
-}
-.figure:-ms-fullscreen .visualizations .visualization {
   height: 100%;
 }
 figure:fullscreen,
@@ -477,15 +518,30 @@ figure:-ms-fullscreen {
   height: 100%;
   max-width: 100%;
   background-color: white;
-  display: -webkit-flex;
   display: flex;
+  /*.visualizations {
+    width: 100%;
+    //height: 100%;
+    flex-grow: 1;
+
+    .visualization {
+      height: 100%; // override 75% height for indiv. visualizations in comparisons
+    }
+  }*/
+}
+figure:fullscreen img.aspect-ratio,
+figure:-webkit-full-screen img.aspect-ratio,
+figure:-moz-full-screen img.aspect-ratio,
+figure:-ms-fullscreen img.aspect-ratio {
+  visibility: hidden;
+  width: 0;
+  height: 0;
 }
 @media (orientation: landscape) {
   figure:fullscreen,
   figure:-webkit-full-screen,
   figure:-moz-full-screen,
   figure:-ms-fullscreen {
-    -webkit-flex-flow: row nowrap;
     flex-flow: row nowrap;
   }
 }
@@ -494,7 +550,6 @@ figure:-ms-fullscreen {
   figure:-webkit-full-screen,
   figure:-moz-full-screen,
   figure:-ms-fullscreen {
-    -webkit-flex-flow: column nowrap;
     flex-flow: column nowrap;
   }
 }
@@ -510,32 +565,24 @@ figure:-ms-fullscreen .figure-details {
   margin-right: auto;
   box-shadow: 0 0.05em 0.15em 0 #808080;
 }
-figure:fullscreen .visualization,
-figure:-webkit-full-screen .visualization,
-figure:-moz-full-screen .visualization,
-figure:-ms-fullscreen .visualization {
+figure:fullscreen .aspect-ratio-preserver,
+figure:-webkit-full-screen .aspect-ratio-preserver,
+figure:-moz-full-screen .aspect-ratio-preserver,
+figure:-ms-fullscreen .aspect-ratio-preserver {
   position: static;
   padding-top: 0;
   width: 100%;
   flex-grow: 1;
 }
-figure:fullscreen .visualization canvas,
-figure:-webkit-full-screen .visualization canvas,
-figure:-moz-full-screen .visualization canvas,
-figure:-ms-fullscreen .visualization canvas {
+figure:fullscreen .aspect-ratio-preserver > .aspect-ratio-preservee,
+figure:-webkit-full-screen .aspect-ratio-preserver > .aspect-ratio-preservee,
+figure:-moz-full-screen .aspect-ratio-preserver > .aspect-ratio-preservee,
+figure:-ms-fullscreen .aspect-ratio-preserver > .aspect-ratio-preservee,
+figure:fullscreen .aspect-ratio-preserver > canvas,
+figure:-webkit-full-screen .aspect-ratio-preserver > canvas,
+figure:-moz-full-screen .aspect-ratio-preserver > canvas,
+figure:-ms-fullscreen .aspect-ratio-preserver > canvas {
   position: static;
-}
-figure:fullscreen .visualizations,
-figure:-webkit-full-screen .visualizations,
-figure:-moz-full-screen .visualizations,
-figure:-ms-fullscreen .visualizations {
-  width: 100%;
-  flex-grow: 1;
-}
-figure:fullscreen .visualizations .visualization,
-figure:-webkit-full-screen .visualizations .visualization,
-figure:-moz-full-screen .visualizations .visualization,
-figure:-ms-fullscreen .visualizations .visualization {
   height: 100%;
 }
 .visualization-controls,
@@ -610,13 +657,13 @@ figure:-ms-fullscreen .visualizations .visualization {
 .tabref a:visited,
 .eqref a:visited {
   text-decoration: none;
-  color: #808080;
+  color: #4d4d4d;
 }
 .figref a:hover,
 .tabref a:hover,
 .eqref a:hover {
   text-decoration: underline;
-  color: #333333;
+  color: #808080;
 }
 .tab {
   margin: 2em 0;
@@ -650,8 +697,6 @@ figure:-ms-fullscreen .visualizations .visualization {
 .exercise .visualizations,
 .exercise .side-by-side {
   width: 100%;
-  display: -webkit-flex;
-  -webkit-flex-flow: row nowrap;
   display: flex;
   flex-flow: row nowrap;
   overflow: hidden;
@@ -663,8 +708,6 @@ figure:-ms-fullscreen .visualizations .visualization {
   flex-grow: 1;
   width: 100%;
   /* Center image (if single image, typically). */
-  display: -webkit-flex;
-  -webkit-flex-flow: row nowrap;
   display: flex;
   flex-flow: row nowrap;
   overflow: hidden;
@@ -674,17 +717,12 @@ figure:-ms-fullscreen .visualizations .visualization {
 .exercise .visualization {
   flex-grow: 1;
   width: 100%;
+  height: 100%;
   overflow: hidden;
   background-color: #505050;
-  position: relative;
-  padding-top: 66.66%;
 }
 .exercise .visualization canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  height: 100%;
 }
 .exercise .selected-color {
   padding: 0.5em 0.5em 0.5em 0.5em;
@@ -692,6 +730,22 @@ figure:-ms-fullscreen .visualizations .visualization {
   text-shadow: -0.1em 0 0 white, 0 -0.1em 0 white, 0.1em 0 0 white, 0 0.1em 0 white;
   background-color: white;
   border: .1em solid black;
+}
+.exercise .aspect-ratio-preserver {
+  position: relative;
+}
+.exercise .aspect-ratio-preserver img.aspect-ratio {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.exercise .aspect-ratio-preserver .aspect-ratio-preservee,
+.exercise .aspect-ratio-preserver > canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 .exercise h2,
 .exercise h3 {
@@ -981,6 +1035,15 @@ form .field {
 .menu-button:focus div {
   background-color: #bfbfbf;
 }
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
 body {
   height: 100%;
   background-color: #ffffff;
@@ -1043,6 +1106,41 @@ main .overview a.overview-item:hover {
     max-width: 60em;
     padding: 1em;
   }
+}
+.main-container {
+  /* Settings to keep the footer at the bottom of the page: */
+  position: relative;
+  padding-bottom: 6rem;
+  min-height: 100%;
+}
+footer {
+  color: #808080;
+  /* Keeping footer at the bottom of the page: https://codepen.io/cbracco/pen/zekgx */
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  text-align: center;
+}
+footer .separator {
+  margin: 0 .5em;
+}
+footer a:link,
+footer a:visited {
+  text-decoration: none;
+  color: #595959;
+}
+footer a:hover {
+  color: #262626;
+}
+footer a.license img {
+  height: 1.1em;
+  margin-bottom: -0.2em;
+  filter: contrast(50%) brightness(175%);
+}
+footer a.license:hover img {
+  filter: contrast(50%) brightness(130%);
 }
 h1 {
   color: #000000;

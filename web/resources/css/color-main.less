@@ -4,6 +4,16 @@
 @import "color-experiment";
 @import "navigation";
 
+html {
+  height: 100%; // For pushing the footer to the bottom of the page (see footer)
+  box-sizing: border-box; // For keeping short pages <100% in height (see footer)
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit; // For keeping short pages <100% in height (see footer)
+}
 
 body {
   height: 100%;
@@ -82,6 +92,53 @@ main {
       //margin-left: auto;
       //margin-right: auto;
       padding: 1em;
+    }
+  }
+}
+
+.main-container {
+  /* Settings to keep the footer at the bottom of the page: */
+  position: relative;
+  padding-bottom: 6rem;
+  min-height: 100%;
+}
+
+footer {
+  color: rgb(50%, 50%, 50%);
+
+  /* Keeping footer at the bottom of the page: https://codepen.io/cbracco/pen/zekgx */
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  text-align: center;
+
+  .separator {
+    margin: 0 .5em;
+  }
+
+  a:link,
+  a:visited {
+    text-decoration: none;
+    color: rgb(35%, 35%, 35%);
+  }
+
+  a:hover {
+    color: rgb(15%, 15%, 15%);
+  }
+
+  a.license {
+    img {
+      height: 1.1em;
+      margin-bottom: -.2em;
+      filter: contrast(50%) brightness(175%);
+    }
+  }
+
+  a.license:hover {
+    img {
+      filter: contrast(50%) brightness(130%);
     }
   }
 }

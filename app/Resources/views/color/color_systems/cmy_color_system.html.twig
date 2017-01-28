@@ -18,7 +18,9 @@
 
         {% if group_a or full_access %}
             <div class="figure" id="fig-cmy-cube">
-                <div class="cmy-cube visualization"></div>
+                <div class="cmy-cube visualization aspect-ratio-preserver">
+                    <img class="aspect-ratio" src="{{ asset('resources/img/3by2aspect.png') }}" />
+                </div>
                 <div class="figure-details">
                     <div class="selected-color"></div>
                     <div class="figure-title">
@@ -160,9 +162,12 @@
                 <span class="figref" data-fig-id="fig-rgbcmy">the figure below</span>.
             </p>
             <div class="figure" id="fig-rgbcmy">
-                <div class="visualizations">
-                    <div class="rgb-cube visualization"></div>
-                    <div class="cmy-cube visualization"></div>
+                <div class="aspect-ratio-preserver">
+                    <img class="aspect-ratio" src="{{ asset('resources/img/3by2aspect.png') }}" />
+                    <div class="visualizations aspect-ratio-preservee">
+                        <div class="rgb-cube visualization"></div>
+                        <div class="cmy-cube visualization"></div>
+                    </div>
                 </div>
                 <div class="figure-details">
                     <div class="selected-color"></div>

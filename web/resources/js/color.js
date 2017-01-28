@@ -71,7 +71,21 @@ function initialize_exercises() {
     return exercises;
 }
 
+/**
+ * Will convert HTML like the following into proper email links.
+ * <a class="email" data-email='["info", "lukas-stratmann", "com"]'></a>
+ */
+function make_email_links() {
+    $("a.email").each(function() {
+        let a = $(this).data("email"); // for name@site.com this should return ["name", "site", "com"]
+        let address = a[0] + "@" + a[1] + "." + a[2];
+        $(this).attr("href", "mailto:" + address);
+        $(this).text(address);
+    });
+}
+
 $(document).ready(function() {
+    make_email_links();
     initialize_visualizations();
     initialize_exercises();
 });

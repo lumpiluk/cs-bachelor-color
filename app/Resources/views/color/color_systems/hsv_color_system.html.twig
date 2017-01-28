@@ -15,7 +15,9 @@
         </p>
         <div class="figure" id="fig-hsvspace">
             {% if group_b or full_access %}
-                <div class="hsv visualization"></div>
+                <div class="hsv visualization aspect-ratio-preserver">
+                    <img class="aspect-ratio" src="{{ asset('resources/img/3by2aspect.png') }}" />
+                </div>
                 <div class="figure-details">
                     <div class="selected-color"></div>
                     <div class="figure-title">
@@ -116,9 +118,12 @@
                 HSL and HSV are comparable in <span class="figref" data-fig-id="fig-hslhsv">the figure below that</span>
             </p>
             <div class="figure" id="fig-rgbhsv">
-                <div class="visualizations">
-                    <div class="rgb-cube visualization"></div>
-                    <div class="hsv visualization"></div>
+                <div class="aspect-ratio-preserver">
+                    <img class="aspect-ratio" src="{{ asset('resources/img/3by2aspect.png') }}" />
+                    <div class="visualizations aspect-ratio-preservee">
+                        <div class="rgb-cube visualization"></div>
+                        <div class="hsv visualization"></div>
+                    </div>
                 </div>
                 <div class="figure-details">
                     <div class="selected-color"></div>
@@ -129,9 +134,12 @@
             </div>
 
             <div class="figure" id="fig-hslhsv">
-                <div class="visualizations">
-                    <div class="hsl visualization"></div>
-                    <div class="hsv visualization"></div>
+                <div class="aspect-ratio-preserver">
+                    <img class="aspect-ratio" src="{{ asset('resources/img/3by2aspect.png') }}" />
+                    <div class="visualizations aspect-ratio-preservee">
+                        <div class="hsl visualization"></div>
+                        <div class="hsv visualization"></div>
+                    </div>
                 </div>
                 <div class="figure-details">
                     <div class="selected-color"></div>

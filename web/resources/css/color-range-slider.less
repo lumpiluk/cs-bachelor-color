@@ -1,13 +1,14 @@
 @import "constants";
 
 @slider_width: 98%;
-@slider_track_height: .5em;
+@slider_track_height: .75rem;
 @slider_padding: 0 0; // (top and bottom) (left and right)
 @slider_thumb_background: rgb(230, 230, 230);
 @slider_thumb_border: .1em solid black;
-@slider_thumb_size: 2 * @slider_track_height;
+@slider_thumb_size: 1rem;
 @slider_background: rgb(129, 129, 129);
 @slider_background_focused: @slider_background;
+@slider_background_border_radius: .3rem;
 @label_padding: 0 .5em 0 0; // top right bottom left
 @number_margin: 0 0 0 .5em;
 
@@ -31,7 +32,7 @@ input[type=range]::-webkit-slider-runnable-track {
   height: @slider_track_height;
   background: @slider_background;
   border: none;
-  border-radius: 3px;
+  border-radius: @slider_background_border_radius;
 }
 input[type=range]::-webkit-slider-thumb {
   -webkit-appearance: none;
@@ -40,7 +41,7 @@ input[type=range]::-webkit-slider-thumb {
   width: @slider_thumb_size;
   border-radius: 50%;
   background: @slider_thumb_background;
-  margin-top: -@slider_thumb_size / 4;
+  margin-top: -@slider_thumb_size / 6;
 }
 input[type=range]:focus {
   outline: none;
@@ -54,7 +55,7 @@ input[type=range]::-moz-range-track {
   height: @slider_track_height;
   background: @slider_background;
   border: none;
-  border-radius: 3px;
+  border-radius: @slider_background_border_radius;
 }
 input[type=range]::-moz-range-thumb {
   border: @slider_thumb_border;

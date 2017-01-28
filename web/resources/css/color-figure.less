@@ -35,8 +35,6 @@ figure {
   .visualizations,
   .side-by-side {
     width: 100%;
-    display: -webkit-flex;
-    -webkit-flex-flow: row nowrap;
     display: flex;
     flex-flow: row nowrap;
     overflow: hidden;
@@ -49,8 +47,6 @@ figure {
       width: 100%;
 
       /* Center image (if single image, typically). */
-      display: -webkit-flex;
-      -webkit-flex-flow: row nowrap;
       display: flex;
       flex-flow: row nowrap;
       overflow: hidden;
@@ -63,19 +59,12 @@ figure {
     //height: @visualization_height;
     flex-grow: 1;
     width: 100%;
+    height: 100%;
     overflow: hidden;
     background-color: #505050;
 
-    // keep 3:2 aspect ratio, see http://www.w3schools.com/howto/howto_css_aspect_ratio.asp
-    position: relative;
-    padding-top: 66.66%; // == aspect_ratio^(-1)
-
     canvas {
-      position: absolute; // necessary for maintaining aspect ratio
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
+      height: 100%;
     }
   }
 
@@ -85,6 +74,26 @@ figure {
     text-shadow: -.1em 0 0 white, 0 -.1em 0 white, .1em 0 0 white, 0 .1em 0 white;
     background-color: white;
     border: .1em solid black;
+  }
+
+  .aspect-ratio-preserver {
+    // (Does not work w/ Firefox and flex layout:) keep 3:2 aspect ratio, see http://www.w3schools.com/howto/howto_css_aspect_ratio.asp
+    // Instead using this now: http://stackoverflow.com/questions/36252919/css-flex-keep-iframe-with-the-proper-aspect-ratio
+    position: relative;
+    img.aspect-ratio {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .aspect-ratio-preservee,
+    >canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
   }
 }
 
@@ -99,16 +108,19 @@ figure {
   max-width: 100%;
   background-color: white;
 
-  display: -webkit-flex;
   display: flex;
 
+  img.aspect-ratio {
+    visibility: hidden;
+    width: 0;
+    height: 0;
+  }
+
   @media (orientation: landscape) {
-    -webkit-flex-flow: row nowrap;
     flex-flow: row nowrap;
   }
 
   @media (orientation: portrait) {
-    -webkit-flex-flow: column nowrap;
     flex-flow: column nowrap;
   }
 
@@ -124,20 +136,20 @@ figure {
     box-shadow: 0 .05em .15em 0 rgb(50%, 50%, 50%);
   }
 
-  .visualization {
+  .aspect-ratio-preserver {
     position: static;
     padding-top: 0;
     width: 100%;
-    //height: 75%;
-    //height: 100%;
     flex-grow: 1;
 
-    canvas {
+    >.aspect-ratio-preservee,
+    >canvas {
       position: static;
+      height: 100%;
     }
   }
 
-  .visualizations {
+  /*.visualizations {
     width: 100%;
     //height: 100%;
     flex-grow: 1;
@@ -145,7 +157,7 @@ figure {
     .visualization {
       height: 100%; // override 75% height for indiv. visualizations in comparisons
     }
-  }
+  }*/
 
   .figure-title {
     // TODO: swap with visualization in js

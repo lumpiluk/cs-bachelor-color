@@ -49,7 +49,7 @@ export class VisualizationComparison {
 
 export function attach_visualization_comparisons() {
     let comparisons = [];
-    $(".figure > .visualizations").parent().each(function() {
+    $(".figure .visualizations").parent().each(function() {
         let comparison = new VisualizationComparison($(this));
         comparisons.push(comparison);
     });
