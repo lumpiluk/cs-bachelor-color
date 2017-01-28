@@ -43,12 +43,11 @@ export class AbstractTask {
 
         /* Attach visualization if needed. */
         if (this.show_visualization) {
-            this.$container.append(
+            let $vis = $(
                 '<div class="visualization aspect-ratio-preserver">' +
                     '<img class="aspect-ratio" src="/resources/img/3by2aspect.png" />' +
                 '</div>'
-            );
-            let $vis = this.$container.find(".visualization");
+            ).appendTo(this.$container);
             this.visualization = make_visualization_by_css_class(this.target_color.get_visualization_css_class(), $vis,
                 this.visualization_options);
             if (this.visualization == null) {

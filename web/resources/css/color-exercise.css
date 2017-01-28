@@ -109,6 +109,15 @@ figure .visualization {
 figure .visualization canvas {
   height: 100%;
 }
+.figure .visualization .vis-not-available,
+figure .visualization .vis-not-available {
+  color: white;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  margin-top: 2em;
+}
 .figure .selected-color,
 figure .selected-color {
   padding: 0.5em 0.5em 0.5em 0.5em;
@@ -723,6 +732,14 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .exercise .visualization canvas {
   height: 100%;
+}
+.exercise .visualization .vis-not-available {
+  color: white;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  margin-top: 2em;
 }
 .exercise .selected-color {
   padding: 0.5em 0.5em 0.5em 0.5em;

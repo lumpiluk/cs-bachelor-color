@@ -12,6 +12,9 @@ export function make_visualization_by_css_class(css_class, $container, options) 
         case "hsv": return new HSVVisualization($container, options);
         case "hsl": return new HSLVisualization($container, options);
         case "cmy-cube": return new CMYCubeVisualization($container, options);
+        case "cmyk":
+            $container.append('<span class="vis-not-available">No visualization available for CMYK</span>');
+            break;
         default: return null;
     }
 }

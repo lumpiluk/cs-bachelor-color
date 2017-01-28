@@ -44,7 +44,7 @@ export class Visualization {
         this.max_focal_length = 400; // for zooming
         this.zoom_steps = 20; // (if available)
         this.zoom_sensitivity = 0.25; // For mouse wheels. Lower => more sensitive.
-        this.aspect = this.$container.width() / this.$container.innerHeight(); // should be 3 / 2;
+        this.aspect = this.$container.width() / this.$container.height(); // should be 3 / 2;
         this.keep_aspect = false; // Used to be true by default before handling this in CSS only. Will be automatically set to false when toggling full screen
         //this.$container.height(this.$container.width() / this.aspect); // Apply aspect ratio (for camera and renderer).
         this.near = 0.1;
@@ -97,6 +97,8 @@ export class Visualization {
             this.init_controls();
             this.init_advanced_controls();
         }
+
+        this.$container.closest(".aspect-ratio").on("load", () => this.on_resize());
     }
 
     render() {
@@ -207,8 +209,9 @@ export class Visualization {
             this.$container.height(this.$container.width() / this.aspect);
         }
 
-        this.renderer.setSize(this.$container.width(), this.$container.innerHeight());
-        this.camera.aspect = this.$container.width() / (this.$container.innerHeight());
+        //console.log("resizing... width: " + this.$container.width() + ", height: " + this.$container.height());
+        this.renderer.setSize(this.$container.width(), this.$container.height());
+        this.camera.aspect = this.$container.width() / (this.$container.height());
         this.camera.updateProjectionMatrix();
         this.render();
     }

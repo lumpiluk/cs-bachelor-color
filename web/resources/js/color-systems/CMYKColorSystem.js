@@ -18,7 +18,7 @@ export class CMYKColorSystem extends AbstractColorSystem {
     }
 
     get_visualization_css_class() {
-        return null;
+        return "cmyk";
     }
 
     /* (override) */
