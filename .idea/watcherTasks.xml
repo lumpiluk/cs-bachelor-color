@@ -64,7 +64,7 @@
       <option name="workingDir" value="$FileDir$" />
       <envs />
     </TaskOptions>
-    <TaskOptions isEnabled="true">
+    <TaskOptions isEnabled="false">
       <option name="arguments" value="--debug -t [browserify-shader --parameterize=true] -t [babelify --presets es2015] $FileName$ -o $ProjectFileDir$/resources/js/build/$FileNameWithoutExtension$.compiled.js" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" value="" />
@@ -83,7 +83,7 @@
       <option name="workingDir" value="$FileDir$" />
       <envs />
     </TaskOptions>
-    <TaskOptions isEnabled="true">
+    <TaskOptions isEnabled="false">
       <option name="arguments" value="$FileName$ -o $FileNameWithoutExtension$.min.js" />
       <option name="checkSyntaxErrors" value="true" />
       <option name="description" value="Compress .js files" />
