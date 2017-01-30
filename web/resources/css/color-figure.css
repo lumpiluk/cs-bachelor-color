@@ -240,9 +240,10 @@ figure .aspect-ratio-preserver img.aspect-ratio {
   display: block;
   width: 100%;
   height: auto;
+  max-height: none;
 }
-.figure .aspect-ratio-preserver .aspect-ratio-preservee,
-figure .aspect-ratio-preserver .aspect-ratio-preservee,
+.figure .aspect-ratio-preserver > .aspect-ratio-preservee,
+figure .aspect-ratio-preserver > .aspect-ratio-preservee,
 .figure .aspect-ratio-preserver > canvas,
 figure .aspect-ratio-preserver > canvas {
   position: absolute;
@@ -303,6 +304,9 @@ figure .aspect-ratio-preserver > canvas {
 .fullscreen-figure .aspect-ratio-preserver > canvas {
   position: static;
   height: 100%;
+  top: auto;
+  left: auto;
+  width: 100%;
 }
 .fullscreen-button {
   text-decoration: underline;
@@ -361,6 +365,9 @@ figure .aspect-ratio-preserver > canvas {
 .figure:fullscreen .aspect-ratio-preserver > canvas {
   position: static;
   height: 100%;
+  top: auto;
+  left: auto;
+  width: 100%;
 }
 .figure:-webkit-full-screen {
   margin: 0;
@@ -413,6 +420,9 @@ figure .aspect-ratio-preserver > canvas {
 .figure:-webkit-full-screen .aspect-ratio-preserver > canvas {
   position: static;
   height: 100%;
+  top: auto;
+  left: auto;
+  width: 100%;
 }
 .figure:-moz-full-screen {
   margin: 0;
@@ -465,6 +475,9 @@ figure .aspect-ratio-preserver > canvas {
 .figure:-moz-full-screen .aspect-ratio-preserver > canvas {
   position: static;
   height: 100%;
+  top: auto;
+  left: auto;
+  width: 100%;
 }
 .figure:-ms-fullscreen {
   margin: 0;
@@ -517,6 +530,9 @@ figure .aspect-ratio-preserver > canvas {
 .figure:-ms-fullscreen .aspect-ratio-preserver > canvas {
   position: static;
   height: 100%;
+  top: auto;
+  left: auto;
+  width: 100%;
 }
 figure:fullscreen,
 figure:-webkit-full-screen,
@@ -593,6 +609,9 @@ figure:-moz-full-screen .aspect-ratio-preserver > canvas,
 figure:-ms-fullscreen .aspect-ratio-preserver > canvas {
   position: static;
   height: 100%;
+  top: auto;
+  left: auto;
+  width: 100%;
 }
 .visualization-controls,
 .visualization-controls-advanced {

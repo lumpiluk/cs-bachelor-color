@@ -98,7 +98,16 @@ export class Visualization {
             this.init_advanced_controls();
         }
 
-        this.$container.closest(".aspect-ratio").on("load", () => this.on_resize());
+        this.$container.closest(".aspect-ratio-preserver").find(".aspect-ratio").on("load", () => {
+            console.log("aspect ratio helper image loaded");
+            console.log("height: " + this.$container.height());
+            this.on_resize();
+            /*
+             * This may not be called at all on regular pages with visualizations
+             * if the image has loaded before the visualizations are being initialized.
+             * The event is important for exercises, though.
+             */
+        });
     }
 
     render() {
