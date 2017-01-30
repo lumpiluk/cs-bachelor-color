@@ -99,8 +99,10 @@ export class Visualization {
         }
 
         this.$container.closest(".aspect-ratio-preserver").find(".aspect-ratio").on("load", () => {
-            console.log("aspect ratio helper image loaded");
-            console.log("height: " + this.$container.height());
+            this.aspect = this.$container.width() / this.$container.height();
+            this.camera.aspect = this.aspect;
+            this.camera.fov = this.fov;
+            this.camera.updateProjectionMatrix();
             this.on_resize();
             /*
              * This may not be called at all on regular pages with visualizations
