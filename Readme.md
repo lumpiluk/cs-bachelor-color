@@ -3,7 +3,6 @@
 This project is online at [color.lukas-stratmann.com](http://color.lukas-stratmann.com).
 Alternatively, you can run the debug version on your local machine as described in Installation for Development and Testing or host the project yourself as described in the section Deployment.
 
-
 ## Project Structure
 
 Important folders and files (with relevance to this project) are written in **bold letters**.

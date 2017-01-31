@@ -340,6 +340,7 @@ export function show_color_matching_options(task_type, default_task_type, $optio
             $target_color_config_sliders_container.empty();
             options.color_systems = [target_system_select.get_selected_text()];
             target_color = get_color_system_by_name(target_system_select.get_selected_text(), false);
+            target_color.randomize(); // important for cmyk? Otherwise, no slider would move with (1,1,1,1)_CMYK
             if (is_initial_call && default_options.target_color_rgb != null) {
                 let rgb = default_options.target_color_rgb;
                 target_color.set_from_rgb(rgb.r, rgb.g, rgb.b);

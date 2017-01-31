@@ -277,10 +277,12 @@ export class Exercise {
                 }
                 let file_reader = new FileReader();
                 file_reader.onload = (e) => {
-                    this.task_types = JSON.parse(e.target.result);
+                    let new_task_types = JSON.parse(e.target.result);
                     console.log("Loaded " + this.task_types.length.toString() + " tasks");
-                    for (let i = 0; i < this.task_types.length; i++) {
-                        add_configuration_elements(this.task_types[i], i);
+                    for (let i = new_task_types.length - 1; i >= 0; i--) {
+                        /* Prepend new task to array (i.e. add to the end of the queue). */
+                        this.task_types.unshift(new_task_types[i]);
+                        add_configuration_elements(new_task_types[i], i);
                     }
                 };
                 file_reader.readAsText($load_config_file_input[0].files[0]);
