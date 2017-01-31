@@ -351,6 +351,10 @@ export class Visualization {
         this.two_fingers_touching = false;
     }
 
+    set_color_from_rgb(r, g, b) {
+        this.color_system.set_from_rgb(r, g, b);
+    }
+
     set_selected_color(r, g, b) {
         if (this.$figure == null) {
             return;

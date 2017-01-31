@@ -186,7 +186,6 @@ export class ColorMatchingTask extends AbstractTask {
                 current_rgb.r, current_rgb.g, current_rgb.b));
         }
 
-        // TODO: hints_label (with an s)
         if (this.show_hints && this.$hints != null) {
             let euclidean_distance_rgb = this.target_color.get_euclidean_distance_rgb(this.current_color);
             this.$hints.removeClass("active");
@@ -216,7 +215,7 @@ export class ColorMatchingTask extends AbstractTask {
         }
 
         let exact_result_tex = this.is_conversion_task ?
-            this.converted_target_color.get_tex() : this.target_color.get_tex();
+                this.converted_target_color.get_tex() : this.target_color.get_tex();
         if (this.stats.correct) {
             this.stats.attempts = this.current_attempt;
             this.stats.skipped = false;
@@ -225,10 +224,13 @@ export class ColorMatchingTask extends AbstractTask {
             this.$feedback.removeClass("wrong");
             this.$feedback.addClass("correct");
             feedback_str += "<em>Correct!</em> ";
-            feedback_str += "The exact result is \\(" + exact_result_tex + "\\).<br/>";
+            feedback_str += "The exact result is \\(" + exact_result_tex + "\\) (see visualization).<br/>";
             this.$feedback.html(feedback_str);
             if (this.is_conversion_task) {
                 append_color_patch(this.$feedback, this.target_color);
+            } else if (this.show_visualization) {
+                let rgb = this.target_color.get_rgb();
+                this.visualization.set_color_from_rgb(rgb.r, rgb.g, rgb.b);
             }
             if (!this.show_current_color) {
                 this.$feedback.append("Your selection:");
@@ -250,14 +252,18 @@ export class ColorMatchingTask extends AbstractTask {
                     this.$submit_button.attr("disabled", true);
                     this.stats.skipped = false;
                     this.$feedback.html(feedback_str);
-                    if (this.is_conversion_task) {
-                        this.$feedback.append("The exact result is \\(" + exact_result_tex + "\\).<br/>");
-                        append_color_patch(this.$feedback, this.target_color);
-                        update_mathjax(this.$feedback);
-                    }
+
+                    this.$feedback.append("The exact result is \\(" + exact_result_tex + "\\) (see visualization).<br/>");
+                    append_color_patch(this.$feedback, this.target_color);
+                    update_mathjax(this.$feedback);
                     if (!this.show_current_color) {
                         this.$feedback.append("Your selection:");
                         append_color_patch(this.$feedback, this.current_color);
+                    }
+
+                    if (!this.is_conversion_task && this.show_visualization) {
+                        let rgb = this.target_color.get_rgb();
+                        this.visualization.set_color_from_rgb(rgb.r, rgb.g, rgb.b);
                     }
                 } else {
                     this.$feedback.html(feedback_str);
@@ -357,7 +363,11 @@ export function show_color_matching_options(task_type, default_task_type, $optio
                 null // no additional label necessary
             );
             if (is_initial_call && default_options.target_units != null) {
+                console.log("setting units by default option");
                 target_units_select.set_selected_text(default_options.target_units);
+            } else {
+                console.log("setting units to first in list");
+                target_units_select.set_selected_index(0); // important for hsv, hsv, so they can use their own default
             }
             options.target_units = target_units_select.get_selected_text();
             target_units_select.add_listener((select_change_event) => {
@@ -367,7 +377,7 @@ export function show_color_matching_options(task_type, default_task_type, $optio
         };
         reset_target_color_config_sliders(true);
 
-        target_system_select.add_listener(reset_target_color_config_sliders);
+        target_system_select.add_listener(() => { reset_target_color_config_sliders(false); });
     }
 
     if (!conversion_task) {

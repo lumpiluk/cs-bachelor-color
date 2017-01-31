@@ -42,6 +42,10 @@ export class VisualizationControlSelect {
         this.$select.val(this._indeces_for_texts[value]).change();
     }
 
+    set_selected_index(index) {
+        this.$select.val(0);
+    }
+
     get_selected_text() {
         return this.$select.find(":selected").text();
     }
