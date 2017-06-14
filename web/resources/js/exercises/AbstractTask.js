@@ -45,9 +45,12 @@ export class AbstractTask {
         if (this.show_visualization) {
             let $vis = $(
                 '<div class="visualization aspect-ratio-preserver">' +
-                    '<img class="aspect-ratio" src="/resources/img/3by2aspect.png" />' +
+                    '<img class="aspect-ratio" src="../../resources/img/3by2aspect.png" />' + // used to be /resources/img/3by2aspect.png. See comment below!
                 '</div>'
             ).appendTo(this.$container);
+	    /*
+	     * Must use relative path to 3by2aspect.png, or else the image won't be found if the project is not at the root of the domain...
+	     */
             this.visualization = make_visualization_by_css_class(this.target_color.get_visualization_css_class(), $vis,
                 this.visualization_options);
             if (this.visualization == null) {
