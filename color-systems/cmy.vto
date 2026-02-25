@@ -40,24 +40,24 @@ title: RGB
             <li>Color matching:</li>
             <ul>
                 <li>
-                    <a href="/exercises/matching/rgb/">RGB</a>
+                    <a href="/exercises/matching/?color_systems=rgb">RGB</a>
                 </li>
                 <li>
-                    <a href="/exercises/matching/cmy/">CMY</a>
+                    <a href="/exercises/matching/?color_systems=cmy">CMY</a>
                 </li>
                 <li>
-                    <a href="/exercises/matching/cmyk/">CMYK</a>
+                    <a href="/exercises/matching/?color_systems=cmyk">CMYK</a>
                 </li>
                 <li>
-                    <a href="/exercises/matching/rgb-cmy-cmyk/">RGB, CMY, and CMYK</a>
+                    <a href="/exercises/matching/?color_systems=rgb&color_systems=cmy&color_systems=cmyk">RGB, CMY, and CMYK</a>
                 </li>
             </ul>
             <li>Color selection:</li>
             <ul>
-                <li><a href="/exercises/selection?color_systems[0]=rgb">RGB</a></li>
-                <li><a href="/exercises/selection?color_systems[0]=cmy">CMY</a></li>
-                <li><a href="/exercises/selection?color_systems[0]=cmyk">CMYK</a></li>
-                <li><a href="/exercises/selection?color_systems[0]=rgb&color_systems[1]=cmy&color_systems[2]=cmyk">RGB, CMY, and CMYK</a></li>
+                <li><a href="/exercises/selection/?color_systems=rgb">RGB</a></li>
+                <li><a href="/exercises/selection/?color_systems=cmy">CMY</a></li>
+                <li><a href="/exercises/selection/?color_systems=cmyk">CMYK</a></li>
+                <li><a href="/exercises/selection/?color_systems=rgb&color_systems=cmy&color_systems=cmyk">RGB, CMY, and CMYK</a></li>
             </ul>
         </ul>
     </div>
@@ -158,7 +158,7 @@ title: RGB
         </p>
         <div class="figure" id="fig-rgbcmy">
             <div class="aspect-ratio-preserver">
-                <img class="aspect-ratio" src=/img/3by2aspect.png" />
+                <img class="aspect-ratio" src="/img/3by2aspect.png" />
                 <div class="visualizations aspect-ratio-preservee">
                     <div class="rgb-cube visualization"></div>
                     <div class="cmy-cube visualization"></div>
@@ -171,25 +171,22 @@ title: RGB
                 <div class="visualization-controls-advanced"></div>
             </div>
         </div>
-    {% endif %}
 
-    {% if group_a or full_access %}
         <div class="exercise-recommendations">
             <b>Recommended exercises for this section:</b>
             <ul>
                 <li>Conversion selection:</li>
                 <ul>
-                    <li><a href="/exercises/conversion-selection?color_systems[0]=rgb&color_systems[1]=cmy">CMY and RGB</a></li>
-                    <li><a href="/exercises/-conversion-selection?color_systems[0]=rgb&color_systems[1]=cmy&color_systems[2]=cmyk">CMY, CMYK, and RGB</a></li>
+                    <li><a href="/exercises/conversion-selection/?color_systems=rgb&color_systems=cmy">CMY and RGB</a></li>
+                    <li><a href="/exercises/-conversion-selection/?color_systems=rgb&color_systems=cmy&color_systems=cmyk">CMY, CMYK, and RGB</a></li>
                 </ul>
                 <li>Conversion:</li>
                 <ul>
-                    <li><a href="/exercises/conversion?color_systems[0]=rgb&color_systems[1]=cmy">CMY and RGB</a></li>
-                    <li><a href="/exercises/conversion?color_systems[0]=rgb&color_systems[1]=cmy">CMY and RGB</a></li>
+                    <li><a href="/exercises/conversion/?color_systems=rgb&color_systems=cmy">CMY and RGB</a></li>
+                    <li><a href="/exercises/conversion/?color_systems=rgb&color_systems=cmy">CMY and RGB</a></li>
                 </ul>
             </ul>
         </div>
-    {% endif %}
 </section>
 
 <section id="literature" class="bibliography">

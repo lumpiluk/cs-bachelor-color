@@ -75,7 +75,7 @@ export class DynamicBoundingCylinder extends Object3D {
 
         this.vertex_positions = new Float32Array(this.vertices.length * 3);
         this.geometry.setIndex(new BufferAttribute(new Uint16Array(this.indices), 1));
-        this.geometry.addAttribute("position", new BufferAttribute(this.vertex_positions, 3));
+        this.geometry.setAttribute("position", new BufferAttribute(this.vertex_positions, 3));
         this.mesh = new LineSegments(this.geometry, this.material);
         this.add(this.mesh);
 

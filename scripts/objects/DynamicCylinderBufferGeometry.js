@@ -93,7 +93,7 @@ export class DynamicCylinderBufferGeometry extends BufferGeometry {
 
         this.vertex_positions = new Float32Array(this.vertices.length * 3);
         this.setIndex(new BufferAttribute(new Uint16Array(this.indices), 1));
-        this.addAttribute('position', new BufferAttribute(this.vertex_positions, 3));
+        this.setAttribute('position', new BufferAttribute(this.vertex_positions, 3));
 
         this.update_cylinder();
     }

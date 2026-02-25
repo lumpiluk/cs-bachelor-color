@@ -37,7 +37,7 @@ export class CircularArrow extends Object3D {
         }
 
         this.circle_geometry.setIndex(new BufferAttribute(new Uint16Array(this.circle_indices), 1));
-        this.circle_geometry.addAttribute("position", new BufferAttribute(this.circle_vertex_positions, 3));
+        this.circle_geometry.setAttribute("position", new BufferAttribute(this.circle_vertex_positions, 3));
         this.circle_mesh = new LineSegments(this.circle_geometry, this.circle_material);
         this.add(this.circle_mesh);
 
