@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="author" content="Lukas Stratmann">
+        <meta name="description" content="On these pages, you will find learning materials on color theory and assorted color systems. You can use the exercises to practice and to reflect on your progress." />
+
+        <title>{{ it.title || metas.title }} | {{ metas.site }}</title>
+        <link rel="stylesheet" type="text/css" href="/styles/color-main.css" />
+
+        {{# Favicons generated using http://realfavicongenerator.net/ #}}
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+        {{# <link rel="manifest" href="{{ asset('manifest.json') }}"> #}}
+        {{# <link rel="mask-icon" href="{{ asset('safari-pinned-tab.svg') }}" color="#5bbad5"> #}}
+        <meta name="theme-color" content="#ffffff">
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js"></script>
+
+        <script>
+            /* Show and hide the main menu. */
+            function open_nav() {
+                $(".sidenav").addClass("open");
+            }
+
+            function close_nav() {
+                $(".sidenav").removeClass("open");
+            }
+        </script>
+
+        <script type="text/x-mathjax-config">
+            MathJax.Hub.Config({
+              TeX: { equationNumbers: { autoNumber: "AMS" } }
+            });
+        </script>
+        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+        <script src="/scripts/color.js"></script>
+    </head>
+    <body>
+        <nav class="sidenav">
+            <a href="javascript:void(0)" class="closebtn" onclick="close_nav()">&times;</a>
+            <ul>
+                <li>{{ comp menuItem { url, item_url: "/", name: "Home" } }}{{ /comp }}</li>
+                <li>{{ comp menuItem { url, item_url: "/about/", name: "About" } }}{{ /comp }}</li>
+                <li>
+                    {{ comp menuItem { url, item_url: "/color-systems/", name: "Color Systems" } }}{{ /comp }}
+                    <ul>
+                        {{# <li>{{ _self.menuItem('XYZ and xy', path('color_system_page', {'color_system_name': 'xyz'})) }}</li> #}}
+                        <li>{{ comp menuItem { url, item_url: "/color-systems/rgb/", name: "RGB" } }}{{ /comp }}</li>
+                        <li>{{ comp menuItem { url, item_url: "/color-systems/cmy/", name: "CMY and CMYK" } }}{{ /comp }}</li>
+                        <li>{{ comp menuItem { url, item_url: "/color-systems/hsl/", name: "HSL" } }}{{ /comp }}</li>
+                        <li>{{ comp menuItem { url, item_url: "/color-systems/hsv/", name: "HSV" } }}{{ /comp }}</li>
+                    </ul>
+                </li>
+                <li>
+                    {{ comp menuItem { url, item_url: "/exercises/", name: "Exercises" } }}{{ /comp }}
+                    <ul>
+                        <li>{{ comp menuItem { url, item_url: "/exercises/matching/", name: "Color Matching" } }}{{ /comp }}</li>
+                        <li>{{ comp menuItem { url, item_url: "/exercises/selection/", name: "Color Selection" } }}{{ /comp }}</li>
+                        <li>{{ comp menuItem { url, item_url: "/exercises/conversion-selection/", name: "Color Conversion Selection" } }}{{ /comp }}</li>
+                        <li>{{ comp menuItem { url, item_url: "/exercises/conversion/", name: "Color Conversion" } }}{{ /comp }}</li>
+                        <li>{{ comp menuItem { url, item_url: "/exercises/mixed/", name: "Mixed" } }}{{ /comp }}</li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+
+        {{# Contains the menu button. This will only be visible on small screens. #}}
+        <nav class="topnav">
+            <div id="menu-button" class="menu-button" onclick="open_nav()">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+        </nav>
+
+        <div class="main-container">
+            <main>
+                {{ content }}
+            </main>
+            <footer>
+                &copy; 2026 Lukas Stratmann
+                <span class="separator">|</span>
+                <a rel="license"
+                   href="http://creativecommons.org/licenses/by-sa/4.0/"
+                   title="Creative Commons Attribution-ShareAlike 4.0 International license"
+                   class="license">
+                    {{# icons from https://creativecommons.org/about/downloads/ #}}
+                    <img alt="CC" src="resources/img/creative-commons/cc.svg" />
+                    <img alt="BY" src="resources/img/creative-commons/by.svg" />
+                    <img alt="SA" src="resources/img/creative-commons/sa.svg" />
+                </a>
+                <span class="separator">|</span>
+                <a class="email" data-email='["info", "lukas-stratmann", "com"]'></a>
+            </footer>
+        </div>
+    </body>
+</html>

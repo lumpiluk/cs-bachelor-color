@@ -1,0 +1,38 @@
+---
+layout: layouts/base.vto
+title: Color Conversion Exercise
+---
+<h1>{{ title }}</h1>
+
+<script>
+let params = new URLSearchParams(document.location.search);
+let color_systems = params.getAll("color_systems");
+console.log("color_systems: ");
+console.log(color_systems);
+</script>
+
+<div class="exercise"
+     data-num-rounds="10"
+     data-allow-random-units="true"
+     data-random-units="false"
+     data-task-types='[
+        {
+            "name": "ColorConversion",
+            "options": {
+                "color_systems": "from_url_params",
+                "show_target_visualization": false,
+                "show_conversion_visualization": false,
+                "show_visualization": false,
+                "visualization_options": {},
+                "max_attempts": 3,
+                "allow_skip_after_first_attempt": true,
+                "show_current_color": false,
+                "show_target_color": false,
+                "show_hints": false,
+                "easy_hsl_hsv_colors": true
+            },
+            "weight": 1
+        }
+     ]'
+>
+</div>

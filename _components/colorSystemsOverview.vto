@@ -1,0 +1,36 @@
+<div class="overview">
+    {{ if !excludeOverview }}
+        <a class="overview-item" href="/color-systems/">
+            <img src="/img/color_systems_thumbnail.png"/>
+            <h2>Color Systems</h2>
+            <p>A short introduction to color systems in general</p>
+        </a>
+    {{ /if }}
+    {{#
+    <a class="overview-item" href="/color-systems/xyz/">
+        <img src="/img/color_systems_thumbnail.png"/>
+        <h2>XYZ and xy</h2>
+        <p>On Gamuts and the color spaces CIE 1931 XYZ and xy</p>
+    </a>
+    #}}
+    <a class="overview-item" href="/color-systems/rgb/">
+        <img src="/img/rgb_thumbnail.png"/>
+        <h2>RGB</h2>
+        <p>Red, green, and blue</p>
+    </a>
+    <a class="overview-item" href="/color-systems/cmy/">
+        <img src="/img/cmy_thumbnail.png"/>
+        <h2>CMY and CMYK</h2>
+        <p>Cyan, magenta, and yellow (and black)</p>
+    </a>
+    <a class="overview-item" href="/color-systems/hsl/">
+        <img src="/img/hsl_thumbnail.png"/>
+        <h2>HSL</h2>
+        <p>Hue, saturation, and lightness</p>
+    </a>
+    <a class="overview-item" href="/color-systems/hsv/">
+        <img src="/img/hsv_thumbnail.png"/>
+        <h2>HSV</h2>
+        <p>Hue, saturation, and value</p>
+    </a>
+</div>
