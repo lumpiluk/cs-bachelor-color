@@ -45,7 +45,7 @@ export class AbstractTask {
         if (this.show_visualization) {
             const $vis = $(
                 '<div class="visualization aspect-ratio-preserver">' +
-                    '<img class="aspect-ratio" src="../resources/img/3by2aspect.png" />' + // used to be /resources/img/3by2aspect.png. See comment below!
+                    '<img class="aspect-ratio" src="/img/3by2aspect.png" />' + // used to be /resources/img/3by2aspect.png. See comment below!
                 '</div>'
             ).appendTo(this.$container);
 	    /*

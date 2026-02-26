@@ -59,5 +59,6 @@ site.use(robots({
 site.add("styles/color-main.scss");
 site.add("scripts/color.js");
 site.add("img/");
+site.add("downloads/thesis.pdf");
 
 export default site;

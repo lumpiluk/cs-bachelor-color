@@ -1,0 +1,67 @@
+---
+layout: layouts/exercises-base.vto
+title: Color Matching Exercise
+---
+<div class="exercise"
+     data-num-rounds="10"
+     data-allow-random-units="true"
+     data-random-units="false"
+     data-task-types='[
+        {
+            "name": "ColorMatching",
+            "options": {
+                "color_systems": "from_url_params",
+                "show_visualization": true,
+                "visualization_options": {},
+                "max_attempts": 3,
+                "allow_skip_after_first_attempt": true,
+                "show_current_color": true,
+                "show_target_color": true,
+                "show_hints": true
+            },
+            "weight": 1
+        }
+     ]'
+>
+</div>
+
+<section id="grassmann-color-matching" style="display: none">
+    <h2>Trichromatic Color Matching</h2>
+
+    This exercise bears similarity to experiments performed since the beginning of the 20th century.
+    With the aim of quantifying the human perception of colors they resulted in the development of
+    the CIE 1931 XYZ color space [SG31, pp. 74ff.], which is still used today in the field of colorimetry.
+    The experiments in turn make use of theoretical foundations developed by Hermann G. Grassmann
+    in the 19th century,
+    who among other things described how colors can be expressed as the sum of three components
+    [Co01, pp. 36f., p. 122, p. 156].
+</section>
+
+<section id="literature" style="display: none">
+    <h2>Literature</h2>
+    <dl>
+        <dt>[SG31]</dt>
+        <dd>
+            Smith, Thomas and Guild, John. "The CIE colorimetric standards
+            and their use." In: <i>Transactions of the Optical Society 33.3</i> (1931),
+            p. 73.
+        </dd>
+        <dt>[Co01]</dt>
+        <dd>
+            Cohen, Jozef B. <i>The Fundamental Color Space.</i> University of Illinois Press, 2001.
+        </dd>
+    </dl>
+</section>
+
+<script>
+    {
+        const params = new URLSearchParams(document.location.search);
+        const color_systems = params.getAll("color_systems");
+        if (color_systems.length === 1 && color_systems.includes("rgb")) {
+            const content = document.getElementById("grassmann-color-matching");
+            const bib = document.getElementById("literature");
+            content.setAttribute("style", "display: unset");
+            bib.setAttribute("style", "display: unset");
+        }
+    }
+</script>

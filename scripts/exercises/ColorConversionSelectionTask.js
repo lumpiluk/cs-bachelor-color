@@ -32,6 +32,7 @@ export class ColorConversionSelectionTask extends AbstractTask {
 
         /* Randomize and convert target color. */
         this.target_color.randomize();
+        let remaining_color_systems = actual.color_systems.slice(); // (copy array)
         remove_from_array(remaining_color_systems, this.target_system_name);
         remaining_color_systems = remaining_color_systems.filter((it) => { return it !== this.target_system_name});
         let conversion_system_name = random_sample(remaining_color_systems);

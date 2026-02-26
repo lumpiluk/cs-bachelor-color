@@ -1,0 +1,23 @@
+---
+layout: layouts/base.vto
+---
+<h1>{{ title }}</h1>
+
+<p id="available-color-systems" style="display: none">
+    <b>Chosen color systems for this exercise: </b>
+    <span class="color-systems-list"></span>
+</p>
+
+{{ content }}
+
+<script>
+    {
+        const params = new URLSearchParams(document.location.search);
+        const color_systems = params.getAll("color_systems");
+        if (color_systems.length > 0) {
+            const availableColorSystemsElem = document.getElementById("available-color-systems");
+            availableColorSystemsElem.append(color_systems.join(", "));
+            availableColorSystemsElem.setAttribute("style", "display: unset");
+        }
+    }
+</script>

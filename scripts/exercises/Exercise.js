@@ -96,6 +96,8 @@ export class Exercise {
                 if (task_type.options.color_systems === "from_url_params") {
                     const urlParams = new URLSearchParams(document.location.search);
                     task_type.options.color_systems = urlParams.getAll("color_systems");
+                    if (task_type.options.color_systems.length > 0) continue;
+                    task_type.options.color_systems = ['rgb', 'cmy', 'cmyk', 'hsl', 'hsv'];
                 }
             }
         }
