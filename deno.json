@@ -1,8 +1,9 @@
 {
   "imports": {
     "lume/": "https://cdn.jsdelivr.net/gh/lumeland/lume@3.2.1/",
-    "three": "npm:three@^0.169.0",
-    "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx@0.1.14/jsx-runtime.ts"
+    "three": "npm:three@^0.183.0",
+    "lume/jsx-runtime": "https://cdn.jsdelivr.net/gh/oscarotero/ssx@0.1.14/jsx-runtime.ts",
+    "file-saver": "npm:file-saver@2.0.5"
   },
   "tasks": {
     "lume": {

@@ -7,7 +7,7 @@ import {
     BoxHelper,
     Vector3,
     ArrowHelper
-} from 'npm:three@0.183.0';
+} from "three";
 
 export class DynamicAnnotatedCube extends Object3D {
     /**

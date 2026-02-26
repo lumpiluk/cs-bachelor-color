@@ -1,4 +1,4 @@
-import {BufferGeometry, BufferAttribute, Vector3} from 'npm:three@0.183.0';
+import {BufferGeometry, BufferAttribute, Vector3} from "three";
 
 const BOTTOM_CENTER_VERTEX_ID = 0;
 const TOP_CENTER_VERTEX_ID = 1;

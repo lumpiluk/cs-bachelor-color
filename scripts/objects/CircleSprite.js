@@ -1,5 +1,5 @@
 //import {Texture, SpriteMaterial, Sprite} from "../../../bower_components/three.js/build/three";
-import {Texture, SpriteMaterial, Sprite} from 'npm:three@0.183.0';
+import {Texture, SpriteMaterial, Sprite} from "three";
 /**
  * Created by lumpiluk on 9/27/16.
  */

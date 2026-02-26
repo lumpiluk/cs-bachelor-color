@@ -6,7 +6,7 @@ import {
 } from "./exercises";
 import {construct_task_type_by_name} from "./exercises";
 import {deep_copy} from "../util";
-import {saveAs} from 'npm:file-saver@2.0.5';
+import {saveAs} from "file-saver";
 
 /**
  * Creates an exercise in a given container.

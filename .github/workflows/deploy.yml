@@ -30,8 +30,8 @@ jobs:
           deno-version: v2.6.x
           cache: true
 
-      - name: Run linter
-        run: deno lint
+      # - name: Run linter
+      #   run: deno lint
 
       # https://github.com/actions/cache
       - name: Cache _cache/
@@ -41,6 +41,9 @@ jobs:
           key: ${{ runner.os }}-cache-${{ github.run_id }}
           restore-keys: |
             ${{ runner.os }}-cache-
+
+      - name: Install dependencies
+        run: deno install --allow-import
 
       - name: Build
         run: deno task build

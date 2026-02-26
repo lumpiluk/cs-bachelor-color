@@ -6,7 +6,7 @@ import {
     BufferAttribute,
     LineSegments,
     LineBasicMaterial
-} from 'npm:three@0.183.0';
+} from "three";
 
 function get_current_angle(i, num_segments, theta_length) {
     return (i * 2 * Math.PI / num_segments) * theta_length / (2 * Math.PI);

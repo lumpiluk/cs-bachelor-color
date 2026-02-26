@@ -5,7 +5,7 @@ import {
     BufferAttribute,
     LineBasicMaterial,
     LineSegments
-} from 'npm:three@0.183.0';
+} from "three";
 
 
 export class DynamicBoundingCylinder extends Object3D {

@@ -1,4 +1,4 @@
-import {Texture, SpriteMaterial, Sprite} from 'npm:three@0.183.0';
+import {Texture, SpriteMaterial, Sprite} from "three";
 
 const TEXTURE_SIZE = 256;
 

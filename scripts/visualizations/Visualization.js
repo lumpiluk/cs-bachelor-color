@@ -1,5 +1,5 @@
 import {Vector2, Euler, Matrix4, PerspectiveCamera, Object3D, WebGLRenderer, Scene}
-    from 'npm:three@0.183.0';
+    from "three";
 import {
     rgb_to_css,
     toggle_full_screen,

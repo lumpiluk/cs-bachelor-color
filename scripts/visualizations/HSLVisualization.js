@@ -14,7 +14,7 @@ import {
     ArrowHelper,
     Mesh,
     Object3D
-} from "npm:three@0.183.0";
+} from "three";
 import {HSLColorSystem} from "../color-systems/HSLColorSystem";
 import {DynamicBoundingCylinderSliced} from "../objects/DynamicBoundingCylinderSliced";
 
