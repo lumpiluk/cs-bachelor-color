@@ -1,0 +1,60 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# This workflow will install Deno then run `deno lint`, `deno task build`, and rsync the generated `_site` to production.
+# For more information see: https://github.com/denoland/setup-deno
+
+name: Deploy
+
+on:
+  push:
+    branches: ["master"]
+
+permissions:
+  contents: read
+
+jobs:
+  lint_build_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v4
+
+      # https://github.com/marketplace/actions/setup-deno
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.6.x
+          cache: true
+
+      - name: Run linter
+        run: deno lint
+
+      # https://github.com/actions/cache
+      - name: Cache _cache/
+        uses: actions/cache@v5
+        with:
+          path: _cache/
+          key: ${{ runner.os }}-cache-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-cache-
+
+      - name: Build
+        run: deno task build
+
+      - name: Check build output
+        run: ls -la _site/
+
+      # https://github.com/marketplace/actions/action-rsync
+      - name: Run rsync
+        uses: up9cloud/action-rsync@v1.4
+        env:
+          HOST: ${{secrets.DEPLOY_HOST}}
+          USER: ${{secrets.DEPLOY_USER}}
+          KEY: ${{secrets.DEPLOY_SSH_KEY}}
+          SOURCE: ./_site/
+          TARGET: ${{secrets.DEPLOY_TARGET_DIR}}  # no trailing slash
+          SSH_ARGS: '-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
