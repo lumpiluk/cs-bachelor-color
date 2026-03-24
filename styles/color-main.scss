@@ -18,6 +18,7 @@ html {
 body {
   height: 100%;
   background-color: constants.$background_color;
+  font-family: 'Fira Sans', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 
   /* On large screens. */
   @media screen {
